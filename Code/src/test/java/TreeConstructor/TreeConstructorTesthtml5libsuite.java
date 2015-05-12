@@ -93,7 +93,6 @@ public class TreeConstructorTesthtml5libsuite {
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests25.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests26.dat",
 
-				
 //				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption01.dat",
 //				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption02.dat",
 //				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/comments01.dat",
