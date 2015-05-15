@@ -67,20 +67,20 @@ public class TreeConstructorTesthtml5libsuite {
 
 		String[] resources = {
 				
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests1.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests2.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests3.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests4.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests5.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests6.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests7.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests8.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests9.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests10.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests11.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests12.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests14.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests15.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests1.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests2.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests3.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests4.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests5.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests6.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests7.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests8.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests9.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests10.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests11.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests12.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests14.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests15.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests16.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests17.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests18.dat",
@@ -90,8 +90,8 @@ public class TreeConstructorTesthtml5libsuite {
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests22.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests23.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests24.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests25.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests26.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests25.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests26.dat",
 
 				
 //				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption01.dat",
@@ -148,6 +148,12 @@ public class TreeConstructorTesthtml5libsuite {
 			resource = resource.split("/")[resource.split("/").length - 1];
 			for (int i = 1; i < tests.length; i++) {
 				String test = tests[i];
+				/*
+				 * Omit the tests that have script-off. Check tests16.dat
+				 * */
+				if(test.contains("#script-off"))
+					continue;
+				
 				String testName = i + " (" + resource + ") "
 						+ test.split("\\n")[0]; // i + "";
 				testList.add(new Object[] { testName, test });
@@ -325,12 +331,13 @@ public class TreeConstructorTesthtml5libsuite {
 						str += "math ";
 						break;
 					}
-				if (current.getNamespaceURI() != null
-						&& current.getLocalName() != null) {
-					str += current.getLocalName();
-				} else {
-					str += current.getNodeName().toLowerCase();
-				}
+//				if (current.getNamespaceURI() != null
+//						&& current.getLocalName() != null) {
+//					str += current.getLocalName();
+//				} else {
+//					str += current.getNodeName().toLowerCase();
+//				}
+				str += current.getNodeName();
 				str += '>';
 				if (parent != current.getParentNode()) {
 					return str += " (misnested... aborting)";
