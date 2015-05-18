@@ -970,6 +970,9 @@ public class InBody implements IInsertionMode {
 		else if (tokenType == TokenType.start_tag
 				&& isOneOf(token.getValue(), new String[] { "table" })) {
 			// TODO
+			if (ElementInScope.isInButtonScope(parserContext, "p")) {
+				closeApElement(parserContext);
+			}
 			InsertAnHTMLElement.run(parserContext, token);
 			parserContext.setFlagFramesetOk(false);
 			parserContext.setInsertionMode(factory
