@@ -961,7 +961,7 @@ public class InBody implements IInsertionMode {
 			ListOfActiveFormattingElements.clear(parserContext);
 		}
 		/*
-		 * A start tag whose tag name is "table" TODO If the Document is not set
+		 * A start tag whose tag name is "table" If the Document is not set
 		 * to quirks mode, and the stack of open elements has a p element in
 		 * button scope, then close a p element. Insert an HTML element for the
 		 * token. Set the frameset-ok flag to "not ok". Switch the insertion
@@ -969,8 +969,7 @@ public class InBody implements IInsertionMode {
 		 */
 		else if (tokenType == TokenType.start_tag
 				&& isOneOf(token.getValue(), new String[] { "table" })) {
-			// TODO
-			if (ElementInScope.isInButtonScope(parserContext, "p")) {
+			if (!parserContext.isFlagForceQuirks() &&ElementInScope.isInButtonScope(parserContext, "p")) {
 				closeApElement(parserContext);
 			}
 			InsertAnHTMLElement.run(parserContext, token);
