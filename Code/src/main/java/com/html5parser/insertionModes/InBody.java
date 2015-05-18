@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -38,6 +39,8 @@ import com.html5parser.parseError.ParseErrorType;
 
 public class InBody implements IInsertionMode {
 
+	private boolean ignoreNextLFCharToken = false;
+
 	public ParserContext process(ParserContext parserContext) {
 
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
@@ -57,10 +60,12 @@ public class InBody implements IInsertionMode {
 		 * the active formatting elements, if any. Insert the token's character.
 		 */
 		else if (token.isSpaceCharacter()) {
-			if (!parserContext.getActiveFormattingElements().isEmpty()) {
-				ListOfActiveFormattingElements.reconstruct(parserContext);
+			if((token.getValue().codePointAt(0) != 0x000A || !ignoreNextLFCharToken)){
+				if (!parserContext.getActiveFormattingElements().isEmpty()) {
+					ListOfActiveFormattingElements.reconstruct(parserContext);
+				}
+				InsertCharacter.run(parserContext, token);
 			}
-			InsertCharacter.run(parserContext, token);
 		}
 		/*
 		 * Any other character token Reconstruct the active formatting
@@ -104,7 +109,12 @@ public class InBody implements IInsertionMode {
 				TagToken tagToken = (TagToken) token;
 				for (Attribute att : tagToken.getAttributes()) {
 					if (!html.hasAttribute(att.getName())) {
-						html.setAttribute(att.getName(), att.getValue());
+						try {
+							html.setAttribute(att.getName(), att.getValue());
+						} catch (DOMException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -138,9 +148,8 @@ public class InBody implements IInsertionMode {
 		else if (tokenType == TokenType.start_tag
 				&& token.getValue().equals("body")) {
 			parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
-			if ((parserContext.getOpenElements().size() >1
-					&& !parserContext.getOpenElements().get(1).getLocalName()
-					.equals("body"))
+			if ((parserContext.getOpenElements().size() > 1 && !parserContext
+					.getOpenElements().get(1).getLocalName().equals("body"))
 					|| parserContext.getOpenElements().size() == 1
 					|| parserContext.openElementsContain("template")) {
 				// ignore the token
@@ -346,14 +355,7 @@ public class InBody implements IInsertionMode {
 				closeApElement(parserContext);
 			}
 			InsertAnHTMLElement.run(parserContext, token);
-			Queue<Token> tokenQueue = parserContext.getTokenizerContext()
-					.getTokens();
-			if (!tokenQueue.isEmpty()) {
-				Token nexToken = tokenQueue.peek();
-				if (nexToken.getValue().equals("LF")) {
-					tokenQueue.poll();
-				}
-			}
+			ignoreNextLFCharToken = true;
 			parserContext.setFlagFramesetOk(false);
 		}
 		/*
@@ -634,15 +636,13 @@ public class InBody implements IInsertionMode {
 		 * 5 If the current node is not node, then this is a parse error.
 		 * 
 		 * 6 Remove node from the stack of open elements.
-		 * 
-		 
 		 */
 		else if (tokenType == TokenType.end_tag
 				&& token.getValue().equals("form")) {
 			if (!parserContext.openElementsContain("template")) {
 				Node node = parserContext.getFormElementPointer();
 				parserContext.setFormElementPointer(null);
-				
+
 				if (node == null
 						|| !ElementInScope.isInScope(parserContext,
 								node.getNodeName())) {
@@ -655,24 +655,25 @@ public class InBody implements IInsertionMode {
 					parserContext
 							.addParseErrors(ParseErrorType.UnexpectedToken);
 				}
-				if(openElementStack.indexOf(node) != -1)
-				openElementStack
-						.removeElementAt(openElementStack.indexOf(node));
-			} 
-			/* If there is a template element on the stack of open elements,
-		 * 
-		 * 1 If the stack of open elements does not have a form element in
-		 * scope, then this is a parse error; abort these steps and ignore the
-		 * token.
-		 * 
-		 * 2 Generate implied end tags.
-		 * 
-		 * 3 If the current node is not a form element, then this is a parse
-		 * error.
-		 * 
-		 * 4 Pop elements from the stack of open elements until a form element
-		 * has been popped from the stack.
-		 */
+				if (openElementStack.indexOf(node) != -1)
+					openElementStack.removeElementAt(openElementStack
+							.indexOf(node));
+			}
+			/*
+			 * If there is a template element on the stack of open elements,
+			 * 
+			 * 1 If the stack of open elements does not have a form element in
+			 * scope, then this is a parse error; abort these steps and ignore
+			 * the token.
+			 * 
+			 * 2 Generate implied end tags.
+			 * 
+			 * 3 If the current node is not a form element, then this is a parse
+			 * error.
+			 * 
+			 * 4 Pop elements from the stack of open elements until a form
+			 * element has been popped from the stack.
+			 */
 			else {
 				if (ElementInScope.isInScope(parserContext, "form")) {
 					parserContext
@@ -961,7 +962,7 @@ public class InBody implements IInsertionMode {
 			ListOfActiveFormattingElements.clear(parserContext);
 		}
 		/*
-		 * A start tag whose tag name is "table" If the Document is not set
+		 * A start tag whose tag name is "table" TODO If the Document is not set
 		 * to quirks mode, and the stack of open elements has a p element in
 		 * button scope, then close a p element. Insert an HTML element for the
 		 * token. Set the frameset-ok flag to "not ok". Switch the insertion
@@ -969,9 +970,10 @@ public class InBody implements IInsertionMode {
 		 */
 		else if (tokenType == TokenType.start_tag
 				&& isOneOf(token.getValue(), new String[] { "table" })) {
-			if (!parserContext.isFlagForceQuirks() &&ElementInScope.isInButtonScope(parserContext, "p")) {
+			if (!parserContext.getDocument().getUserData("quirksmode")
+					.equals("set")
+					&& ElementInScope.isInButtonScope(parserContext, "p"))
 				closeApElement(parserContext);
-			}
 			InsertAnHTMLElement.run(parserContext, token);
 			parserContext.setFlagFramesetOk(false);
 			parserContext.setInsertionMode(factory
@@ -1233,13 +1235,7 @@ public class InBody implements IInsertionMode {
 		else if (tokenType == TokenType.start_tag
 				&& isOneOf(token.getValue(), new String[] { "textarea" })) {
 			InsertAnHTMLElement.run(parserContext, token);
-			Token nextToken = parserContext.getTokenizerContext().getTokens()
-					.peek();
-			if (nextToken != null
-					&& nextToken.getValue().equals(
-							String.valueOf(Character.toChars(0x000A)))) {
-				parserContext.getTokenizerContext().getTokens().poll();
-			}
+			ignoreNextLFCharToken=true;
 			TokenizerStateFactory tokenStateFactory = TokenizerStateFactory
 					.getInstance();
 			parserContext.getTokenizerContext().setNextState(
@@ -1443,6 +1439,11 @@ public class InBody implements IInsertionMode {
 			anyOtherEndTag(parserContext);
 		}
 
+		if (!(tokenType == TokenType.start_tag && isOneOf(token.getValue(),
+				new String[] { "pre", "listing", "textarea" }))) {
+			ignoreNextLFCharToken = false;
+		}
+
 		return parserContext;
 	}
 
@@ -1533,5 +1534,13 @@ public class InBody implements IInsertionMode {
 		if (ElementInScope.isInButtonScope(parserContext, "p")) {
 			closeApElement(parserContext);
 		}
+	}
+
+	public boolean isIgnoreNextLFCharToken() {
+		return ignoreNextLFCharToken;
+	}
+
+	public void setIgnoreNextLFCharToken(boolean ignoreNextLFCharToken) {
+		this.ignoreNextLFCharToken = ignoreNextLFCharToken;
 	}
 }
