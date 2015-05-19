@@ -16,7 +16,7 @@ public class GenericRawTextElementParsing {
 				.getInstance();
 		InsertAnHTMLElement.run(context, token);
 		context.getTokenizerContext().setNextState(
-				tokenizerFactory.getState(TokenizerState.RCDATA_state));
+				tokenizerFactory.getState(TokenizerState.RAWTEXT_state));
 		context.setOriginalInsertionMode(context.getInsertionMode());
 		context.setInsertionMode(insertionModeFactory
 				.getInsertionMode(InsertionMode.text));
