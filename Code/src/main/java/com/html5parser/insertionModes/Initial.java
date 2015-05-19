@@ -90,6 +90,11 @@ public class Initial implements IInsertionMode {
 		// parse error; set the Document to quirks mode.
 		// In any case, switch the insertion mode to "before html", then
 		// reprocess the token.
+		Document doc = parserContext.getDocument();
+		if (doc.getElementsByTagName("iframe").getLength() == 0) {
+			parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
+			parserContext.setFlagForceQuirks(true);
+		}
 		parserContext.setInsertionMode(InsertionModeFactory.getInstance()
 				.getInsertionMode(InsertionMode.before_html));
 		parserContext.setFlagReconsumeToken(true);
