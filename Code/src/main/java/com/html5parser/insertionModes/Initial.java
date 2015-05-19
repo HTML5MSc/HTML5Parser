@@ -3,7 +3,6 @@ package com.html5parser.insertionModes;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentType;
-import org.w3c.dom.html.HTMLIFrameElement;
 
 import com.html5parser.algorithms.InsertComment;
 import com.html5parser.classes.InsertionMode;
