@@ -60,9 +60,6 @@ public class InsertCharacter {
 			Node location = adjustedInsertionLocation.getParent()
 					.getLastChild();
 			location.setNodeValue((location.getNodeValue()).concat(data));
-			if (location.getNodeValue().contains("&amp;")) {
-				location.setNodeValue(location.getNodeValue().replace("&amp;", "&"));
-			}
 			return referenceLocation;
 		}
 
