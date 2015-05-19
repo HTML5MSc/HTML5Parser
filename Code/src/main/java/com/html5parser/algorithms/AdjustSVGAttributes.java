@@ -9,7 +9,7 @@ public class AdjustSVGAttributes {
 
 	public static Token run(TagToken token) {
 		for (Attribute att : token.getAttributes()) {
-			String value = SVGAttributesTable.TABLE.get(att);
+			String value = SVGAttributesTable.TABLE.get(att.getName());
 			if (value!=null){
 				att.setName(value);
 			}

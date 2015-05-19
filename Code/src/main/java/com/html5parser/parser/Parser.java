@@ -46,6 +46,7 @@ public class Parser implements IParser {
 		try {
 			builder = dbf.newDocumentBuilder();
 			doc = builder.newDocument();
+			doc.setUserData("quirksmode", "not set", null);
 			parserContext.setDocument(doc);
 		} catch (ParserConfigurationException e) {
 			// TODO Auto-generated catch block

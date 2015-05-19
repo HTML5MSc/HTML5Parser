@@ -27,9 +27,9 @@ public class RAWTEXT_end_tag_name_state implements ITokenizerState {
 		case FF:
 		case SPACE:
 			/*
-			 * If the current end tag token is an appropriate end tag token, 
-			 * then switch to the before attribute name state. 
-			 * Otherwise, treat it as per the "anything else" entry below.
+			 * If the current end tag token is an appropriate end tag token,
+			 * then switch to the before attribute name state. Otherwise, treat
+			 * it as per the "anything else" entry below.
 			 */
 			if (currentToken.getValue().equals(
 					tokenizerContext.getLatestEmittedStartTag())) {
@@ -59,8 +59,9 @@ public class RAWTEXT_end_tag_name_state implements ITokenizerState {
 			 * then switch to the data state and emit the current tag token.
 			 * Otherwise, treat it as per the "anything else" entry below.
 			 */
-			if (currentToken.getValue().equals(
-					tokenizerContext.getLatestEmittedStartTag())) {
+			if (tokenizerContext.getEmittedStartTags().size() > 0
+					&& currentToken.getValue().equals(
+							tokenizerContext.getLatestEmittedStartTag())) {
 				tokenizerContext.setNextState(factory
 						.getState(TokenizerState.Data_state));
 				tokenizerContext.setFlagEmitToken(true);
@@ -79,13 +80,14 @@ public class RAWTEXT_end_tag_name_state implements ITokenizerState {
 
 		case LATIN_SMALL_LETTER:
 			/*
-			 * Append the current input character to the current tag token's tag name. 
-			 * Append the current input character to the temporary buffer.
+			 * Append the current input character to the current tag token's tag
+			 * name. Append the current input character to the temporary buffer.
 			 */
 			currentToken.setValue(currentToken.getValue().concat(
 					String.valueOf(Character.toChars(currentChar))));
-			tokenizerContext.setTemporaryBuffer(tokenizerContext.getTemporaryBuffer().concat(
-					String.valueOf(Character.toChars(currentChar))));
+			tokenizerContext.setTemporaryBuffer(tokenizerContext
+					.getTemporaryBuffer().concat(
+							String.valueOf(Character.toChars(currentChar))));
 			break;
 		default:
 			defaultProcess(tokenizerContext);
@@ -98,10 +100,10 @@ public class RAWTEXT_end_tag_name_state implements ITokenizerState {
 	}
 
 	/*
-	 * Switch to the RAWTEXT state. Emit a U+003C LESS-THAN SIGN character token,
-	 * a U+002F SOLIDUS character token, and a character token for each of the
-	 * characters in the temporary buffer (in the order they were added to the
-	 * buffer). Reconsume the current input character.
+	 * Switch to the RAWTEXT state. Emit a U+003C LESS-THAN SIGN character
+	 * token, a U+002F SOLIDUS character token, and a character token for each
+	 * of the characters in the temporary buffer (in the order they were added
+	 * to the buffer). Reconsume the current input character.
 	 */
 	private void defaultProcess(TokenizerContext tokenizerContext) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();

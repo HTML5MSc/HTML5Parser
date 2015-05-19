@@ -175,9 +175,9 @@ public class InTable implements IInsertionMode {
 			// Acknowledge the token's self-closing flag, if it is set.
 			case "input":
 				Boolean isInputHidden = false;
-				for (TagToken.Attribute a : ((TagToken) token).getAttributes())
-					if (a.getName().equals("type")
-							&& a.getValue().equals("hidden"))
+				if (((TagToken) token).hasAttribute(new String[] { "type" }))
+					if (((TagToken) token).getAttribute("type").getValue()
+							.toLowerCase().equals("hidden"))
 						isInputHidden = true;
 				if (!isInputHidden)
 					anythingElse(parserContext);

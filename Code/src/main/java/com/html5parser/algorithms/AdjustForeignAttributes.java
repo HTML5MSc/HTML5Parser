@@ -9,7 +9,7 @@ public class AdjustForeignAttributes {
 
 	public static Token run(TagToken token) {
 		for (Attribute att : token.getAttributes()) {
-			String[] values = ForeignAttributesTable.TABLE.get(att);
+			String[] values = ForeignAttributesTable.TABLE.get(att.getName());
 			if (values!=null){
 				att.setPrefix(values[0]);
 				att.setLocalName(values[1]);

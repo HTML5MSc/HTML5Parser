@@ -16,7 +16,13 @@ public class Text implements IInsertionMode {
 		// A character token
 		// Insert the token's character.
 		case character:
-			InsertCharacter.run(parserContext, token);
+			boolean ignoreLFCharToken = false;
+			if(parserContext.getOriginalInsertionMode() != null && parserContext.getOriginalInsertionMode() instanceof InBody){
+				ignoreLFCharToken = ((InBody) parserContext.getOriginalInsertionMode()).isIgnoreNextLFCharToken();
+			}
+			if(token.getValue().codePointAt(0) != 0x000A ||  !ignoreLFCharToken){
+				InsertCharacter.run(parserContext, token);
+			}
 			break;
 
 		// An end-of-file token
@@ -59,6 +65,11 @@ public class Text implements IInsertionMode {
 			break;
 		default:
 			break;
+		}
+		
+		//only one LF character must be ignored just after a "textarea" start tag
+		if(parserContext.getOriginalInsertionMode() != null && parserContext.getOriginalInsertionMode() instanceof InBody){
+			((InBody) parserContext.getOriginalInsertionMode()).setIgnoreNextLFCharToken(false);
 		}
 		return parserContext;
 	}

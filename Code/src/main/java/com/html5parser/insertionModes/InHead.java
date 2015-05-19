@@ -201,7 +201,7 @@ public class InHead implements IInsertionMode {
 		 * Act as described in the "anything else" entry below.
 		 */
 		else if (tokenType == TokenType.end_tag
-				&& (token.getValue().equals("head")
+				&& (token.getValue().equals("body")
 				|| token.getValue().equals("html")
 				|| token.getValue().equals("br")
 				)) {
