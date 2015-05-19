@@ -42,13 +42,16 @@ public class RAWTEXT_end_tag_open_state implements ITokenizerState{
 		default:
 			/*
 			 * Switch to the RAWTEXT state. 
-			 * Emit a U+003C LESS-THAN SIGN character token. 
+			 * Emit a U+003C LESS-THAN SIGN character token
+			 * and a U+002F SOLIDUS character token
 			 * Reconsume the current input character.
 			 */
 			tokenizerContext.setNextState(factory
 					.getState(TokenizerState.RAWTEXT_state));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character, String
 					.valueOf(Character.toChars(0x003C))));
+			tokenizerContext.emitCurrentToken(new Token(TokenType.character, String
+					.valueOf(Character.toChars(0x002F))));
 			tokenizerContext.setFlagReconsumeCurrentInputCharacter(true);
 			
 		}
