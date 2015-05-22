@@ -24,7 +24,7 @@ public class GenericRCDATAElementParsing {
 				.getInstance();
 		InsertAnHTMLElement.run(context, token);
 		context.getTokenizerContext().setNextState(
-				tokenizerFactory.getState(TokenizerState.RAWTEXT_state));
+				tokenizerFactory.getState(TokenizerState.RCDATA_state));
 		context.setOriginalInsertionMode(context.getInsertionMode());
 		context.setInsertionMode(insertionModeFactory
 				.getInsertionMode(InsertionMode.text));
