@@ -9,11 +9,11 @@ import com.html5parser.classes.ParserContext;
 import com.html5parser.factories.InsertionModeFactory;
 
 public class ResetTheInsertionModeAppropriately {
-	
+
 	public static void Run(ParserContext parserContext) {
-		Run(parserContext, null) ;
+		Run(parserContext, null);
 	}
-	
+
 	public static void Run(ParserContext parserContext, Element context) {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Stack<Element> openElements = new Stack<Element>();
@@ -35,8 +35,8 @@ public class ResetTheInsertionModeAppropriately {
 			if (openElements.isEmpty()) {
 				last = true;
 				// if fragment case, node = context element
-				if(context!=null){
-					node=context;
+				if (context != null) {
+					node = context;
 				}
 			}
 			switch (node.getNodeName()) {
@@ -99,11 +99,14 @@ public class ResetTheInsertionModeAppropriately {
 					parserContext.setInsertionMode(factory
 							.getInsertionMode(InsertionMode.in_cell));
 					return;
+				} else {
+					parserContext.setInsertionMode(factory
+							.getInsertionMode(InsertionMode.in_body));
+					return;
 				}
-				break;
 
-			// 6 If node is a tr element, then switch the insertion mode to
-			// "in row" and abort these steps.
+				// 6 If node is a tr element, then switch the insertion mode to
+				// "in row" and abort these steps.
 			case "tr":
 				parserContext.setInsertionMode(factory
 						.getInsertionMode(InsertionMode.in_row));
