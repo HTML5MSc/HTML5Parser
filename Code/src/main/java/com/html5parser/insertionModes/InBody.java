@@ -3,13 +3,12 @@ package com.html5parser.insertionModes;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.html5parser.algorithms.AddAttributesToAnElement;
 import com.html5parser.algorithms.AdjustForeignAttributes;
 import com.html5parser.algorithms.AdjustMathMLAttributes;
 import com.html5parser.algorithms.AdjustSVGAttributes;
@@ -60,7 +59,7 @@ public class InBody implements IInsertionMode {
 		 * the active formatting elements, if any. Insert the token's character.
 		 */
 		else if (token.isSpaceCharacter()) {
-			if((token.getValue().codePointAt(0) != 0x000A || !ignoreNextLFCharToken)){
+			if ((token.getValue().codePointAt(0) != 0x000A || !ignoreNextLFCharToken)) {
 				if (!parserContext.getActiveFormattingElements().isEmpty()) {
 					ListOfActiveFormattingElements.reconstruct(parserContext);
 				}
@@ -107,16 +106,7 @@ public class InBody implements IInsertionMode {
 			} else {
 				Element html = parserContext.getOpenElements().get(0);
 				TagToken tagToken = (TagToken) token;
-				for (Attribute att : tagToken.getAttributes()) {
-					if (!html.hasAttribute(att.getName())) {
-						try {
-							html.setAttribute(att.getName(), att.getValue());
-						} catch (DOMException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
+				AddAttributesToAnElement.run(html, tagToken);
 			}
 		}
 		/*
@@ -971,7 +961,7 @@ public class InBody implements IInsertionMode {
 		else if (tokenType == TokenType.start_tag
 				&& isOneOf(token.getValue(), new String[] { "table" })) {
 			if (!parserContext.getDocument().getUserData("quirksmode")
-					.equals("set")
+					.equals("no-quirks mode")
 					&& ElementInScope.isInButtonScope(parserContext, "p"))
 				closeApElement(parserContext);
 			InsertAnHTMLElement.run(parserContext, token);
@@ -1235,7 +1225,7 @@ public class InBody implements IInsertionMode {
 		else if (tokenType == TokenType.start_tag
 				&& isOneOf(token.getValue(), new String[] { "textarea" })) {
 			InsertAnHTMLElement.run(parserContext, token);
-			ignoreNextLFCharToken=true;
+			ignoreNextLFCharToken = true;
 			TokenizerStateFactory tokenStateFactory = TokenizerStateFactory
 					.getInstance();
 			parserContext.getTokenizerContext().setNextState(
