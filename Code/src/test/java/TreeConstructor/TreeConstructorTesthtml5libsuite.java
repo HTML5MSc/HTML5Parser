@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,12 +22,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.html5parser.algorithms.ParsingHTMLFragments;
 import com.html5parser.classes.ParserContext;
+import com.html5parser.classes.token.TagToken.Attribute;
 import com.html5parser.parser.Parser;
 
 /* HTML5LIB FORMAT example
@@ -66,7 +69,7 @@ public class TreeConstructorTesthtml5libsuite {
 		List<Object[]> testList = new ArrayList<Object[]>();
 
 		String[] resources = {
-				
+
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests1.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests2.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests3.dat",
@@ -93,34 +96,32 @@ public class TreeConstructorTesthtml5libsuite {
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests25.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests26.dat",
 
-				
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption01.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption02.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/comments01.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/doctype01.dat",
-//				//"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/domjs-unsafe.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/entities01.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/entities02.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/foreign-fragment.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/html5test-com.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/inbody01.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/isindex.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/main-element.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/pending-spec-changes-plain-text-unsafe.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/pending-spec-changes.dat",
-//				//"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/plain-text-unsafe.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/ruby.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/scriptdata01.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tables01.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/template.dat",
-//
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests_innerHTML_1.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tricky01.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/webkit01.dat",
-//				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/webkit02.dat",
-					
-			}
-		;
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption01.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption02.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/comments01.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/doctype01.dat",
+		// //"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/domjs-unsafe.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/entities01.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/entities02.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/foreign-fragment.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/html5test-com.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/inbody01.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/isindex.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/main-element.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/pending-spec-changes-plain-text-unsafe.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/pending-spec-changes.dat",
+		// //"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/plain-text-unsafe.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/ruby.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/scriptdata01.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tables01.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/template.dat",
+		//
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests_innerHTML_1.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tricky01.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/webkit01.dat",
+		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/webkit02.dat",
+
+		};
 
 		for (String resource : resources) {
 			testList = addTestFile(testList, resource);
@@ -150,10 +151,10 @@ public class TreeConstructorTesthtml5libsuite {
 				String test = tests[i];
 				/*
 				 * Omit the tests that have script-off. Check tests16.dat
-				 * */
-				if(test.contains("#script-off"))
+				 */
+				if (test.contains("#script-off"))
 					continue;
-				
+
 				String testName = i + " (" + resource + ") "
 						+ test.split("\\n")[0]; // i + "";
 				testList.add(new Object[] { testName, test });
@@ -212,6 +213,9 @@ public class TreeConstructorTesthtml5libsuite {
 		// System.out.println("*************** " + input);
 		// System.out.println("******Expected " + expected);
 		if (contextElement != null) {
+			System.out
+					.println("*************** Pasing HTML Fragment with Context Element:"
+							+ contextElement);
 			Document document = null;
 			ParserContext parserContext = new ParserContext();
 			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -236,8 +240,8 @@ public class TreeConstructorTesthtml5libsuite {
 					System.out.println(node);
 					Node adopted = document.importNode(node, true);
 					element.appendChild(adopted);
-					process_result(input, element, expected);
 				}
+				process_result(input, element, expected);
 			} catch (ParserConfigurationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -291,11 +295,30 @@ public class TreeConstructorTesthtml5libsuite {
 		Node parent = node;
 		Node current = node.getFirstChild();
 		Node next = null;
+
+		/*
+		 * Check if there is an Invalid doctype
+		 * */
+		if (parent.getUserData("invalidDoctype") != null)
+			str += "\n| " + parent.getUserData("invalidDoctype").toString();
+
 		for (;;) {
 			str += "\n| " + indent(ancestors);
 			switch (current.getNodeType()) {
 			case Node.DOCUMENT_TYPE_NODE:
-				str += "<!DOCTYPE " + current.getNodeName() + '>';
+				String publicId = ((DocumentType) current).getPublicId();
+				publicId = publicId == null ? "" : (" \"" + publicId + "\"");
+				String systemId = ((DocumentType) current).getSystemId();
+				if (systemId == null) {
+					if (publicId.isEmpty())
+						systemId = "";
+					else
+						systemId = " \"\"";
+				} else
+					systemId = " \"" + systemId + "\"";
+
+				str += "<!DOCTYPE " + current.getNodeName() + publicId
+						+ systemId + '>';
 				break;
 			case Node.COMMENT_NODE:
 				try {
@@ -331,20 +354,28 @@ public class TreeConstructorTesthtml5libsuite {
 						str += "math ";
 						break;
 					}
-//				if (current.getNamespaceURI() != null
-//						&& current.getLocalName() != null) {
-//					str += current.getLocalName();
-//				} else {
-//					str += current.getNodeName().toLowerCase();
-//				}
+				// if (current.getNamespaceURI() != null
+				// && current.getLocalName() != null) {
+				// str += current.getLocalName();
+				// } else {
+				// str += current.getNodeName().toLowerCase();
+				// }
 				str += current.getNodeName();
 				str += '>';
 				if (parent != current.getParentNode()) {
 					return str += " (misnested... aborting)";
 				} else {
-					if (current.hasAttributes()) {
-						List<String> attrNames = new ArrayList<String>();
-						Map<String, Integer> attrPos = new HashMap<String, Integer>();
+					@SuppressWarnings("unchecked")
+					List<Attribute> invalidAtts = (List<Attribute>) current
+							.getUserData("invalidAtts");
+
+					if (current.hasAttributes() || invalidAtts != null) {
+						// List<String> attrNames = new ArrayList<String>();
+						// Map<String, Integer> attrPos = new HashMap<String,
+						// Integer>();
+
+						Map<String, String> attrNames = new HashMap<String, String>();
+
 						for (int j = 0; j < current.getAttributes().getLength(); j += 1) {
 							if (current.getAttributes().item(j) != null) {
 								String name = "";
@@ -370,21 +401,71 @@ public class TreeConstructorTesthtml5libsuite {
 									name += current.getAttributes().item(j)
 											.getNodeName();
 								}
-								attrNames.add(name);
-								attrPos.put(name, j);
+								// attrNames.add(name);
+								// attrPos.put(name, j);
+								attrNames.put(name, current.getAttributes()
+										.item(j).getNodeValue());
 							}
 						}
+
+						/*
+						 * Check if there are invalid attributes
+						 * */
+						if (invalidAtts != null) {
+							for (int j = 0; j < invalidAtts.size(); j += 1) {
+								if (invalidAtts.get(j) != null) {
+									String name = "";
+									if (invalidAtts.get(j).getNamespace() != null)
+										switch (invalidAtts.get(j)
+												.getNamespace()) {
+										case "http://www.w3.org/XML/1998/namespace":
+											name += "xml ";
+											break;
+										case "http://www.w3.org/2000/xmlns/":
+											name += "xmlns ";
+											break;
+										case "http://www.w3.org/1999/xlink":
+											name += "xlink ";
+											break;
+										}
+									if (invalidAtts.get(j).getLocalName() != null) {
+										name += invalidAtts.get(j)
+												.getLocalName();
+									} else {
+										name += invalidAtts.get(j).getName();
+									}
+									// attrNames.add(name);
+									// attrPos.put(name, j);
+									attrNames.put(name, invalidAtts.get(j)
+											.getValue());
+								}
+							}
+						}
+
+						// if (attrNames.size() > 0) {
+						// attrNames.sort(null);
+						// for (int j = 0; j < attrNames.size(); j += 1) {
+						// str += "\n| " + indent(1 + ancestors)
+						// + attrNames.get(j);
+						// str += "=\""
+						// + current
+						// .getAttributes()
+						// .item(attrPos.get(attrNames
+						// .get(j)))
+						// .getNodeValue() + "\"";
+						// }
+						// }
+
 						if (attrNames.size() > 0) {
-							attrNames.sort(null);
-							for (int j = 0; j < attrNames.size(); j += 1) {
-								str += "\n| " + indent(1 + ancestors)
-										+ attrNames.get(j);
-								str += "=\""
-										+ current
-												.getAttributes()
-												.item(attrPos.get(attrNames
-														.get(j)))
-												.getNodeValue() + "\"";
+							TreeMap<String, String> sorted_map = new TreeMap<String, String>(
+									attrNames);
+							for (Map.Entry<String, String> entry : sorted_map
+									.entrySet()) {
+								String key = entry.getKey();
+								String value = entry.getValue();
+
+								str += "\n| " + indent(1 + ancestors) + key;
+								str += "=\"" + value + "\"";
 							}
 						}
 					}
