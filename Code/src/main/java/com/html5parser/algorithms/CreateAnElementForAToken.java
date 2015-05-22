@@ -1,5 +1,8 @@
 package com.html5parser.algorithms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -79,6 +82,13 @@ public class CreateAnElementForAToken {
 										+ currentToken.getValue());
 					}
 				} catch (DOMException e) {
+					@SuppressWarnings("unchecked")
+					List<Attribute> invalidAtts = (List<Attribute>) element
+							.getUserData("invalidAtts");
+					if (invalidAtts == null)
+						invalidAtts = new ArrayList<Attribute>();
+					invalidAtts.add(attribute);
+					element.setUserData("invalidAtts", invalidAtts, null);
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
