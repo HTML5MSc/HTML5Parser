@@ -241,7 +241,8 @@ public class ForeignContent {
 		// An end tag whose tag name is "script", if the current node is a
 		// script element in the SVG namespace
 		// Pop the current node off the stack of open elements.
-		//
+		if(parserContext.getCurrentNode().getNodeName().equals("script"))
+			parserContext.getOpenElements().pop();
 		// Let the old insertion point have the same value as the current
 		// insertion point. Let the insertion point be just before the next
 		// input character.
