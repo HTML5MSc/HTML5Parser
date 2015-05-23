@@ -88,8 +88,8 @@ public class ForeignContent {
 							.hasAttribute(new String[] { "color", "face",
 									"size" }))) {
 				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
-				if (parserContext.isFlagHTMLFragmentParser())
-					anyOtherEndTag(parserContext, token);
+				if (parserContext.isFlagHTMLFragmentParser()){
+				}
 				else {
 					Element e = parserContext.getOpenElements().pop();
 					while (!parserContext.getOpenElements().isEmpty()) {
@@ -105,6 +105,7 @@ public class ForeignContent {
 							parserContext.getOpenElements().pop();
 					}
 					parserContext.setFlagReconsumeToken(true);
+					return parserContext;
 				}
 			}
 			// Any other start tag
@@ -138,7 +139,7 @@ public class ForeignContent {
 			// Otherwise
 			// Pop the current node off the stack of open elements and
 			// acknowledge the token's self-closing flag.
-			else {
+			
 				Element adjustedCurrentNode = parserContext
 						.getAdjustedCurrentNode();
 				if (adjustedCurrentNode.getNamespaceURI() != null
@@ -166,7 +167,6 @@ public class ForeignContent {
 						anScriptEndTag(parserContext);
 					}
 				}
-			}
 			break;
 		case end_tag:
 			if (!token.getValue().equals("script"))

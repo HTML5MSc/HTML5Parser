@@ -46,7 +46,7 @@ public class Parser implements IParser {
 		try {
 			builder = dbf.newDocumentBuilder();
 			doc = builder.newDocument();
-			// quirks mode limited-quirks mode, no-quirks mode
+			//Quirks mode can have value: quirks mode, limited-quirks mode, no-quirks mode
 			doc.setUserData("quirksmode", "no-quirks mode", null);
 			parserContext.setDocument(doc);
 		} catch (ParserConfigurationException e) {
