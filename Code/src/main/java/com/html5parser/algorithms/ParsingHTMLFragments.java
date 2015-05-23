@@ -153,7 +153,15 @@ public class ParsingHTMLFragments {
 			startTagToken.appendCharacterInValueInLastAttribute(attribute
 					.getNodeValue());
 		}
+		
+		//Set namespace as attribute
+		if(context.getNamespaceURI()!=null){
+			startTagToken.createAttribute("xmlns");
+			startTagToken.appendCharacterInValueInLastAttribute(context.getNamespaceURI());
+		}
+		
 		context.setUserData("startTagToken", startTagToken, null);
+		parser.getParserContext().setHtmlFragmentContext(context);
 
 		// Reset the parser's insertion mode appropriately.
 		ResetTheInsertionModeAppropriately.Run(newParserContext, context);
@@ -207,9 +215,9 @@ public class ParsingHTMLFragments {
 			e.printStackTrace();
 		}
 
-		Element context = doc.createElement("div");
+		Element context = doc.createElementNS(Namespace.SVG, "path");
 		doc.appendChild(context);
-		String input = "<b>test</b>";
+		String input = "<nobr>X";
 		NodeList result = ParsingHTMLFragments.run(parserContext, context,
 				input);
 		System.out.println(result.getLength());

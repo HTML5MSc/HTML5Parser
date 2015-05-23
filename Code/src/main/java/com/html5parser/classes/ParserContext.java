@@ -58,7 +58,7 @@ public class ParserContext {
 	private ArrayList<Element> activeFormattingElements = new ArrayList<Element>();
 	// private Element currentNode; //is the last element pushed onto the stack
 	// of open elements
-	private Element adjustedCurrentNode;
+	private Element htmlFragmentContext;
 	private Element headElementPointer;
 	private Element formElementPointer;
 
@@ -185,16 +185,20 @@ public class ParserContext {
 		// HTML fragment parsing algorithm; otherwise, the adjusted current node
 		// is the current node.
 		if (this.flagHTMLFragmentParser && this.openElements.size() == 1)
-			// TODO return context node
-			return openElements.peek();
+			//return openElements.peek();
+			return htmlFragmentContext;
 		else if (openElements.size() > 0)
 			return openElements.peek();
 		else
 			return null;
 	}
 
-	public void setAdjustedCurrentNode(Element adjustedCurrentNode) {
-		this.adjustedCurrentNode = adjustedCurrentNode;
+	public Element getHtmlFragmentContext() {
+		return htmlFragmentContext;
+	}
+
+	public void setHtmlFragmentContext(Element htmlFragmentContext) {
+		this.htmlFragmentContext = htmlFragmentContext;
 	}
 
 	public Element getHeadElementPointer() {

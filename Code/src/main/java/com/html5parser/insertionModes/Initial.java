@@ -115,5 +115,7 @@ public class Initial implements IInsertionMode {
 		parserContext.setInsertionMode(InsertionModeFactory.getInstance()
 				.getInsertionMode(InsertionMode.before_html));
 		parserContext.setFlagReconsumeToken(true);
+		Document doc = parserContext.getDocument();
+		doc.setUserData("quirksmode", "quirks mode", null);
 	}
 }

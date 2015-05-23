@@ -52,11 +52,11 @@ public class CreateAnElementForAToken {
 		if (currentToken.getType().equals(TokenType.start_tag)) {
 			for (Attribute attribute : ((TagToken) currentToken)
 					.getAttributes()) {
-				// TODO character "," is not a valid attribute name, DOM thorows
-				// an exception but HTML5 do accepts it
+				// TODO character "," is not a valid attribute name, DOM throws
+				// an exception but HTML5 does accept it
 				try {
-					element.setAttribute(attribute.getName(),
-							attribute.getValue());
+					element.setAttributeNS(attribute.getNamespace(),
+							attribute.getName(), attribute.getValue());
 
 					// If the newly created element has an xmlns attribute in
 					// the

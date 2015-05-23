@@ -885,10 +885,13 @@ public class InBody implements IInsertionMode {
 
 		else if (tokenType == TokenType.start_tag
 				&& token.getValue().equals("nobr")) {
-			if (ElementInScope.isInScope(parserContext, token.getValue()))
-				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
-			AdoptionAgencyAlgorithm.Run(parserContext, token.getValue());
 			ListOfActiveFormattingElements.reconstruct(parserContext);
+			if (ElementInScope.isInScope(parserContext, token.getValue())){
+				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
+				AdoptionAgencyAlgorithm.Run(parserContext, token.getValue());
+				ListOfActiveFormattingElements.reconstruct(parserContext);
+			}
+				
 			Element e = InsertAnHTMLElement.run(parserContext, token);
 			ListOfActiveFormattingElements.push(parserContext, e);
 		}
@@ -961,7 +964,7 @@ public class InBody implements IInsertionMode {
 		else if (tokenType == TokenType.start_tag
 				&& isOneOf(token.getValue(), new String[] { "table" })) {
 			if (!parserContext.getDocument().getUserData("quirksmode")
-					.equals("no-quirks mode")
+					.equals("quirks mode")
 					&& ElementInScope.isInButtonScope(parserContext, "p"))
 				closeApElement(parserContext);
 			InsertAnHTMLElement.run(parserContext, token);
@@ -1026,9 +1029,22 @@ public class InBody implements IInsertionMode {
 		 * Insert an HTML element for the token. Immediately pop the current
 		 * node off the stack of open elements. Acknowledge the token's
 		 * self-closing flag, if it is set.
+		 * 
+		 * 
+		 * Here is a difference wiht the WHATWG spec that have:
+		 * 
+		 * A start tag whose tag name is one of: "menuitem", "param", "source",
+		 * "track"
+		 * 
+		 * Insert an HTML element for the token. Immediately pop the current
+		 * node off the stack of open elements.
+		 * 
+		 * Acknowledge the token's self-closing flag, if it is set.
+		 * 
+		 * To pass the HTML5Lib5 tests, the WHATWG was implemented.
 		 */
 		else if (tokenType == TokenType.start_tag
-				&& isOneOf(token.getValue(), new String[] { "param", "source",
+				&& isOneOf(token.getValue(), new String[] { "menuitem", "param", "source",
 						"track" })) {
 			InsertAnHTMLElement.run(parserContext, token);
 			parserContext.getOpenElements().pop();

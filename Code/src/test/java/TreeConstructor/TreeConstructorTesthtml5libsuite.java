@@ -3,6 +3,8 @@ package TreeConstructor;
 import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -30,6 +32,7 @@ import org.w3c.dom.NodeList;
 import com.html5parser.algorithms.ParsingHTMLFragments;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.token.TagToken.Attribute;
+import com.html5parser.constants.Namespace;
 import com.html5parser.parser.Parser;
 
 /* HTML5LIB FORMAT example
@@ -96,30 +99,30 @@ public class TreeConstructorTesthtml5libsuite {
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests25.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests26.dat",
 
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption01.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption02.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/comments01.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/doctype01.dat",
-		// //"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/domjs-unsafe.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/entities01.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/entities02.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/foreign-fragment.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/html5test-com.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/inbody01.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/isindex.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/main-element.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/pending-spec-changes-plain-text-unsafe.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/pending-spec-changes.dat",
-		// //"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/plain-text-unsafe.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/ruby.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/scriptdata01.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tables01.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/template.dat",
-		//
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests_innerHTML_1.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tricky01.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/webkit01.dat",
-		// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/webkit02.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption01.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/adoption02.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/comments01.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/doctype01.dat",
+		"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/domjs-unsafe.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/entities01.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/entities02.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/foreign-fragment.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/html5test-com.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/inbody01.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/isindex.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/main-element.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/pending-spec-changes-plain-text-unsafe.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/pending-spec-changes.dat",
+		"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/plain-text-unsafe.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/ruby.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/scriptdata01.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tables01.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/template.dat",
+		
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests_innerHTML_1.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tricky01.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/webkit01.dat",
+		 "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/webkit02.dat",
 
 		};
 
@@ -139,8 +142,8 @@ public class TreeConstructorTesthtml5libsuite {
 			url = new URL(resource);
 			in = new BufferedReader(new InputStreamReader(url.openStream()));
 
-			// String resource = "C:\\Users\\JoséArmando\\Desktop\\test.txt";
-			// in = new BufferedReader(new FileReader(new File(resource)));
+//			 resource = "C:\\Users\\JoséArmando\\Desktop\\domjs-unsafe.dat";
+//			 in = new BufferedReader(new FileReader(new File(resource)));
 
 			scanner = new Scanner(in);
 			String testFile = scanner.useDelimiter("\\A").next();
@@ -155,8 +158,16 @@ public class TreeConstructorTesthtml5libsuite {
 				if (test.contains("#script-off"))
 					continue;
 
+				
+				int inputFinish = test.indexOf("\n#errors\n");
+				String input="";
+				if (inputFinish != -1) 
+					input = test.substring(0, inputFinish);
+					
+				// The replacement of the return line char is because the Junit Parameterized
+				// does not work properly is the char is set in a parameter (testName)
 				String testName = i + " (" + resource + ") "
-						+ test.split("\\n")[0]; // i + "";
+						+ input.replace("\n", "(EOL)").replace("\r", "(EOL)"); // i + "";
 				testList.add(new Object[] { testName, test });
 			}
 
@@ -214,7 +225,7 @@ public class TreeConstructorTesthtml5libsuite {
 		// System.out.println("******Expected " + expected);
 		if (contextElement != null) {
 			System.out
-					.println("*************** Pasing HTML Fragment with Context Element:"
+					.println("*************** Parsing HTML Fragment with Context Element:"
 							+ contextElement);
 			Document document = null;
 			ParserContext parserContext = new ParserContext();
@@ -228,8 +239,7 @@ public class TreeConstructorTesthtml5libsuite {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			Element element = document.createElement(contextElement);
+			Element element = createElement(document, contextElement);
 			try {
 				NodeList result = ParsingHTMLFragments.run(parserContext,
 						element, input);
@@ -495,4 +505,22 @@ public class TreeConstructorTesthtml5libsuite {
 		}
 	}
 
+	private Element createElement(Document doc, String context){
+		context = context.trim();
+		if(!context.contains(" ")) return doc.createElementNS("http://www.w3.org/1999/xhtml",context);
+		
+		String [] contextSplit = context.split(" ");
+		String namespace = null;
+		String name = contextSplit[1];
+		
+		switch(contextSplit[0]){
+		case "math":
+			namespace = "http://www.w3.org/1998/Math/MathML";
+			break;
+		case "svg":
+			namespace = "http://www.w3.org/2000/svg";
+			break;
+		}
+		return doc.createElementNS(namespace, name);
+	}
 }
