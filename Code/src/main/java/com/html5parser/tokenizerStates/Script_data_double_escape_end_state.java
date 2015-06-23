@@ -41,23 +41,29 @@ public class Script_data_double_escape_end_state implements ITokenizerState {
 						.setNextState(factory
 								.getState(TokenizerState.Script_data_double_escaped_state));
 			}
-			tokenizerContext.emitCurrentToken(new Token(TokenType.character, currentChar));
+			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
+					currentChar));
 			break;
 		case LATIN_CAPITAL_LETTER:
 			/*
-			 * change it to lower case
+			 * Uppercase ASCII letter Append the lowercase version of the
+			 * current input character (add 0x0020 to the character's code
+			 * point) to the temporary buffer. Emit the current input character
+			 * as a character token.
 			 */
-			currentChar += 0x0020;
-
+			tokenizerContext
+					.appendCharacterToTemporaryBuffer(currentChar + 0x0020);
+			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
+					currentChar));
+			break;
 		case LATIN_SMALL_LETTER:
 			/*
 			 * Append the current input character to the temporary buffer. Emit
 			 * the current input character as a character token.
 			 */
-			tokenizerContext.setTemporaryBuffer(tokenizerContext
-					.getTemporaryBuffer().concat(
-							String.valueOf(Character.toChars(currentChar))));
-			tokenizerContext.emitCurrentToken(new Token(TokenType.character, currentChar));
+			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
+			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
+					currentChar));
 			break;
 		default:
 			/*

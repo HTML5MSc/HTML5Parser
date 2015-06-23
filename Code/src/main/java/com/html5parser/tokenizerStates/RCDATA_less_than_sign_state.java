@@ -10,7 +10,7 @@ import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.ITokenizerState;
 
 public class RCDATA_less_than_sign_state implements ITokenizerState {
-	
+
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
@@ -37,7 +37,7 @@ public class RCDATA_less_than_sign_state implements ITokenizerState {
 			tokenizerContext.setNextState(factory
 					.getState(TokenizerState.RCDATA_state));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(0x003C))));
+					0x003C));
 			tokenizerContext.setFlagReconsumeCurrentInputCharacter(true);
 			break;
 		}

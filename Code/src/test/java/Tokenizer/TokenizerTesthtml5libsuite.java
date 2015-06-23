@@ -100,7 +100,8 @@ public class TokenizerTesthtml5libsuite {
 
 			for (int i = 0; i < tests.size(); i++) {
 				JSONObject test = (JSONObject) tests.get(i);
-				String testName = (String) test.get("description");
+				String testName = (String) test.get("description") + i + " (" + resource + ") ";
+				
 				testList.add(new Object[] { testName, test });
 			}
 

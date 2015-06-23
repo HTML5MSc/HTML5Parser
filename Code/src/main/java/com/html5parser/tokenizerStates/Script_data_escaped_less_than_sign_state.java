@@ -3,16 +3,15 @@ package com.html5parser.tokenizerStates;
 import com.html5parser.classes.ASCIICharacter;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
+import com.html5parser.classes.Token.TokenType;
 import com.html5parser.classes.TokenizerContext;
 import com.html5parser.classes.TokenizerState;
-import com.html5parser.classes.Token.TokenType;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.ITokenizerState;
 
 public class Script_data_escaped_less_than_sign_state implements
 		ITokenizerState {
 
-	@Override
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
@@ -41,16 +40,15 @@ public class Script_data_escaped_less_than_sign_state implements
 			 * a character token.
 			 */
 			tokenizerContext.setTemporaryBuffer("");
-			tokenizerContext.setTemporaryBuffer(tokenizerContext
-					.getTemporaryBuffer().concat(
-							String.valueOf(Character.toChars(currentChar + 0x0020))));
+			tokenizerContext
+					.appendCharacterToTemporaryBuffer(currentChar + 0x0020);
 			tokenizerContext
 					.setNextState(factory
 							.getState(TokenizerState.Script_data_double_escape_start_state));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(0x003C))));
+					0x003C));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(currentChar))));
+					currentChar));
 			break;
 		case LATIN_SMALL_LETTER:
 			/*
@@ -61,16 +59,14 @@ public class Script_data_escaped_less_than_sign_state implements
 			 * token.
 			 */
 			tokenizerContext.setTemporaryBuffer("");
-			tokenizerContext.setTemporaryBuffer(tokenizerContext
-					.getTemporaryBuffer().concat(
-							String.valueOf(Character.toChars(currentChar))));
+			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
 			tokenizerContext
 					.setNextState(factory
 							.getState(TokenizerState.Script_data_double_escape_start_state));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(0x003C))));
+					0x003C));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(currentChar))));
+					currentChar));
 			break;
 
 		default:
@@ -81,7 +77,7 @@ public class Script_data_escaped_less_than_sign_state implements
 			tokenizerContext.setNextState(factory
 					.getState(TokenizerState.Script_data_escaped_state));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(0x003C))));
+					0x003C));
 			tokenizerContext.setFlagReconsumeCurrentInputCharacter(true);
 			break;
 		}

@@ -12,7 +12,6 @@ import com.html5parser.interfaces.ITokenizerState;
 
 public class Script_data_escaped_end_tag_open_state implements ITokenizerState {
 
-	@Override
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
@@ -23,9 +22,20 @@ public class Script_data_escaped_end_tag_open_state implements ITokenizerState {
 		switch (asciiCharacter) {
 		case LATIN_CAPITAL_LETTER:
 			/*
-			 * change to lower case
+			 * Uppercase ASCII letter Create a new end tag token, and set its
+			 * tag name to the lowercase version of the current input character
+			 * (add 0x0020 to the character's code point). Append the current
+			 * input character to the temporary buffer. Finally, switch to the
+			 * script data escaped end tag name state. (Don't emit the token
+			 * yet; further details will be filled in before it is emitted.)
 			 */
-			currentChar += 0x0020;
+			tokenizerContext.setCurrentToken(new TagToken(TokenType.end_tag,
+					currentChar + 0x0020));
+			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
+			tokenizerContext
+					.setNextState(factory
+							.getState(TokenizerState.Script_data_escaped_end_tag_name_state));
+			break;
 		case LATIN_SMALL_LETTER:
 			/*
 			 * Create a new end tag token, and set its tag name to the current
@@ -34,12 +44,9 @@ public class Script_data_escaped_end_tag_open_state implements ITokenizerState {
 			 * tag name state. (Don't emit the token yet; further details will
 			 * be filled in before it is emitted.)
 			 */
-			String addedChar = String.valueOf(Character.toChars(currentChar));
-			TagToken token = new TagToken(TokenType.end_tag, addedChar);
-			tokenizerContext.setTemporaryBuffer(tokenizerContext
-					.getTemporaryBuffer().concat(
-							String.valueOf(Character.toChars(currentChar))));
-			tokenizerContext.setCurrentToken(token);
+			tokenizerContext.setCurrentToken(new TagToken(TokenType.end_tag,
+					currentChar));
+			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
 			tokenizerContext
 					.setNextState(factory
 							.getState(TokenizerState.Script_data_escaped_end_tag_name_state));
@@ -53,9 +60,9 @@ public class Script_data_escaped_end_tag_open_state implements ITokenizerState {
 			tokenizerContext.setNextState(factory
 					.getState(TokenizerState.Script_data_escaped_state));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(0x003C))));
+					0x003C));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(0x002F))));
+					0x002F));
 			tokenizerContext.setFlagReconsumeCurrentInputCharacter(true);
 			break;
 

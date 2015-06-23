@@ -11,7 +11,7 @@ import com.html5parser.interfaces.ITokenizerState;
 import com.html5parser.parseError.ParseErrorType;
 
 public class RCDATA_state implements ITokenizerState {
-	
+
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
@@ -37,16 +37,17 @@ public class RCDATA_state implements ITokenizerState {
 			// Parse error. Emit a U+FFFD REPLACEMENT CHARACTER character token.
 			context.addParseErrors(ParseErrorType.UnexpectedInputCharacter);
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(0xFFFD))));
+					0xFFFD));
 			break;
 		case EOF:
 			// Emit an end-of-file token.
-			tokenizerContext.emitCurrentToken(new Token(TokenType.end_of_file, null));
+			tokenizerContext.emitCurrentToken(new Token(TokenType.end_of_file,
+					null));
 			break;
 		default:
 			// Emit the current input character as a character token.
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(currentChar))));
+					currentChar));
 			break;
 		}
 
