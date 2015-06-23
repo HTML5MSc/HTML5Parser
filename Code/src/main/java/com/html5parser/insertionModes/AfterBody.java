@@ -24,17 +24,7 @@ public class AfterBody implements IInsertionMode {
 		 * 
 		 * Process the token using the rules for the "in body" insertion mode.
 		 */
-		if (tokenType == TokenType.character
-				&& (token.getValue().equals(
-						String.valueOf(Character.toChars(0x0009)))
-						|| token.getValue().equals(
-								String.valueOf(Character.toChars(0x000A)))
-						|| token.getValue().equals(
-								String.valueOf(Character.toChars(0x000C)))
-						|| token.getValue().equals(
-								String.valueOf(Character.toChars(0x000D))) || token
-						.getValue().equals(
-								String.valueOf(Character.toChars(0x0020))))) {
+		if (tokenType == TokenType.character && token.isSpaceCharacter()) {
 			IInsertionMode insertionMode = factory
 					.getInsertionMode(InsertionMode.in_body);
 			return parserContext = insertionMode.process(parserContext);
@@ -106,12 +96,13 @@ public class AfterBody implements IInsertionMode {
 		/**
 		 * Anything else
 		 * 
-		 * Parse error. Switch the insertion mode to "in body" and reprocess the token.
+		 * Parse error. Switch the insertion mode to "in body" and reprocess the
+		 * token.
 		 */
 		parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
 		parserContext.setInsertionMode(factory
-					.getInsertionMode(InsertionMode.in_body));
+				.getInsertionMode(InsertionMode.in_body));
 		parserContext.setFlagReconsumeToken(true);
-		return parserContext; 
+		return parserContext;
 	}
 }

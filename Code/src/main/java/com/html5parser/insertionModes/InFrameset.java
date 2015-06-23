@@ -27,17 +27,7 @@ public class InFrameset implements IInsertionMode {
 		 * 
 		 * Insert the character.
 		 */
-		if (tokenType == TokenType.character
-				&& (token.getValue().equals(
-						String.valueOf(Character.toChars(0x0009)))
-						|| token.getValue().equals(
-								String.valueOf(Character.toChars(0x000A)))
-						|| token.getValue().equals(
-								String.valueOf(Character.toChars(0x000C)))
-						|| token.getValue().equals(
-								String.valueOf(Character.toChars(0x000D))) || token
-						.getValue().equals(
-								String.valueOf(Character.toChars(0x0020))))) {
+		if (tokenType == TokenType.character && token.isSpaceCharacter()) {
 			InsertCharacter.run(parserContext, token);
 			return parserContext;
 		}

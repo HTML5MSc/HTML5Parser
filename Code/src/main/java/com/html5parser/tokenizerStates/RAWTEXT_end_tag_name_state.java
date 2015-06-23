@@ -76,18 +76,17 @@ public class RAWTEXT_end_tag_name_state implements ITokenizerState {
 			 * tag name. Append the current input character to the temporary
 			 * buffer.
 			 */
-			currentChar += 0x0020;
+			currentToken.appendValue(currentChar + 0x0020);
+			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
+			break;
 
 		case LATIN_SMALL_LETTER:
 			/*
 			 * Append the current input character to the current tag token's tag
 			 * name. Append the current input character to the temporary buffer.
 			 */
-			currentToken.setValue(currentToken.getValue().concat(
-					String.valueOf(Character.toChars(currentChar))));
-			tokenizerContext.setTemporaryBuffer(tokenizerContext
-					.getTemporaryBuffer().concat(
-							String.valueOf(Character.toChars(currentChar))));
+			currentToken.appendValue(currentChar);
+			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
 			break;
 		default:
 			defaultProcess(tokenizerContext);
@@ -109,15 +108,15 @@ public class RAWTEXT_end_tag_name_state implements ITokenizerState {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		tokenizerContext.setNextState(factory
 				.getState(TokenizerState.RAWTEXT_state));
-		tokenizerContext.emitCurrentToken(new Token(TokenType.character, String
-				.valueOf(Character.toChars(0x003C))));
-		tokenizerContext.emitCurrentToken(new Token(TokenType.character, String
-				.valueOf(Character.toChars(0x002F))));
+		tokenizerContext
+				.emitCurrentToken(new Token(TokenType.character, 0x003C));
+		tokenizerContext
+				.emitCurrentToken(new Token(TokenType.character, 0x002F));
 		String temporaryBuffer = tokenizerContext.getTemporaryBuffer();
 		for (int i = 0; i < temporaryBuffer.length(); i++) {
 			char a = temporaryBuffer.charAt(i);
-			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(a)));
+			tokenizerContext
+					.emitCurrentToken(new Token(TokenType.character, a));
 		}
 		tokenizerContext.setFlagReconsumeCurrentInputCharacter(true);
 	}

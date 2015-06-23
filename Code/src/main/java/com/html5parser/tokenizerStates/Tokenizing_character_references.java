@@ -58,27 +58,32 @@ public class Tokenizing_character_references {
 		// U+0009 CHARACTER TABULATION (tab)
 		case 0x0009:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			result.add(new Token(TokenType.character, 0x0009));
+			//result.add(new Token(TokenType.character, 0x0009));
+			result.addAll(queue);
 			return result;
 			// U+000A LINE FEED (LF)
 		case 0x000A:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			result.add(new Token(TokenType.character, 0x000A));
+			//result.add(new Token(TokenType.character, 0x000A));
+			result.addAll(queue);
 			return result;
 			// U+000C FORM FEED (FF)
 		case 0x000C:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			result.add(new Token(TokenType.character, 0x000C));
+			//result.add(new Token(TokenType.character, 0x000C));
+			result.addAll(queue);
 			return result;
 			// U+0020 SPACE
 		case 0x0020:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			result.add(new Token(TokenType.character, 0x0020));
+			//result.add(new Token(TokenType.character, 0x0020));
+			result.addAll(queue);
 			return result;
 			// U+0026 AMPERSAND
 		case 0x0026:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			result.add(new Token(TokenType.character, 0x0026)); // return &
+			//result.add(new Token(TokenType.character, 0x0026)); // return &
+			result.addAll(queue);
 			return result;
 
 			// U+0023 NUMBER SIGN (#
@@ -412,7 +417,7 @@ public class Tokenizing_character_references {
 
 	private static boolean isHexDigit(int codePoint) {
 		return ((codePoint >= 0x0030 && codePoint <= 0x0039)
-				|| (codePoint >= 0x0041 && codePoint <= 0x005A) || (codePoint >= 0x0061 && codePoint <= 0x0066));
+				|| (codePoint >= 0x0041 && codePoint <= 0x0046) || (codePoint >= 0x0061 && codePoint <= 0x0066));
 	}
 
 	private static boolean isDecDigit(int codePoint) {

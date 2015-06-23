@@ -12,7 +12,6 @@ import com.html5parser.interfaces.ITokenizerState;
 
 public class Script_data_end_tag_open_state implements ITokenizerState {
 
-	@Override
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
@@ -30,22 +29,17 @@ public class Script_data_end_tag_open_state implements ITokenizerState {
 			 * name state. (Don't emit the token yet; further details will be
 			 * filled in before it is emitted.)
 			 */
-			String addedChar = String.valueOf(Character
-					.toChars(currentChar + 0x0020));
-			TagToken token = new TagToken(TokenType.end_tag, addedChar);
-			tokenizerContext.setTemporaryBuffer(tokenizerContext
-					.getTemporaryBuffer().concat(
-							String.valueOf(Character.toChars(currentChar))));
+
+			TagToken token = new TagToken(TokenType.end_tag,
+					currentChar + 0x0020);
+			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
 			tokenizerContext.setCurrentToken(token);
 			tokenizerContext.setNextState(factory
 					.getState(TokenizerState.Script_data_end_tag_name_state));
 			break;
 		case LATIN_SMALL_LETTER:
-			addedChar = String.valueOf(Character.toChars(currentChar));
-			token = new TagToken(TokenType.end_tag, addedChar);
-			tokenizerContext.setTemporaryBuffer(tokenizerContext
-					.getTemporaryBuffer().concat(
-							String.valueOf(Character.toChars(currentChar))));
+			token = new TagToken(TokenType.end_tag, currentChar);
+			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
 			tokenizerContext.setCurrentToken(token);
 			tokenizerContext.setNextState(factory
 					.getState(TokenizerState.Script_data_end_tag_name_state));
@@ -59,9 +53,9 @@ public class Script_data_end_tag_open_state implements ITokenizerState {
 			tokenizerContext.setNextState(factory
 					.getState(TokenizerState.Script_data_state));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(0x003C))));
+					0x003C));
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
-					String.valueOf(Character.toChars(0x002F))));
+					0x002F));
 			tokenizerContext.setFlagReconsumeCurrentInputCharacter(true);
 			break;
 

@@ -47,16 +47,8 @@ public class AfterAfterBody implements IInsertionMode {
 		if ((tokenType == TokenType.DOCTYPE)
 				|| (tokenType == TokenType.start_tag && token.getValue()
 						.equals("html"))
-				|| (tokenType == TokenType.character && (token.getValue()
-						.equals(String.valueOf(Character.toChars(0x0009)))
-						|| token.getValue().equals(
-								String.valueOf(Character.toChars(0x000A)))
-						|| token.getValue().equals(
-								String.valueOf(Character.toChars(0x000C)))
-						|| token.getValue().equals(
-								String.valueOf(Character.toChars(0x000D))) || token
-						.getValue().equals(
-								String.valueOf(Character.toChars(0x0020)))))) {
+				|| (tokenType == TokenType.character && token
+						.isSpaceCharacter())) {
 			IInsertionMode insertionMode = factory
 					.getInsertionMode(InsertionMode.in_body);
 			return parserContext = insertionMode.process(parserContext);
