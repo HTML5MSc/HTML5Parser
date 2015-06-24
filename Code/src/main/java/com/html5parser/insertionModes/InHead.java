@@ -116,7 +116,7 @@ public class InHead implements IInsertionMode {
 		 * Follow the generic raw text element parsing algorithm.
 		 */
 		else if ((tokenType == TokenType.start_tag
-				&& token.getValue().equals("noscript") && !parserContext
+				&& token.getValue().equals("noscript") && parserContext
 					.isFlagScripting())
 				|| (tokenType == TokenType.start_tag && (token.getValue()
 						.equals("noframes") || token.getValue().equals("style")))) {
@@ -180,9 +180,9 @@ public class InHead implements IInsertionMode {
 
 			parserContext.setOriginalInsertionMode(parserContext
 					.getInsertionMode());
-			
-			parserContext.setInsertionMode(InsertionModeFactory
-					.getInstance().getInsertionMode(InsertionMode.text));
+
+			parserContext.setInsertionMode(InsertionModeFactory.getInstance()
+					.getInsertionMode(InsertionMode.text));
 
 		}
 		/*
@@ -197,14 +197,13 @@ public class InHead implements IInsertionMode {
 					.getInsertionMode(InsertionMode.after_head));
 		}
 		/*
-		 * An end tag whose tag name is one of: "body", "html", "br"
-		 * Act as described in the "anything else" entry below.
+		 * An end tag whose tag name is one of: "body", "html", "br" Act as
+		 * described in the "anything else" entry below.
 		 */
 		else if (tokenType == TokenType.end_tag
 				&& (token.getValue().equals("body")
-				|| token.getValue().equals("html")
-				|| token.getValue().equals("br")
-				)) {
+						|| token.getValue().equals("html") || token.getValue()
+						.equals("br"))) {
 			anythingElse(parserContext);
 		}
 		/*
@@ -244,8 +243,8 @@ public class InHead implements IInsertionMode {
 		}
 		return parserContext;
 	}
-	
-	private void anythingElse(ParserContext parserContext){
+
+	private void anythingElse(ParserContext parserContext) {
 		parserContext.getOpenElements().pop();
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		parserContext.setInsertionMode(factory

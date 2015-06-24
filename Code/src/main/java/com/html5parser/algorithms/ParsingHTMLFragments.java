@@ -1,17 +1,8 @@
 package com.html5parser.algorithms;
 
-import java.io.StringWriter;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -28,6 +19,7 @@ import com.html5parser.constants.Namespace;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.parser.Parser;
+import com.html5parser.parser.Serializer;
 
 public class ParsingHTMLFragments {
 
@@ -46,6 +38,7 @@ public class ParsingHTMLFragments {
 		// the context element is in limited-quirks mode, then let the Document
 		// be in limited-quirks mode. Otherwise, leave the Document in no-quirks
 		// mode.
+		document.setUserData("quirksmode", "no-quirks mode", null);
 
 		// Create a new HTML parser, and associate it with the just created
 		// Document node.
@@ -57,65 +50,73 @@ public class ParsingHTMLFragments {
 		parser.getParserContext().setFlagHTMLFragmentParser(true);
 
 		// Set the state of the HTML parser's tokenization stage as follows:
+		// NOTE the spec does not say anything about namspace of the context
+		// element, so we assume the elements must be in the HTML namespace
 		TokenizerContext tokenizer = parser.getParserContext()
 				.getTokenizerContext();
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		String elementName = context.getTagName();
 
-		switch (elementName) {
+		if (context.getNamespaceURI() != null
+				&& context.getNamespaceURI().equals(Namespace.HTML)) {
+			switch (elementName) {
 
-		// If it is a title or textarea element
-		// Switch the tokenizer to the RCDATA state.
-		case "title":
-		case "textarea":
-			tokenizer.setNextState(factory
-					.getState(TokenizerState.RCDATA_state));
-			break;
+			// If it is a title or textarea element
+			// Switch the tokenizer to the RCDATA state.
+			case "title":
+			case "textarea":
+				tokenizer.setNextState(factory
+						.getState(TokenizerState.RCDATA_state));
+				break;
 
-		// If it is a style, xmp, iframe, noembed, or noframes element
-		// Switch the tokenizer to the RAWTEXT state.
-		case "style":
-		case "xmp":
-		case "iframe":
-		case "noembed":
-		case "noframes":
-			tokenizer.setNextState(factory
-					.getState(TokenizerState.RAWTEXT_state));
-			break;
-
-		// If it is a script element
-		// Switch the tokenizer to the script data state.
-		case "script":
-			tokenizer.setNextState(factory
-					.getState(TokenizerState.Script_data_state));
-			break;
-
-		// If it is a noscript element
-		// If the scripting flag is enabled, switch the tokenizer to the RAWTEXT
-		// state. Otherwise, leave the tokenizer in the data state.
-		case "noscript":
-			if (parserContext.isFlagScripting())
+			// If it is a style, xmp, iframe, noembed, or noframes element
+			// Switch the tokenizer to the RAWTEXT state.
+			case "style":
+			case "xmp":
+			case "iframe":
+			case "noembed":
+			case "noframes":
 				tokenizer.setNextState(factory
 						.getState(TokenizerState.RAWTEXT_state));
-			else
+				break;
+
+			// If it is a script element
+			// Switch the tokenizer to the script data state.
+			case "script":
+				tokenizer.setNextState(factory
+						.getState(TokenizerState.Script_data_state));
+				break;
+
+			// If it is a noscript element
+			// If the scripting flag is enabled, switch the tokenizer to the
+			// RAWTEXT
+			// state. Otherwise, leave the tokenizer in the data state.
+			case "noscript":
+				if (parserContext.isFlagScripting())
+					tokenizer.setNextState(factory
+							.getState(TokenizerState.RAWTEXT_state));
+				else
+					tokenizer.setNextState(factory
+							.getState(TokenizerState.Data_state));
+				break;
+
+			// If it is a plaintext element
+			// Switch the tokenizer to the PLAINTEXT state.
+			case "plaintext":
+				tokenizer.setNextState(factory
+						.getState(TokenizerState.PLAINTEXT_state));
+				break;
+
+			// Otherwise
+			// Leave the tokenizer in the data state.
+			default:
 				tokenizer.setNextState(factory
 						.getState(TokenizerState.Data_state));
-			break;
+				break;
 
-		// If it is a plaintext element
-		// Switch the tokenizer to the PLAINTEXT state.
-		case "plaintext":
-			tokenizer.setNextState(factory
-					.getState(TokenizerState.PLAINTEXT_state));
-			break;
-
-		// Otherwise
-		// Leave the tokenizer in the data state.
-		default:
+			}
+		} else
 			tokenizer.setNextState(factory.getState(TokenizerState.Data_state));
-			break;
-
-		}
 
 		// Let root be a new html element with no attributes.
 		Element root = document.createElementNS(Namespace.HTML, "html");
@@ -153,13 +154,17 @@ public class ParsingHTMLFragments {
 			startTagToken.appendCharacterInValueInLastAttribute(attribute
 					.getNodeValue());
 		}
-		
-		//Set namespace as attribute
-		if(context.getNamespaceURI()!=null){
+
+		// Add start tag token to the stack of emmited start tags
+		tokenizer.appendEmittedStartTag(startTagToken.getValue());
+
+		// Set namespace as attribute
+		if (context.getNamespaceURI() != null) {
 			startTagToken.createAttribute("xmlns");
-			startTagToken.appendCharacterInValueInLastAttribute(context.getNamespaceURI());
+			startTagToken.appendCharacterInValueInLastAttribute(context
+					.getNamespaceURI());
 		}
-		
+
 		context.setUserData("startTagToken", startTagToken, null);
 		parser.getParserContext().setHtmlFragmentContext(context);
 
@@ -228,33 +233,8 @@ public class ParsingHTMLFragments {
 			Node adopted = doc.importNode(node, true);
 			context.appendChild(adopted);
 		}
-		System.out.println(serializeDocument(doc));
+		System.out.println(Serializer.toHtmlString(doc));
 
 		System.out.println(parserContext.getParseErrors());
-	}
-
-	private static String serializeDocument(Document doc) {
-		boolean indent = true;
-		try {
-			StringWriter writer = new StringWriter();
-			TransformerFactory tf = TransformerFactory.newInstance();
-			Transformer transformer = tf.newTransformer();
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
-					"yes");
-			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-			transformer.setOutputProperty(OutputKeys.INDENT, indent ? "yes"
-					: "no");
-			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			transformer.setOutputProperty(
-					"{http://xml.apache.org/xslt}indent-amount", "4");
-
-			transformer.transform(new DOMSource(doc), new StreamResult(writer));
-			return writer.toString();
-		} catch (IllegalArgumentException
-				| TransformerFactoryConfigurationError | TransformerException e) {
-			e.printStackTrace();
-			return null;
-
-		}
 	}
 }

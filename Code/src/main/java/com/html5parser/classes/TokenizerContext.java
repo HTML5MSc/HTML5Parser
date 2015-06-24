@@ -120,6 +120,10 @@ public class TokenizerContext {
 	public Stack<String> getEmittedStartTags() {
 		return emittedStartTags;
 	}
+	
+	public void appendEmittedStartTag(String emittedStartTag) {
+		this.emittedStartTags.push(emittedStartTag);
+	}
 
 	public String getLatestEmittedStartTag() {
 		if (this.emittedStartTags.isEmpty()) {

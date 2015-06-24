@@ -12,8 +12,12 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.html5parser.algorithms.ForeignContent;
+import com.html5parser.algorithms.ParsingHTMLFragments;
 import com.html5parser.algorithms.TreeCostructionDispatcher;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
@@ -35,26 +39,25 @@ public class Parser implements IParser {
 	TreeConstructor treeConstructor;
 
 	public Parser() {
+		initialize(false);
+	}
+	
+	public Parser(boolean scriptFlag) {
+		initialize(scriptFlag);
+	}
 
+	private void initialize(boolean scriptFlag){
 		parserContext = new ParserContext();
 		tokenizer = new Tokenizer();
 		streamPreprocessor = new StreamPreprocessor();
 		treeConstructor = new TreeConstructor();
-
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
-		try {
-			builder = dbf.newDocumentBuilder();
-			doc = builder.newDocument();
-			//Quirks mode can have value: quirks mode, limited-quirks mode, no-quirks mode
-			doc.setUserData("quirksmode", "no-quirks mode", null);
-			parserContext.setDocument(doc);
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		doc = createNewDocument();
+		
+		parserContext.setDocument(doc);
+		parserContext.setFlagScripting(scriptFlag);
+		
 	}
-
+	
 	public Document parse(String htmlString) {
 		return parse(new ByteArrayInputStream(htmlString.getBytes()));
 	}
@@ -162,6 +165,66 @@ public class Parser implements IParser {
 		return parserContext.getDocument();
 	}
 
+	public Node parseFragment(String htmlString, String contextElement){
+		Document document = createNewDocument();
+		ParserContext parserContext = new ParserContext();
+		Element element = createElement(document, contextElement);
+		
+		try {
+			NodeList result = ParsingHTMLFragments.run(parserContext,
+					element, htmlString);
+
+			int size = result.getLength();
+			for (int i = 0; i < size; i++) {
+				Node node = result.item(i);
+				//System.out.println(node);
+				Node adopted = document.importNode(node, true);
+				element.appendChild(adopted);
+			}
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return element;
+	}
+	
+	private Document createNewDocument(){
+		Document document = null;
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder;
+		try {
+			builder = dbf.newDocumentBuilder();
+			document = builder.newDocument();
+			//Quirks mode can have value: quirks mode, limited-quirks mode, no-quirks mode
+			document.setUserData("quirksmode", "no-quirks mode", null);
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return document;
+	}
+	
+	private Element createElement(Document doc, String context) {
+		context = context.trim();
+		if (!context.contains(" "))
+			return doc.createElementNS("http://www.w3.org/1999/xhtml", context);
+
+		String[] contextSplit = context.split(" ");
+		String namespace = null;
+		String name = contextSplit[1];
+
+		switch (contextSplit[0]) {
+		case "math":
+			namespace = "http://www.w3.org/1998/Math/MathML";
+			break;
+		case "svg":
+			namespace = "http://www.w3.org/2000/svg";
+			break;
+		}
+		return doc.createElementNS(namespace, name);
+	}
+	
 	public ParserContext tokenize(ParserContext parserContext, String string) {
 		BufferedReader in = null;
 
