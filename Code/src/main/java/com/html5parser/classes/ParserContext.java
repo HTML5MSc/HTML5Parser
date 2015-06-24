@@ -176,7 +176,7 @@ public class ParserContext {
 	}
 
 	public Element getCurrentNode() {
-		return openElements.peek();
+		return openElements.size() > 0 ? openElements.peek() : null;
 	}
 
 	public Element getAdjustedCurrentNode() {
@@ -185,7 +185,7 @@ public class ParserContext {
 		// HTML fragment parsing algorithm; otherwise, the adjusted current node
 		// is the current node.
 		if (this.flagHTMLFragmentParser && this.openElements.size() == 1)
-			//return openElements.peek();
+			// return openElements.peek();
 			return htmlFragmentContext;
 		else if (openElements.size() > 0)
 			return openElements.peek();

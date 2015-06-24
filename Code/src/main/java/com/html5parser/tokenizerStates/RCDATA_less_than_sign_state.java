@@ -27,7 +27,7 @@ public class RCDATA_less_than_sign_state implements ITokenizerState {
 			// RCDATA end tag open state.
 			tokenizerContext.setTemporaryBuffer("");
 			tokenizerContext.setNextState(factory
-					.getState(TokenizerState.RAWTEXT_end_tag_open_state));
+					.getState(TokenizerState.RCDATA_end_tag_open_state));
 			break;
 		default:
 			/*

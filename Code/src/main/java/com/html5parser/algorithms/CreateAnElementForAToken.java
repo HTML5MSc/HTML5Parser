@@ -44,7 +44,7 @@ public class CreateAnElementForAToken {
 			doc = ((Document) intendedParentElement);
 
 		Element element = doc.createElementNS(namespace,
-				currentToken.getValue());
+				cleanElementName(currentToken.getValue()));
 		// Element element = doc.createElement(currentToken.getValue());
 		// The new element saves a reference of the token that created it
 		element.setUserData("0", currentToken, null);
@@ -127,5 +127,12 @@ public class CreateAnElementForAToken {
 		// running of the reset the form owner algorithm when the parser
 		// subsequently attempts to insert the element.
 		return element;
+	}
+
+	private static String cleanElementName(String name) {
+		name = name.replace("<", "");
+		if (name.endsWith(":"))
+			name = name.substring(0, name.length() - 1);
+		return name;
 	}
 }

@@ -15,7 +15,7 @@ public class RCDATA_end_tag_open_state implements ITokenizerState {
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
-		int currentChar = tokenizerContext.getNextInputCharacter();
+		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		tokenizerContext.setCurrentInputCharacter(currentChar);
 
 		ASCIICharacter asciiCharacter = tokenizerContext
@@ -36,7 +36,7 @@ public class RCDATA_end_tag_open_state implements ITokenizerState {
 					currentChar + 0x0020));
 			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
 			tokenizerContext.setNextState(factory
-					.getState(TokenizerState.Tag_name_state));
+					.getState(TokenizerState.RCDATA_end_tag_name_state));
 			break;
 
 		case LATIN_SMALL_LETTER:
@@ -51,7 +51,7 @@ public class RCDATA_end_tag_open_state implements ITokenizerState {
 					currentChar));
 			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
 			tokenizerContext.setNextState(factory
-					.getState(TokenizerState.Tag_name_state));
+					.getState(TokenizerState.RCDATA_end_tag_name_state));
 			break;
 		default:
 			/*

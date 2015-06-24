@@ -98,9 +98,9 @@ public class AppropiatePlaceForInsertingANode {
 		// it instead be inside the template element's template contents, after
 		// its last child (if any).
 
-		if (adjustedInsertionLocation.getNodeName().equals("template")) {
-			adjustedInsertionLocation = getDocumentFragment(adjustedInsertionLocation);
-		}
+//		if (adjustedInsertionLocation.getNodeName().equals("template")) {
+//			adjustedInsertionLocation = getDocumentFragment(adjustedInsertionLocation);
+//		}
 
 		return new AdjustedInsertionLocation(adjustedInsertionLocation, null);
 	}

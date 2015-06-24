@@ -53,10 +53,10 @@ public class TreeCostructionDispatcher {
 				|| (adjustedCurrentNode.getNamespaceURI() != null && adjustedCurrentNode
 						.getNamespaceURI().equals(Namespace.HTML))
 				|| ((IntegrationPoint
-						.isMathMLTextIntegrationPoint(adjustedCurrentNode)
-						&& currentToken.getType().equals(TokenType.start_tag)) && (!currentToken
-						.getValue().equals("mglyph") && !currentToken.getValue()
-						.equals("malignmark")))
+						.isMathMLTextIntegrationPoint(adjustedCurrentNode) && currentToken
+						.getType().equals(TokenType.start_tag)) && (!currentToken
+						.getValue().equals("mglyph") && !currentToken
+						.getValue().equals("malignmark")))
 				|| (IntegrationPoint
 						.isMathMLTextIntegrationPoint(adjustedCurrentNode) && currentToken
 						.getType().equals(TokenType.character))
@@ -65,8 +65,8 @@ public class TreeCostructionDispatcher {
 								Namespace.MathML)
 						&& adjustedCurrentNode.getNodeName().equals(
 								"annotation-xml")
-						&& currentToken.getValue().equals("svg") && currentToken
-						.getType().equals(TokenType.start_tag))
+						&& currentToken.getType().equals(TokenType.start_tag) && currentToken
+						.getValue().equals("svg"))
 				|| (IntegrationPoint
 						.isHtmlIntegrationPoint(adjustedCurrentNode) && currentToken
 						.getType().equals(TokenType.start_tag))
