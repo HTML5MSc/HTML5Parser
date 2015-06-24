@@ -75,15 +75,15 @@ public class Serializer {
 			switch (current.getNodeType()) {
 			case Node.DOCUMENT_TYPE_NODE:
 				String publicId = ((DocumentType) current).getPublicId();
-				publicId = publicId == null ? "" : (" \"" + publicId + "\"");
 				String systemId = ((DocumentType) current).getSystemId();
-				if (systemId == null) {
-					if (publicId.isEmpty())
-						systemId = "";
-					else
-						systemId = " \"\"";
-				} else
-					systemId = " \"" + systemId + "\"";
+				
+				if (publicId == null && systemId == null) {
+					publicId = "";
+					systemId = "";
+				} else {
+					publicId = " \"" + (publicId== null ? "" : publicId) + "\"";
+					systemId = " \"" + (systemId== null ? "" : systemId) + "\"";
+				}
 
 				str += "<!DOCTYPE " + current.getNodeName() + publicId
 						+ systemId + '>';
