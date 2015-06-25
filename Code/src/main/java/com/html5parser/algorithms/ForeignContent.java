@@ -88,9 +88,8 @@ public class ForeignContent {
 							.hasAttribute(new String[] { "color", "face",
 									"size" }))) {
 				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
-				if (parserContext.isFlagHTMLFragmentParser()){
-				}
-				else {
+				if (parserContext.isFlagHTMLFragmentParser()) {
+				} else {
 					Element e = parserContext.getOpenElements().pop();
 					while (!parserContext.getOpenElements().isEmpty()) {
 						e = parserContext.getCurrentNode();
@@ -139,34 +138,32 @@ public class ForeignContent {
 			// Otherwise
 			// Pop the current node off the stack of open elements and
 			// acknowledge the token's self-closing flag.
-			
-				Element adjustedCurrentNode = parserContext
-						.getAdjustedCurrentNode();
-				if (adjustedCurrentNode.getNamespaceURI() != null
-						&& adjustedCurrentNode.getNamespaceURI().equals(
-								Namespace.MathML))
-					AdjustMathMLAttributes.run((TagToken) token);
-				if (adjustedCurrentNode.getNamespaceURI() != null
-						&& adjustedCurrentNode.getNamespaceURI().equals(
-								Namespace.SVG)) {
-					token = changeTokenName(token);
-					AdjustSVGAttributes.run((TagToken) token);
-				}
-				AdjustForeignAttributes.run((TagToken) token);
-				InsertForeignElement.run(parserContext, token,
-						adjustedCurrentNode.getNamespaceURI());
 
-				if (((TagToken) token).isFlagSelfClosingTag()) {
-					if (!token.getValue().equals("script")) {
-						parserContext.getOpenElements().pop();
-						((TagToken) token)
-								.setFlagAcknowledgeSelfClosingTag(true);
-					} else {
-						((TagToken) token)
-								.setFlagAcknowledgeSelfClosingTag(true);
-						anScriptEndTag(parserContext);
-					}
+			Element adjustedCurrentNode = parserContext
+					.getAdjustedCurrentNode();
+			if (adjustedCurrentNode.getNamespaceURI() != null
+					&& adjustedCurrentNode.getNamespaceURI().equals(
+							Namespace.MathML))
+				AdjustMathMLAttributes.run((TagToken) token);
+			if (adjustedCurrentNode.getNamespaceURI() != null
+					&& adjustedCurrentNode.getNamespaceURI().equals(
+							Namespace.SVG)) {
+				token = changeTokenName(token);
+				AdjustSVGAttributes.run((TagToken) token);
+			}
+			AdjustForeignAttributes.run((TagToken) token);
+			InsertForeignElement.run(parserContext, token,
+					adjustedCurrentNode.getNamespaceURI());
+
+			if (((TagToken) token).isFlagSelfClosingTag()) {
+				if (!token.getValue().equals("script")) {
+					parserContext.getOpenElements().pop();
+					((TagToken) token).setFlagAcknowledgeSelfClosingTag(true);
+				} else {
+					((TagToken) token).setFlagAcknowledgeSelfClosingTag(true);
+					anScriptEndTag(parserContext);
 				}
+			}
 			break;
 		case end_tag:
 			if (!token.getValue().equals("script"))
@@ -208,7 +205,7 @@ public class ForeignContent {
 			// abort
 			// these steps.
 			if (node.getNodeName().toLowerCase().equals(token.getValue()))
-//				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
+			// parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
 			{
 				while (!stack.isEmpty()) {
 					Element e = stack.pop();
@@ -237,11 +234,11 @@ public class ForeignContent {
 	}
 
 	private static void anScriptEndTag(ParserContext parserContext) {
-		//TODO this steps
+		// TODO this steps
 		// An end tag whose tag name is "script", if the current node is a
 		// script element in the SVG namespace
 		// Pop the current node off the stack of open elements.
-		if(parserContext.getCurrentNode().getNodeName().equals("script"))
+		if (parserContext.getCurrentNode().getNodeName().equals("script"))
 			parserContext.getOpenElements().pop();
 		// Let the old insertion point have the same value as the current
 		// insertion point. Let the insertion point be just before the next

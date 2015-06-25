@@ -11,7 +11,7 @@ import com.html5parser.factories.InsertionModeFactory;
 public class ResetTheInsertionModeAppropriately {
 
 	public static void Run(ParserContext parserContext) {
-		if(parserContext.isFlagHTMLFragmentParser())
+		if (parserContext.isFlagHTMLFragmentParser())
 			Run(parserContext, parserContext.getHtmlFragmentContext());
 		else
 			Run(parserContext, null);
@@ -46,11 +46,8 @@ public class ResetTheInsertionModeAppropriately {
 
 			// 4 If node is a select element, run these substeps:
 			case "select":
-				Boolean done = false;
 				// 1 If last is true, jump to the step below labeled done.
-				if (last)
-					done = true;
-				else {
+				if (!last) {
 					// 2 Let ancestor be node.
 					Element ancestor = node;
 
@@ -59,7 +56,7 @@ public class ResetTheInsertionModeAppropriately {
 					// elements, jump to the step below labeled done.
 					do {
 						if (openElements.isEmpty())
-							done = true;
+							break;
 
 						// 4 Let ancestor be the node before ancestor in the
 						// stack of open elements.
@@ -69,7 +66,7 @@ public class ResetTheInsertionModeAppropriately {
 						// below
 						// labeled done.
 						if (ancestor.getNodeName().equals("template"))
-							done = true;
+							break;
 
 						// 6 If ancestor is a table node, switch the insertion
 						// mode
@@ -82,20 +79,18 @@ public class ResetTheInsertionModeAppropriately {
 						}
 
 						// 7 Jump back to the step labeled loop.
-					} while (!done);
+					} while (true);
 				}
 				// 8 Done: Switch the insertion mode to "in select" and
 				// abort these steps.
-				if (done) {
-					parserContext.setInsertionMode(factory
-							.getInsertionMode(InsertionMode.in_select));
-					return;
-				}
-				break;
 
-			// 5 If node is a td or th element and last is false, then
-			// switch
-			// the insertion mode to "in cell" and abort these steps.
+				parserContext.setInsertionMode(factory
+						.getInsertionMode(InsertionMode.in_select));
+				return;
+
+				// 5 If node is a td or th element and last is false, then
+				// switch
+				// the insertion mode to "in cell" and abort these steps.
 			case "td":
 			case "th":
 				if (!last) {

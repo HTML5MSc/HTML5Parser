@@ -55,12 +55,13 @@ public class TreeConstructorTesthtml5libsuite {
 		this.test = test;
 		this.scriptFlag = scriptFlag;
 	}
-	
+
 	// Declares parameters here
 	@Parameters(name = "Test name: {0}")
 	public static Iterable<Object[]> test1() {
 
-		//ignoreTests(); // uncomment to ignore tests
+		if (ignoreTests)
+			ignoreTests();
 
 		List<Object[]> testList = new ArrayList<Object[]>();
 
@@ -110,7 +111,7 @@ public class TreeConstructorTesthtml5libsuite {
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/ruby.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/scriptdata01.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tables01.dat",
-				// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/template.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/template.dat",
 
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests_innerHTML_1.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tricky01.dat",
@@ -259,9 +260,8 @@ public class TreeConstructorTesthtml5libsuite {
 		assertEquals("TEST FAILED", expected, result);
 
 	}
-	
-	private static void ignoreTests(){
-		ignoreTests = true;
+
+	private static void ignoreTests() {
 		ignoredTests = new ArrayList<String>();
 
 		// invalid element name (<)

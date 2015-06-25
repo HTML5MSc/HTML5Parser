@@ -886,12 +886,12 @@ public class InBody implements IInsertionMode {
 		else if (tokenType == TokenType.start_tag
 				&& token.getValue().equals("nobr")) {
 			ListOfActiveFormattingElements.reconstruct(parserContext);
-			if (ElementInScope.isInScope(parserContext, token.getValue())){
+			if (ElementInScope.isInScope(parserContext, token.getValue())) {
 				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
 				AdoptionAgencyAlgorithm.Run(parserContext, token.getValue());
 				ListOfActiveFormattingElements.reconstruct(parserContext);
 			}
-				
+
 			Element e = InsertAnHTMLElement.run(parserContext, token);
 			ListOfActiveFormattingElements.push(parserContext, e);
 		}
@@ -1044,8 +1044,8 @@ public class InBody implements IInsertionMode {
 		 * To pass the HTML5Lib5 tests, the WHATWG was implemented.
 		 */
 		else if (tokenType == TokenType.start_tag
-				&& isOneOf(token.getValue(), new String[] { "menuitem", "param", "source",
-						"track" })) {
+				&& isOneOf(token.getValue(), new String[] { "menuitem",
+						"param", "source", "track" })) {
 			InsertAnHTMLElement.run(parserContext, token);
 			parserContext.getOpenElements().pop();
 			((TagToken) token).setFlagAcknowledgeSelfClosingTag(true);
@@ -1517,23 +1517,6 @@ public class InBody implements IInsertionMode {
 				return true;
 
 		return false;
-	}
-
-	private void loop(ParserContext parserContext, Node node, String nodeName) {
-		while (node.getNodeName().equals(nodeName)) {
-			GenerateImpliedEndTags.run(parserContext, nodeName);
-			if (!parserContext.getCurrentNode().getNodeName().equals(nodeName)) {
-				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
-			}
-			while (!parserContext.getOpenElements().isEmpty()) {
-				Element element = parserContext.getOpenElements().pop();
-				if (element.getNodeName().equals(nodeName)) {
-					break;
-				}
-			}
-			done(parserContext);
-			break;
-		}
 	}
 
 	private void done(ParserContext parserContext) {

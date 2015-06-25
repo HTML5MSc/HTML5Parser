@@ -2,7 +2,6 @@ package com.html5parser.algorithms;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import com.html5parser.classes.ParserContext;
 
@@ -60,7 +59,9 @@ public class AppropiatePlaceForInsertingANode {
 			// later than the last table
 			if (lastTemplate != null
 					&& (lastTable == null || templateIndex > tableIndex)) {
-				adjustedInsertionLocation = getDocumentFragment(adjustedInsertionLocation);
+				// adjustedInsertionLocation =
+				// getDocumentFragment(adjustedInsertionLocation);
+				adjustedInsertionLocation = lastTemplate;
 				return new AdjustedInsertionLocation(adjustedInsertionLocation,
 						null);
 			}
@@ -98,21 +99,22 @@ public class AppropiatePlaceForInsertingANode {
 		// it instead be inside the template element's template contents, after
 		// its last child (if any).
 
-//		if (adjustedInsertionLocation.getNodeName().equals("template")) {
-//			adjustedInsertionLocation = getDocumentFragment(adjustedInsertionLocation);
-//		}
+		if (adjustedInsertionLocation.getNodeName().equals("template")) {
+			adjustedInsertionLocation = getDocumentFragment(adjustedInsertionLocation);
+		}
 
 		return new AdjustedInsertionLocation(adjustedInsertionLocation, null);
 	}
 
 	private static Node getDocumentFragment(Node node) {
-		NodeList children = node.getChildNodes();
-		for (int i = 0; i < children.getLength(); i++) {
-			if (children.item(i).getNodeType() == Node.DOCUMENT_FRAGMENT_NODE) {
-				return children.item(i);
-			}
-		}
-		return null;
+		// NodeList children = node.getChildNodes();
+		// for (int i = 0; i < children.getLength(); i++) {
+		// if (children.item(i).getNodeType() == Node.DOCUMENT_FRAGMENT_NODE) {
+		// return children.item(i);
+		// }
+		// }
+		// return null;
+		return node;
 	}
 
 }
