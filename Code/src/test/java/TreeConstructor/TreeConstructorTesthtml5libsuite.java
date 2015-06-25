@@ -42,13 +42,15 @@ import com.html5parser.parser.Serializer;
 public class TreeConstructorTesthtml5libsuite {
 
 	private static List<String> ignoredTests;
-	
+	private static boolean ignoreTests = false;
+
 	private String testName;
 	private String test;
 	private boolean scriptFlag;
-	
+
 	// parameters pass via this constructor
-	public TreeConstructorTesthtml5libsuite(String testName, String test, boolean scriptFlag) {
+	public TreeConstructorTesthtml5libsuite(String testName, String test,
+			boolean scriptFlag) {
 		this.testName = testName;
 		this.test = test;
 		this.scriptFlag = scriptFlag;
@@ -57,13 +59,10 @@ public class TreeConstructorTesthtml5libsuite {
 	// Declares parameters here
 	@Parameters(name = "Test name: {0}")
 	public static Iterable<Object[]> test1() {
-		
-		ignoredTests = new ArrayList<String>();
-		ignoredTests.add("1 (html5test-com.dat) <div<div>"); // invalid element name (<)
-		ignoredTests.add("14 (webkit01.dat) <rdar://problem/6869687>"); // invalid element name (:)
-		ignoredTests.add("3 (main-element.dat) <!DOCTYPE html>xxx<svg><x><g><a><main><b>"); // different specs - "main" element
-		ignoredTests.add("14 (ruby.dat) <html><ruby>a<rtc>b<rp></ruby></html>"); // different specs - "rtc" element
-		
+
+		if (ignoreTests)
+			ignoreTests();
+
 		List<Object[]> testList = new ArrayList<Object[]>();
 
 		String[] resources = {
@@ -112,7 +111,7 @@ public class TreeConstructorTesthtml5libsuite {
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/ruby.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/scriptdata01.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tables01.dat",
-				//"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/template.dat",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/template.dat",
 
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tests_innerHTML_1.dat",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tree-construction/tricky01.dat",
@@ -164,9 +163,10 @@ public class TreeConstructorTesthtml5libsuite {
 				// does not work properly is the char is set in a parameter
 				// (testName)
 				String testName = i + " (" + resource + ") "
-						+ input.replace("\n", "(EOL)").replace("\r", "(EOL)"); // i
-																				// +
-				if(!ignoredTests.contains(testName))																// "";
+						+ input.replace("\n", "(EOL)").replace("\r", "(EOL)");
+
+				if (ignoreTests && ignoredTests.contains(testName))
+					continue;
 				testList.add(new Object[] { testName, test, scriptFlag });
 			}
 
@@ -259,5 +259,19 @@ public class TreeConstructorTesthtml5libsuite {
 		System.out.println();
 		assertEquals("TEST FAILED", expected, result);
 
+	}
+
+	private static void ignoreTests() {
+		ignoredTests = new ArrayList<String>();
+
+		// invalid element name (<)
+		ignoredTests.add("1 (html5test-com.dat) <div<div>");
+		// invalid element name (:)
+		ignoredTests.add("14 (webkit01.dat) <rdar://problem/6869687>");
+		// different specs - "main" element
+		ignoredTests
+				.add("3 (main-element.dat) <!DOCTYPE html>xxx<svg><x><g><a><main><b>");
+		// different specs - "rtc" element
+		ignoredTests.add("14 (ruby.dat) <html><ruby>a<rtc>b<rp></ruby></html>");
 	}
 }

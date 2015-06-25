@@ -10,6 +10,7 @@ import com.html5parser.classes.InsertionMode;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
+import com.html5parser.constants.Namespace;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
 import com.html5parser.parseError.ParseErrorType;
@@ -212,7 +213,8 @@ public class InTemplate implements IInsertionMode {
 			Stack<Element> openElements = parserContext.getOpenElements();
 			Element templateElement=null;
 			for(Element element: openElements){
-				if(element.getTagName().equals("template")){
+				if(element.getTagName().equals("template") && 
+						element.getNamespaceURI().equals(Namespace.HTML)){
 					templateElement=element;
 					break;
 				}
@@ -226,7 +228,8 @@ public class InTemplate implements IInsertionMode {
 			
 			do{
 				templateElement = openElements.pop();
-			}while(templateElement.getTagName().equals("template"));
+			}while(!(templateElement.getTagName().equals("template") && 
+					templateElement.getNamespaceURI().equals(Namespace.HTML)));
 			
 			ListOfActiveFormattingElements.clear(parserContext);
 			parserContext.getTemplateInsertionModes().pop();

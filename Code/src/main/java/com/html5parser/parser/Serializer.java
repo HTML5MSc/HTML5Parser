@@ -19,6 +19,7 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.Node;
 
 import com.html5parser.classes.token.TagToken.Attribute;
+import com.html5parser.constants.Namespace;
 
 public class Serializer {
 
@@ -71,19 +72,22 @@ public class Serializer {
 			str += "\n| " + parent.getUserData("invalidDoctype").toString();
 
 		for (;;) {
-			str += "\n| " + indent(ancestors);
+			// str += "\n| " + indent(ancestors);
+			str += "\n| " + indent(ancestors + templateAncestors(current, 0));
 			switch (current.getNodeType()) {
 			case Node.DOCUMENT_TYPE_NODE:
 				String publicId = ((DocumentType) current).getPublicId();
-				publicId = publicId == null ? "" : (" \"" + publicId + "\"");
 				String systemId = ((DocumentType) current).getSystemId();
-				if (systemId == null) {
-					if (publicId.isEmpty())
-						systemId = "";
-					else
-						systemId = " \"\"";
-				} else
-					systemId = " \"" + systemId + "\"";
+
+				if (publicId == null && systemId == null) {
+					publicId = "";
+					systemId = "";
+				} else {
+					publicId = " \"" + (publicId == null ? "" : publicId)
+							+ "\"";
+					systemId = " \"" + (systemId == null ? "" : systemId)
+							+ "\"";
+				}
 
 				str += "<!DOCTYPE " + current.getNodeName() + publicId
 						+ systemId + '>';
@@ -232,11 +236,28 @@ public class Serializer {
 								String key = entry.getKey();
 								String value = entry.getValue();
 
-								str += "\n| " + indent(1 + ancestors) + key;
+								// str += "\n| " + indent(1 + ancestors) + key;
+								str += "\n| "
+										+ indent(1 + ancestors
+												+ templateAncestors(current, 0))
+										+ key;
 								str += "=\"" + value + "\"";
 							}
 						}
 					}
+
+					/*
+					 * Template elements have 'content' child This is the
+					 * required format of html5lib
+					 */
+					if (current.getNodeName().equals("template")
+							&& current.getNamespaceURI().equals(Namespace.HTML)) {
+						str += "\n| "
+								+ indent(1 + ancestors
+										+ templateAncestors(current, 0))
+								+ "content";
+					}
+
 					next = current.getFirstChild();
 					if (null != next) {
 						parent = current;
@@ -270,5 +291,17 @@ public class Serializer {
 				str += "  ";
 		}
 		return str;
+	}
+
+	private static int templateAncestors(Node current, int ancestors) {
+		if (current.getParentNode() != null) {
+			current = current.getParentNode();
+			if (current.getNodeName().equals("template")
+					&& current.getNamespaceURI().equals(Namespace.HTML))
+				ancestors++;
+			return templateAncestors(current, ancestors);
+		} else
+			return ancestors;
+
 	}
 }

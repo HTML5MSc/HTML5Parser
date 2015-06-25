@@ -5,12 +5,14 @@ import org.w3c.dom.Element;
 import com.html5parser.algorithms.AdjustedInsertionLocation;
 import com.html5parser.algorithms.AppropiatePlaceForInsertingANode;
 import com.html5parser.algorithms.CreateAnElementForAToken;
+import com.html5parser.algorithms.GenerateImpliedEndTags;
 import com.html5parser.algorithms.GenericRCDATAElementParsing;
 import com.html5parser.algorithms.GenericRawTextElementParsing;
 import com.html5parser.algorithms.InsertAnHTMLElement;
 import com.html5parser.algorithms.InsertCharacter;
 import com.html5parser.algorithms.InsertComment;
 import com.html5parser.algorithms.ListOfActiveFormattingElements;
+import com.html5parser.algorithms.ResetTheInsertionModeAppropriately;
 import com.html5parser.classes.InsertionMode;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
@@ -223,6 +225,50 @@ public class InHead implements IInsertionMode {
 					.getInsertionMode(InsertionMode.in_template);
 			parserContext.setInsertionMode(in_template);
 			parserContext.getTemplateInsertionModes().push(in_template);
+
+		}
+		/*
+		 * An end tag whose tag name is "template"
+		 * 
+		 * If there is no template element on the stack of open elements, then
+		 * this is a parse error; ignore the token.
+		 * 
+		 * Otherwise, run these steps:
+		 * 
+		 * Generate implied end tags.
+		 * 
+		 * If the current node is not a template element, then this is a parse
+		 * error.
+		 * 
+		 * Pop elements from the stack of open elements until a template element
+		 * has been popped from the stack.
+		 * 
+		 * Clear the list of active formatting elements up to the last marker.
+		 * Pop the current template insertion mode off the stack of template
+		 * insertion modes.
+		 * 
+		 * Reset the insertion mode appropriately.
+		 */
+		else if (tokenType == TokenType.end_tag
+				&& token.getValue().equals("template")) {
+			if (!parserContext.openElementsContain("template"))
+				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
+			else {
+				GenerateImpliedEndTags.run(parserContext);
+				if (!parserContext.getCurrentNode().getNodeName()
+						.equals("template"))
+					parserContext
+							.addParseErrors(ParseErrorType.UnexpectedToken);
+				while (true) {
+					Element element = parserContext.getOpenElements().pop();
+					if (element.getNodeName().equals(token.getValue())) {
+						break;
+					}
+				}
+				ListOfActiveFormattingElements.clear(parserContext);
+				parserContext.getTemplateInsertionModes().pop();
+				ResetTheInsertionModeAppropriately.Run(parserContext);
+			}
 		}
 		/*
 		 * A start tag whose tag name is "head" Any other end tag Parse error.
