@@ -11,7 +11,10 @@ import com.html5parser.factories.InsertionModeFactory;
 public class ResetTheInsertionModeAppropriately {
 
 	public static void Run(ParserContext parserContext) {
-		Run(parserContext, null);
+		if(parserContext.isFlagHTMLFragmentParser())
+			Run(parserContext, parserContext.getHtmlFragmentContext());
+		else
+			Run(parserContext, null);
 	}
 
 	public static void Run(ParserContext parserContext, Element context) {
