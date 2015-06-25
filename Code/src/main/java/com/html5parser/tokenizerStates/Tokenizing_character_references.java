@@ -3,6 +3,8 @@ package com.html5parser.tokenizerStates;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.hamcrest.core.IsInstanceOf;
+
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
@@ -10,6 +12,7 @@ import com.html5parser.classes.token.DocTypeToken;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.classes.token.TagToken.Attribute;
 import com.html5parser.constants.NamedCharacterReference;
+import com.html5parser.interfaces.ITokenizerState;
 import com.html5parser.parseError.ParseError;
 import com.html5parser.parseError.ParseErrorType;
 
@@ -473,17 +476,47 @@ public class Tokenizing_character_references {
 			}
 			return result;
 		} else {
+
 			for (int value : values) {
 				result.add(new Token(TokenType.character, value));
 			}
+
+			// poll those chars that were replaced by a reference
 			while (charsConsumed > 0) {
 				queue.poll();
 				charsConsumed--;
 			}
+			
+			// If the character reference is being consumed as part of an
+			// attribute, and the last character matched is not a U+003B
+			// SEMICOLON character (;), and the next character is either a
+			// U+003D EQUALS SIGN character (=) or an alphanumeric ASCII
+			// character, then, for historical reasons, all the characters that
+			// were matched after the U+0026 AMPERSAND character (&) must be
+			// unconsumed, and nothing is returned. However, if this next
+			// character is in fact a U+003D EQUALS SIGN character (=), then
+			// this is a parse error, because some legacy user agents will
+			// misinterpret the markup in those cases.
+
+			ITokenizerState currentState = context.getTokenizerContext()
+					.getNextState();
+			if (currentState instanceof Attribute_value_double_quoted_state
+					|| currentState instanceof Attribute_value_single_quoted_state
+					|| currentState instanceof Attribute_value_unquoted_state) {
+				if (queue.peek() != null) {
+					int nextChar = queue.peek().getIntValue();
+					if (nextChar == 0x003D || isAlphanumeric(nextChar)) {
+						if (nextChar == 0x0026) {
+							context.addParseErrors(ParseErrorType.UnexpectedInputCharacter);
+						}
+						return null;
+					}
+				}
+			} 
+			if (!buffer.toString().endsWith(";")) {
+				context.addParseErrors(ParseErrorType.UnexpectedInputCharacter);
+			}
 			result.addAll(queue);// add tokens not processed
-		}
-		if (!buffer.toString().endsWith(";")) {
-			context.addParseErrors(ParseErrorType.UnexpectedInputCharacter);
 		}
 
 		return result;
