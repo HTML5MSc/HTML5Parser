@@ -11,6 +11,7 @@ import org.w3c.dom.Element;
 
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.classes.token.TagToken.Attribute;
+import com.html5parser.constants.Namespace;
 import com.html5parser.insertionModes.Initial;
 import com.html5parser.interfaces.IInsertionMode;
 import com.html5parser.parseError.ParseError;
@@ -269,17 +270,20 @@ public class ParserContext {
 	}
 
 	public boolean openElementsContain(String elementName) {
+		return openElementsContain(elementName, Namespace.HTML);
+	}
+	
+	public boolean openElementsContain(String elementName, String namespace) {
 		List<Element> list = new ArrayList<Element>();
 		list.addAll(openElements);
-		int n = openElements.size();
-		boolean flag = false;
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < list.size(); i++) {
 			Element element = list.get(i);
-			if (element.getNodeName().equals(elementName)) {
-				flag = true;
+			if (element.getNodeName().equals(elementName)
+					&& element.getNamespaceURI().equals(namespace)) {
+				return true;
 			}
 		}
-		return flag;
+		return false;
 	}
 
 	public boolean isFlagHTMLFragmentParser() {
@@ -288,6 +292,16 @@ public class ParserContext {
 
 	public void setFlagHTMLFragmentParser(boolean flagHTMLFragmentParser) {
 		this.flagHTMLFragmentParser = flagHTMLFragmentParser;
+	}
+
+	public boolean isHTMLElement(Element element, String name) {
+		boolean value = false;
+		if (element != null && name != null
+				&& element.getNamespaceURI() != null
+				&& element.getNamespaceURI().equals(Namespace.HTML)
+				&& element.getNodeName().equals(name))
+			value = true;
+		return value;
 	}
 
 }

@@ -7,8 +7,6 @@ import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.TokenizerContext;
 import com.html5parser.classes.token.TagToken;
-import com.html5parser.constants.NamedCharacterReference;
-import com.html5parser.parseError.ParseErrorType;
 
 public class Character_reference_in_attribute_value_state {
 	protected Queue<Token> reference = new LinkedList<Token>();
@@ -43,11 +41,10 @@ public class Character_reference_in_attribute_value_state {
 				String original = "";
 				for (Token token : reference)
 					original = original.concat(token.getValue());
-				
+
 				Queue<Token> result = Tokenizing_character_references
 						.getTokenCharactersFromReference(reference, context);
 
-				
 				if (result == null) {
 					((TagToken) tokenizerContext.getCurrentToken())
 							.appendCharacterInValueInLastAttribute(0x0026);
@@ -62,7 +59,6 @@ public class Character_reference_in_attribute_value_state {
 				}
 
 			}
-			
 		}
 		parsingCharacterReference = false;
 		reference = new LinkedList<Token>();
