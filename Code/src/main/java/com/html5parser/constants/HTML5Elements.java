@@ -19,5 +19,4 @@ public class HTML5Elements {
 			"thead", "title", "tr", "track", "ul", "wbr", "xmp", "mi", "mo",
 			"mn", "ms", "mtext", "annotation-xml", "foreignObject", "desc",
 			"title" };
-
 }

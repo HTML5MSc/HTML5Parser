@@ -3,8 +3,6 @@ package com.html5parser.tokenizerStates;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import org.hamcrest.core.IsInstanceOf;
-
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
@@ -61,31 +59,31 @@ public class Tokenizing_character_references {
 		// U+0009 CHARACTER TABULATION (tab)
 		case 0x0009:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			//result.add(new Token(TokenType.character, 0x0009));
+			// result.add(new Token(TokenType.character, 0x0009));
 			result.addAll(queue);
 			return result;
 			// U+000A LINE FEED (LF)
 		case 0x000A:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			//result.add(new Token(TokenType.character, 0x000A));
+			// result.add(new Token(TokenType.character, 0x000A));
 			result.addAll(queue);
 			return result;
 			// U+000C FORM FEED (FF)
 		case 0x000C:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			//result.add(new Token(TokenType.character, 0x000C));
+			// result.add(new Token(TokenType.character, 0x000C));
 			result.addAll(queue);
 			return result;
 			// U+0020 SPACE
 		case 0x0020:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			//result.add(new Token(TokenType.character, 0x0020));
+			// result.add(new Token(TokenType.character, 0x0020));
 			result.addAll(queue);
 			return result;
 			// U+0026 AMPERSAND
 		case 0x0026:
 			result.add(new Token(TokenType.character, 0x0026)); // return &
-			//result.add(new Token(TokenType.character, 0x0026)); // return &
+			// result.add(new Token(TokenType.character, 0x0026)); // return &
 			result.addAll(queue);
 			return result;
 
@@ -491,7 +489,7 @@ public class Tokenizing_character_references {
 				queue.poll();
 				charsConsumed--;
 			}
-			
+
 			// If the character reference is being consumed as part of an
 			// attribute, and the last character matched is not a U+003B
 			// SEMICOLON character (;), and the next character is either a
@@ -517,7 +515,7 @@ public class Tokenizing_character_references {
 						return null;
 					}
 				}
-			} 
+			}
 			if (!buffer.toString().endsWith(";")) {
 				context.addParseErrors(ParseErrorType.UnexpectedInputCharacter);
 			}

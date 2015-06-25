@@ -1,7 +1,5 @@
 package com.html5parser.insertionModes;
 
-import java.util.Stack;
-
 import org.w3c.dom.Element;
 
 import com.html5parser.algorithms.ListOfActiveFormattingElements;
@@ -10,7 +8,6 @@ import com.html5parser.classes.InsertionMode;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
-import com.html5parser.constants.Namespace;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
 import com.html5parser.parseError.ParseErrorType;
@@ -210,27 +207,18 @@ public class InTemplate implements IInsertionMode {
 		 * Reprocess the token.
 		 */
 		if (tokenType == TokenType.end_of_file) {
-			Stack<Element> openElements = parserContext.getOpenElements();
-			Element templateElement=null;
-			for(Element element: openElements){
-				if(element.getTagName().equals("template") && 
-						element.getNamespaceURI().equals(Namespace.HTML)){
-					templateElement=element;
-					break;
-				}
-			}
-			if (templateElement==null){
+			if (!parserContext.openElementsContain("template")) {
 				parserContext.setFlagStopParsing(true);
 				return parserContext;
 			}
-			
+
 			parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
-			
-			do{
-				templateElement = openElements.pop();
-			}while(!(templateElement.getTagName().equals("template") && 
-					templateElement.getNamespaceURI().equals(Namespace.HTML)));
-			
+
+			Element templateElement = null;
+			do {
+				templateElement = parserContext.getOpenElements().pop();
+			} while (!(parserContext.isHTMLElement(templateElement, "template")));
+
 			ListOfActiveFormattingElements.clear(parserContext);
 			parserContext.getTemplateInsertionModes().pop();
 			ResetTheInsertionModeAppropriately.Run(parserContext);

@@ -261,7 +261,7 @@ public class InHead implements IInsertionMode {
 							.addParseErrors(ParseErrorType.UnexpectedToken);
 				while (true) {
 					Element element = parserContext.getOpenElements().pop();
-					if (element.getNodeName().equals(token.getValue())) {
+					if (parserContext.isHTMLElement(element, token.getValue())) {
 						break;
 					}
 				}
