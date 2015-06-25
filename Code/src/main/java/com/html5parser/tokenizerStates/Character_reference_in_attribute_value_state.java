@@ -30,13 +30,6 @@ public class Character_reference_in_attribute_value_state {
 		reference = new LinkedList<Token>();
 	}
 
-	// If the character reference is being consumed as part of an attribute, and
-	// the last character matched is not a ";" (U+003B) character, and the next
-	// character is either a "=" (U+003D) character or in the range ASCII
-	// digits, uppercase ASCII letters, or lowercase ASCII letters, then, for
-	// historical reasons, all the characters that were matched after the U+0026
-	// AMPERSAND character (&) must be unconsumed, and nothing is returned.
-
 	// If the possible reference is numerical then try to match,
 	// If not numerical, try to match the whole input as a reference and add a
 	// parse error because it doesn't end with ;
@@ -48,28 +41,30 @@ public class Character_reference_in_attribute_value_state {
 				attemptToConsumeReference(context, tokenizerContext);
 			else {
 				String original = "";
-				// ((TagToken) tokenizerContext.getCurrentToken())
-				// .appendCharacterInValueInLastAttribute(0X0026);
 				for (Token token : reference)
 					original = original.concat(token.getValue());
-				// ((TagToken) tokenizerContext.getCurrentToken())
-				// .appendCharacterInValueInLastAttribute(token
-				// .getValue());
+				
+				Queue<Token> result = Tokenizing_character_references
+						.getTokenCharactersFromReference(reference, context);
 
-				int[] values = NamedCharacterReference.MAP.get(original.replace(";", ""));
-				if (values == null) {
+				
+				if (result == null) {
 					((TagToken) tokenizerContext.getCurrentToken())
 							.appendCharacterInValueInLastAttribute(0x0026);
 					((TagToken) tokenizerContext.getCurrentToken())
 							.appendCharacterInValueInLastAttribute(original);
 				} else {
-					for (int value : values)
+					for (Token tokenResult : result) {
 						((TagToken) tokenizerContext.getCurrentToken())
-								.appendCharacterInValueInLastAttribute(value);
-					context.addParseErrors(ParseErrorType.UnexpectedInputCharacter);
+								.appendCharacterInValueInLastAttribute(tokenResult
+										.getValue());
+					}
 				}
 
 			}
+			
 		}
+		parsingCharacterReference = false;
+		reference = new LinkedList<Token>();
 	}
 }
