@@ -42,7 +42,7 @@ import com.html5parser.parser.Serializer;
 public class TreeConstructorTesthtml5libsuite {
 
 	private static List<String> ignoredTests;
-	private static boolean ignoreTests = false;
+	private static boolean ignoreTests = true;
 
 	private String testName;
 	private String test;
@@ -273,5 +273,9 @@ public class TreeConstructorTesthtml5libsuite {
 				.add("3 (main-element.dat) <!DOCTYPE html>xxx<svg><x><g><a><main><b>");
 		// different specs - "rtc" element
 		ignoredTests.add("14 (ruby.dat) <html><ruby>a<rtc>b<rp></ruby></html>");
+		// different specs - Special HTML elements "menu", "menuitem"
+		ignoredTests.add("78 (template.dat) <body><template><i><menu>Foo</i>");
+		// different specs - adoption agengy algorithm
+		ignoredTests.add("54 (tests1.dat) <b id=a><p><b id=b></p></b>TEST");
 	}
 }
