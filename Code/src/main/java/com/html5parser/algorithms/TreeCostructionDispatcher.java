@@ -1,11 +1,9 @@
 package com.html5parser.algorithms;
 
-import org.w3c.dom.Element;
-
+import com.html5dom.Element;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
-import com.html5parser.constants.Namespace;
 
 public class TreeCostructionDispatcher {
 
@@ -50,8 +48,7 @@ public class TreeCostructionDispatcher {
 		Element adjustedCurrentNode = context.getAdjustedCurrentNode();
 		Token currentToken = context.getTokenizerContext().getCurrentToken();
 		if (adjustedCurrentNode == null
-				|| (adjustedCurrentNode.getNamespaceURI() != null && adjustedCurrentNode
-						.getNamespaceURI().equals(Namespace.HTML))
+				|| (adjustedCurrentNode.isHTMLElement())
 				|| ((IntegrationPoint
 						.isMathMLTextIntegrationPoint(adjustedCurrentNode) && currentToken
 						.getType().equals(TokenType.start_tag)) && (!currentToken
@@ -60,9 +57,7 @@ public class TreeCostructionDispatcher {
 				|| (IntegrationPoint
 						.isMathMLTextIntegrationPoint(adjustedCurrentNode) && currentToken
 						.getType().equals(TokenType.character))
-				|| (adjustedCurrentNode.getNamespaceURI() != null
-						&& adjustedCurrentNode.getNamespaceURI().equals(
-								Namespace.MathML)
+				|| (adjustedCurrentNode.isMathMLElement()
 						&& adjustedCurrentNode.getNodeName().equals(
 								"annotation-xml")
 						&& currentToken.getType().equals(TokenType.start_tag) && currentToken

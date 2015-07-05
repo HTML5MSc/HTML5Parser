@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.w3c.dom.Document;
+import com.html5dom.Document;
 
 /**
  * Hello world!

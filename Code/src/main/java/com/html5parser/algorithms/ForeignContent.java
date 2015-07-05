@@ -3,12 +3,10 @@ package com.html5parser.algorithms;
 import java.util.ArrayList;
 import java.util.Stack;
 
-import org.w3c.dom.Element;
-
+import com.html5dom.Element;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.token.TagToken;
-import com.html5parser.constants.Namespace;
 import com.html5parser.parseError.ParseErrorType;
 import com.html5parser.parser.TreeConstructor;
 
@@ -88,17 +86,15 @@ public class ForeignContent {
 							.hasAttribute(new String[] { "color", "face",
 									"size" }))) {
 				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
-				if (parserContext.isFlagHTMLFragmentParser()) {
-				} else {
+				if (!parserContext.isFlagHTMLFragmentParser()) {
+
 					Element e = parserContext.getOpenElements().pop();
 					while (!parserContext.getOpenElements().isEmpty()) {
 						e = parserContext.getCurrentNode();
 						if (IntegrationPoint.isHtmlIntegrationPoint(e)
 								|| IntegrationPoint
 										.isMathMLTextIntegrationPoint(e)
-								|| (e.getNamespaceURI() != null && e
-										.getNamespaceURI().equals(
-												Namespace.HTML))) {
+								|| (e.isHTMLElement())) {
 							break;
 						} else
 							parserContext.getOpenElements().pop();
@@ -141,13 +137,9 @@ public class ForeignContent {
 
 			Element adjustedCurrentNode = parserContext
 					.getAdjustedCurrentNode();
-			if (adjustedCurrentNode.getNamespaceURI() != null
-					&& adjustedCurrentNode.getNamespaceURI().equals(
-							Namespace.MathML))
+			if (adjustedCurrentNode.isMathMLElement())
 				AdjustMathMLAttributes.run((TagToken) token);
-			if (adjustedCurrentNode.getNamespaceURI() != null
-					&& adjustedCurrentNode.getNamespaceURI().equals(
-							Namespace.SVG)) {
+			if (adjustedCurrentNode.isSVGElement()) {
 				token = changeTokenName(token);
 				AdjustSVGAttributes.run((TagToken) token);
 			}
@@ -223,8 +215,7 @@ public class ForeignContent {
 			// the
 			// section corresponding to the current insertion mode in HTML
 			// content.
-			if (node.getNamespaceURI() != null
-					&& node.getNamespaceURI().equals(Namespace.HTML)) {
+			if (node.isHTMLElement()) {
 				parserContext = new TreeConstructor()
 						.consumeToken(parserContext);
 				return;

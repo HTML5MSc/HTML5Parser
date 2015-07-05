@@ -1,7 +1,7 @@
 package com.html5parser.insertionModes;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import com.html5dom.Document;
+import com.html5dom.Element;
 
 import com.html5parser.algorithms.CreateAnElementForAToken;
 import com.html5parser.algorithms.InsertComment;

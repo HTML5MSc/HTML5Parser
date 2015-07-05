@@ -1,14 +1,14 @@
 package com.html5parser.algorithms;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.List;
+
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
+import com.html5dom.Document;
+import com.html5dom.Document.QuirksMode;
+import com.html5dom.Element;
+import com.html5dom.Node;
+import com.html5dom.Node.NodeType;
 import com.html5parser.classes.InsertionMode;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token.TokenType;
@@ -23,14 +23,11 @@ import com.html5parser.parser.Serializer;
 
 public class ParsingHTMLFragments {
 
-	public static NodeList run(ParserContext parserContext, Element context,
+	public static List<Node> run(ParserContext parserContext, Element context,
 			String input) throws ParserConfigurationException {
 
 		// Create a new Document node, and mark it as being an HTML document.
-		Document document;
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = dbf.newDocumentBuilder();
-		document = builder.newDocument();
+		Document document = new Document();
 
 		// TODO If the node document of the context element is in quirks mode,
 		// then
@@ -38,7 +35,7 @@ public class ParsingHTMLFragments {
 		// the context element is in limited-quirks mode, then let the Document
 		// be in limited-quirks mode. Otherwise, leave the Document in no-quirks
 		// mode.
-		document.setUserData("quirksmode", "no-quirks mode", null);
+		document.setQuirksMode(QuirksMode.noQuirks);
 
 		// Create a new HTML parser, and associate it with the just created
 		// Document node.
@@ -57,8 +54,7 @@ public class ParsingHTMLFragments {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		String elementName = context.getTagName();
 
-		if (context.getNamespaceURI() != null
-				&& context.getNamespaceURI().equals(Namespace.HTML)) {
+		if (context.isHTMLElement()) {
 			switch (elementName) {
 
 			// If it is a title or textarea element
@@ -147,10 +143,10 @@ public class ParsingHTMLFragments {
 		// e.g. for the purposes of determining if it is an HTML integration
 		// point. TODO:?????
 		TagToken startTagToken = new TagToken(TokenType.start_tag,
-				context.getLocalName());
-		for (int i = 0; i < context.getAttributes().getLength(); i++) {
-			Node attribute = context.getAttributes().item(i);
-			startTagToken.createAttribute(attribute.getLocalName());
+				context.getNodeName());
+		for (int i = 0; i < context.getAttributes().size(); i++) {
+			Node attribute = context.getAttributes().get(i);
+			startTagToken.createAttribute(attribute.getNodeName());
 			startTagToken.appendCharacterInValueInLastAttribute(attribute
 					.getNodeValue());
 		}
@@ -165,7 +161,7 @@ public class ParsingHTMLFragments {
 					.getNamespaceURI());
 		}
 
-		context.setUserData("startTagToken", startTagToken, null);
+		context.setUserData("startTagToken", startTagToken);
 		parser.getParserContext().setHtmlFragmentContext(context);
 
 		// Reset the parser's insertion mode appropriately.
@@ -184,7 +180,7 @@ public class ParsingHTMLFragments {
 				break;
 			}
 			if (context.getParentNode() != null
-					&& context.getParentNode().getNodeType() == Node.ELEMENT_NODE)
+					&& context.getParentNode().getNodeType() == NodeType.ELEMENT_NODE)
 				elementPointer = (Element) context.getParentNode();
 			else
 				elementPointer = null;
@@ -207,28 +203,20 @@ public class ParsingHTMLFragments {
 	}
 
 	public static void main(String[] args) throws ParserConfigurationException {
-		Document doc = null;
+		Document doc = new Document();
 		ParserContext parserContext = new ParserContext();
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
-		try {
-			builder = dbf.newDocumentBuilder();
-			doc = builder.newDocument();
-			parserContext.setDocument(doc);
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		parserContext.setDocument(doc);
 
 		Element context = doc.createElementNS(Namespace.SVG, "path");
 		doc.appendChild(context);
 		String input = "<nobr>X";
-		NodeList result = ParsingHTMLFragments.run(parserContext, context,
+		List<Node> result = ParsingHTMLFragments.run(parserContext, context,
 				input);
-		System.out.println(result.getLength());
-		int size = result.getLength();
+		System.out.println(result.size());
+		int size = result.size();
 		for (int i = 0; i < size; i++) {
-			Node node = result.item(i);
+			Node node = result.get(i);
 			System.out.println(node);
 			Node adopted = doc.importNode(node, true);
 			context.appendChild(adopted);

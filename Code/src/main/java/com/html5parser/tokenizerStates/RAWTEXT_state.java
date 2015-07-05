@@ -30,8 +30,8 @@ public class RAWTEXT_state implements ITokenizerState {
 		// Parse error. Emit a U+FFFD REPLACEMENT CHARACTER character token.
 		case NULL:
 			context.addParseErrors(ParseErrorType.UnexpectedInputCharacter);
-			token = new Token(TokenType.character, 0xFFFD);
-			tokenizerContext.emitCurrentToken(token);
+			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
+					0xFFFD));
 			break;
 
 		// EOF

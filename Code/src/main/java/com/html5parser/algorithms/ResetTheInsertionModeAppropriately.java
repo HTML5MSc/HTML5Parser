@@ -2,7 +2,7 @@ package com.html5parser.algorithms;
 
 import java.util.Stack;
 
-import org.w3c.dom.Element;
+import com.html5dom.Element;
 
 import com.html5parser.classes.InsertionMode;
 import com.html5parser.classes.ParserContext;

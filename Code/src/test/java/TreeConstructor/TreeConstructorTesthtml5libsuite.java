@@ -14,8 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.w3c.dom.Node;
 
+import com.html5dom.Node;
 import com.html5parser.parser.Parser;
 import com.html5parser.parser.Serializer;
 
@@ -265,9 +265,9 @@ public class TreeConstructorTesthtml5libsuite {
 		ignoredTests = new ArrayList<String>();
 
 		// invalid element name (<)
-		ignoredTests.add("1 (html5test-com.dat) <div<div>");
+		// ignoredTests.add("1 (html5test-com.dat) <div<div>");
 		// invalid element name (:)
-		ignoredTests.add("14 (webkit01.dat) <rdar://problem/6869687>");
+		// ignoredTests.add("14 (webkit01.dat) <rdar://problem/6869687>");
 		// different specs - "main" element
 		ignoredTests
 				.add("3 (main-element.dat) <!DOCTYPE html>xxx<svg><x><g><a><main><b>");

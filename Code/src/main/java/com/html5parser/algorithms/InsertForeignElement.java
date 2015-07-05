@@ -1,8 +1,6 @@
 package com.html5parser.algorithms;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Element;
-
+import com.html5dom.Element;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 
@@ -13,10 +11,11 @@ public class InsertForeignElement {
 		AdjustedInsertionLocation adjustedInsertionLocation = AppropiatePlaceForInsertingANode
 				.run(context);
 		Element element = CreateAnElementForAToken.run(
-				adjustedInsertionLocation.getParent(), namespace, token, context);
+				adjustedInsertionLocation.getParent(), namespace, token,
+				context);
 		try {
 			adjustedInsertionLocation.insertElement(element);
-		} catch (DOMException e) {
+		} catch (Exception e) {
 			// TODO drop the new element on the floor
 		}
 

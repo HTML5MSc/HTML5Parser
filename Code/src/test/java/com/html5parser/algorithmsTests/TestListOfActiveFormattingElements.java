@@ -1,18 +1,14 @@
 package com.html5parser.algorithmsTests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
-import com.html5parser.algorithms.ElementInScope;
+import com.html5dom.Document;
+import com.html5dom.Element;
 import com.html5parser.algorithms.ListOfActiveFormattingElements;
 import com.html5parser.classes.ParserContext;
 
@@ -157,10 +153,10 @@ public class TestListOfActiveFormattingElements {
 		ArrayList<Element> list = parserContext.getActiveFormattingElements();
 		assertTrue("Empty list", list.isEmpty());
 	}
-	
+
 	@Test
 	public void test_clearNoMarkerFormattingElement() {
-		String[] elementList = {"a", "b"};
+		String[] elementList = { "a", "b" };
 		Document doc = createDocument();
 		ParserContext parserContext = createListOfFormattingElements(doc,
 				elementList);
@@ -172,7 +168,7 @@ public class TestListOfActiveFormattingElements {
 
 	@Test
 	public void test_clearUpToMarkerFormattingElement() {
-		String[] elementList = {"a", "b", null, "i", "a"};
+		String[] elementList = { "a", "b", null, "i", "a" };
 		Document doc = createDocument();
 		ParserContext parserContext = createListOfFormattingElements(doc,
 				elementList);
@@ -181,10 +177,10 @@ public class TestListOfActiveFormattingElements {
 		ArrayList<Element> list = parserContext.getActiveFormattingElements();
 		assertTrue("Empty list", list.size() == 3);
 	}
-	
+
 	@Test
 	public void test_clearNothingFormattingElement() {
-		String[] elementList = {"a", "b", null};
+		String[] elementList = { "a", "b", null };
 		Document doc = createDocument();
 		ParserContext parserContext = createListOfFormattingElements(doc,
 				elementList);
@@ -193,26 +189,15 @@ public class TestListOfActiveFormattingElements {
 		ArrayList<Element> list = parserContext.getActiveFormattingElements();
 		assertTrue("Empty list", list.size() == 3);
 	}
+
 	private Document createDocument() {
-
-		Document doc = null;
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
-		try {
-			builder = dbf.newDocumentBuilder();
-			doc = builder.newDocument();
-
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Document doc = new Document();
 		return doc;
 	}
 
 	private ParserContext createListOfFormattingElements(Document doc,
 			String[] elements) {
 		ParserContext parserContext = new ParserContext();
-		ArrayList<Element> list = parserContext.getActiveFormattingElements();
 
 		for (String elementName : elements) {
 			if (elementName != null) {

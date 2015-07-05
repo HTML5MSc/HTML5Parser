@@ -1,10 +1,8 @@
 package com.html5parser.insertionModes;
 
-import org.w3c.dom.DOMException;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
-
+import com.html5dom.Document;
+import com.html5dom.Document.QuirksMode;
+import com.html5dom.DocumentType;
 import com.html5parser.algorithms.InsertComment;
 import com.html5parser.classes.InsertionMode;
 import com.html5parser.classes.ParserContext;
@@ -71,30 +69,10 @@ public class Initial implements IInsertionMode {
 				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
 			}
 
-			// // set the value of to one of these: "quirks mode",
-			// "limited-quirks mode", "no-quirks mode"
-			// doc.setUserData("quirksmode", "no-quirks mode", null);
 			Document doc = parserContext.getDocument();
-			if (tagName != null && !tagName.isEmpty()) {
-				DOMImplementation domImpl = doc.getImplementation();
-				try {
-					DocumentType doctype = domImpl.createDocumentType(tagName,
-							publicIdentifier, systemIdentifier);
-					doc.appendChild(doctype);
-				} catch (DOMException e) {
-					e.printStackTrace();
-					String invalidDoctype = "<!DOCTYPE "
-							+ (tagName == null ? "" : tagName)
-							+ (publicIdentifier == null ? ""
-									: (" " + publicIdentifier))
-							+ (systemIdentifier == null ? ""
-									: (" " + systemIdentifier)) + ">";
-					doc.setUserData("invalidDoctype", invalidDoctype, null);
-				}
-			} else {
-				String invalidDoctype = "<!DOCTYPE >";
-				doc.setUserData("invalidDoctype", invalidDoctype, null);
-			}
+			DocumentType doctype = doc.createDocumentType(tagName,
+					publicIdentifier, systemIdentifier);
+			doc.appendChild(doctype);
 			InsertionModeFactory factory = InsertionModeFactory.getInstance();
 			parserContext.setInsertionMode(factory
 					.getInsertionMode(InsertionMode.before_html));
@@ -116,6 +94,6 @@ public class Initial implements IInsertionMode {
 				.getInsertionMode(InsertionMode.before_html));
 		parserContext.setFlagReconsumeToken(true);
 		Document doc = parserContext.getDocument();
-		doc.setUserData("quirksmode", "quirks mode", null);
+		doc.setQuirksMode(QuirksMode.quirks);
 	}
 }

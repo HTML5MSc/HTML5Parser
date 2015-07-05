@@ -6,16 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
+import com.html5dom.Document;
+import com.html5dom.Document.QuirksMode;
+import com.html5dom.Element;
+import com.html5dom.Node;
 import com.html5parser.algorithms.ForeignContent;
 import com.html5parser.algorithms.ParsingHTMLFragments;
 import com.html5parser.algorithms.TreeCostructionDispatcher;
@@ -41,23 +39,23 @@ public class Parser implements IParser {
 	public Parser() {
 		initialize(false);
 	}
-	
+
 	public Parser(boolean scriptFlag) {
 		initialize(scriptFlag);
 	}
 
-	private void initialize(boolean scriptFlag){
+	private void initialize(boolean scriptFlag) {
 		parserContext = new ParserContext();
 		tokenizer = new Tokenizer();
 		streamPreprocessor = new StreamPreprocessor();
 		treeConstructor = new TreeConstructor();
 		doc = createNewDocument();
-		
+
 		parserContext.setDocument(doc);
 		parserContext.setFlagScripting(scriptFlag);
-		
+
 	}
-	
+
 	public Document parse(String htmlString) {
 		return parse(new ByteArrayInputStream(htmlString.getBytes()));
 	}
@@ -106,10 +104,10 @@ public class Parser implements IParser {
 							.setFlagReconsumeCurrentInputCharacter(false);
 				}
 
-//				for (Token tok : parserContext.getTokenizerContext()
-//						.getTokens()) {
-//					System.out.println(tok.getType() + " : " + tok.getValue());
-//				}
+				 for (Token tok : parserContext.getTokenizerContext()
+				 .getTokens()) {
+				 System.out.println(tok.getType() + " : " + tok.getValue());
+				 }
 
 				/*
 				 * Consume all the tokens emited
@@ -165,19 +163,19 @@ public class Parser implements IParser {
 		return parserContext.getDocument();
 	}
 
-	public Node parseFragment(String htmlString, String contextElement){
+	public Node parseFragment(String htmlString, String contextElement) {
 		Document document = createNewDocument();
 		ParserContext parserContext = new ParserContext();
 		Element element = createElement(document, contextElement);
-		
+
 		try {
-			NodeList result = ParsingHTMLFragments.run(parserContext,
+			List<Node> result = ParsingHTMLFragments.run(parserContext,
 					element, htmlString);
 
-			int size = result.getLength();
+			int size = result.size();
 			for (int i = 0; i < size; i++) {
-				Node node = result.item(i);
-				//System.out.println(node);
+				Node node = result.get(i);
+				// System.out.println(node);
 				Node adopted = document.importNode(node, true);
 				element.appendChild(adopted);
 			}
@@ -185,26 +183,16 @@ public class Parser implements IParser {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return element;
 	}
-	
-	private Document createNewDocument(){
-		Document document = null;
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
-		try {
-			builder = dbf.newDocumentBuilder();
-			document = builder.newDocument();
-			//Quirks mode can have value: quirks mode, limited-quirks mode, no-quirks mode
-			document.setUserData("quirksmode", "no-quirks mode", null);
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+	private Document createNewDocument() {
+		Document document = new Document();
+		document.setQuirksMode(QuirksMode.noQuirks);
 		return document;
 	}
-	
+
 	private Element createElement(Document doc, String context) {
 		context = context.trim();
 		if (!context.contains(" "))
@@ -224,7 +212,7 @@ public class Parser implements IParser {
 		}
 		return doc.createElementNS(namespace, name);
 	}
-	
+
 	public ParserContext tokenize(ParserContext parserContext, String string) {
 		BufferedReader in = null;
 

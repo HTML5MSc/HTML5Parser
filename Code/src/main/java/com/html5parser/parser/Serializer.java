@@ -1,59 +1,19 @@
 package com.html5parser.parser;
 
-import java.io.File;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.DocumentType;
-import org.w3c.dom.Node;
-
-import com.html5parser.classes.token.TagToken.Attribute;
+import com.html5dom.DocumentType;
+import com.html5dom.Element;
+import com.html5dom.Node;
 import com.html5parser.constants.Namespace;
 
 public class Serializer {
 
 	public static String toHtmlString(Node doc) {
-		return toHtmlString(doc, true, false);
-	}
-
-	public static String toHtmlString(Node doc, boolean indent, boolean saveFile) {
-		try {
-			StringWriter writer = new StringWriter();
-			TransformerFactory tf = TransformerFactory.newInstance();
-			Transformer transformer = tf.newTransformer();
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
-					"yes");
-			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-			transformer.setOutputProperty(OutputKeys.INDENT, indent ? "yes"
-					: "no");
-			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			transformer.setOutputProperty(
-					"{http://xml.apache.org/xslt}indent-amount", "4");
-
-			if (saveFile) {
-				transformer.transform(new DOMSource(doc), new StreamResult(
-						new File("output.html")));
-			}
-
-			transformer.transform(new DOMSource(doc), new StreamResult(writer));
-			return writer.toString();
-		} catch (IllegalArgumentException
-				| TransformerFactoryConfigurationError | TransformerException e) {
-			e.printStackTrace();
-			return null;
-
-		}
+		return doc.getOuterHtml();
 	}
 
 	public static String toHtml5libFormat(Node node) {
@@ -75,174 +35,97 @@ public class Serializer {
 			// str += "\n| " + indent(ancestors);
 			str += "\n| " + indent(ancestors + templateAncestors(current, 0));
 			switch (current.getNodeType()) {
-			case Node.DOCUMENT_TYPE_NODE:
-				String publicId = ((DocumentType) current).getPublicId();
-				String systemId = ((DocumentType) current).getSystemId();
-
-				if (publicId == null && systemId == null) {
-					publicId = "";
-					systemId = "";
+			case DOCUMENT_TYPE_NODE:
+				DocumentType doctype = (DocumentType) current;
+				String docname = doctype.getName();
+				String publicid = doctype.getPublicId();
+				String systemid = doctype.getSystemId();
+				docname = docname == null ? "" : docname;
+				if (publicid == null && systemid == null) {
+					publicid = "";
+					systemid = "";
 				} else {
-					publicId = " \"" + (publicId == null ? "" : publicId)
+					publicid = " \"" + (publicid == null ? "" : publicid)
 							+ "\"";
-					systemId = " \"" + (systemId == null ? "" : systemId)
+					systemid = " \"" + (systemid == null ? "" : systemid)
 							+ "\"";
 				}
-
-				str += "<!DOCTYPE " + current.getNodeName() + publicId
-						+ systemId + '>';
+				str += "<!DOCTYPE " + docname + publicid + systemid + ">";
 				break;
-			case Node.COMMENT_NODE:
-				try {
-					str += "<!-- " + current.getNodeValue() + " -->";
-				} catch (NullPointerException e) {
-					str += "<!--  -->";
-				}
+			case COMMENT_NODE:
+				str += "<!-- "
+						+ (current.getNodeValue() == null ? "" : current
+								.getNodeValue()) + " -->";
 				if (parent != current.getParentNode()) {
 					return str += " (misnested... aborting)";
 				}
 				break;
-			case 7:
-				str += "<?" + current.getNodeName() + current.getNodeValue()
-						+ '>';
+			case CDATA_SECTION_NODE:
+				str += "<![CDATA[ "
+						+ (current.getNodeValue() == null ? "" : current
+								.getNodeValue()) + " ]]>";
 				break;
-			case Node.CDATA_SECTION_NODE:
-				str += "<![CDATA[ " + current.getNodeValue() + " ]]>";
-				break;
-			case Node.TEXT_NODE:
-				str += '"' + current.getNodeValue() + '"';
+			case TEXT_NODE:
+				str += '"' + current.getOuterHtml() + '"';
 				if (parent != current.getParentNode()) {
 					return str += " (misnested... aborting)";
 				}
 				break;
-			case Node.ELEMENT_NODE:
+			case ELEMENT_NODE:
 				str += "<";
 				if (current.getNamespaceURI() != null)
 					switch (current.getNamespaceURI()) {
-					case "http://www.w3.org/2000/svg":
+					case Namespace.SVG:
 						str += "svg ";
 						break;
-					case "http://www.w3.org/1998/Math/MathML":
+					case Namespace.MathML:
 						str += "math ";
 						break;
 					}
-				// if (current.getNamespaceURI() != null
-				// && current.getLocalName() != null) {
-				// str += current.getLocalName();
-				// } else {
-				// str += current.getNodeName().toLowerCase();
-				// }
 				str += current.getNodeName();
 				str += '>';
 				if (parent != current.getParentNode()) {
 					return str += " (misnested... aborting)";
 				} else {
-					@SuppressWarnings("unchecked")
-					List<Attribute> invalidAtts = (List<Attribute>) current
-							.getUserData("invalidAtts");
+					List<com.html5dom.Attribute> atts = ((Element) current)
+							.getAttributes();
+					Map<String, String> attrNames = new HashMap<String, String>();
 
-					if (current.hasAttributes() || invalidAtts != null) {
-						// List<String> attrNames = new ArrayList<String>();
-						// Map<String, Integer> attrPos = new HashMap<String,
-						// Integer>();
-
-						Map<String, String> attrNames = new HashMap<String, String>();
-
-						for (int j = 0; j < current.getAttributes().getLength(); j += 1) {
-							if (current.getAttributes().item(j) != null) {
-								String name = "";
-								if (current.getAttributes().item(j)
-										.getNamespaceURI() != null)
-									switch (current.getAttributes().item(j)
-											.getNamespaceURI()) {
-									case "http://www.w3.org/XML/1998/namespace":
-										name += "xml ";
-										break;
-									case "http://www.w3.org/2000/xmlns/":
-										name += "xmlns ";
-										break;
-									case "http://www.w3.org/1999/xlink":
-										name += "xlink ";
-										break;
-									}
-								if (current.getAttributes().item(j)
-										.getLocalName() != null) {
-									name += current.getAttributes().item(j)
-											.getLocalName();
-								} else {
-									name += current.getAttributes().item(j)
-											.getNodeName();
-								}
-								// attrNames.add(name);
-								// attrPos.put(name, j);
-								attrNames.put(name, current.getAttributes()
-										.item(j).getNodeValue());
+					for (com.html5dom.Attribute att : atts) {
+						String name = "";
+						if (att.getNamespaceURI() != null) {
+							switch (att.getNamespaceURI()) {
+							case Namespace.XML:
+								name += "xml ";
+								break;
+							case Namespace.XMLNS:
+								name += "xmlns ";
+								break;
+							case Namespace.XLink:
+								name += "xlink ";
+								break;
 							}
+							name += att.getLocalName();
+						} else {
+							name += att.getNodeName();
 						}
+						attrNames.put(name, att.getNodeValue());
+					}
 
-						/*
-						 * Check if there are invalid attributes
-						 */
-						if (invalidAtts != null) {
-							for (int j = 0; j < invalidAtts.size(); j += 1) {
-								if (invalidAtts.get(j) != null) {
-									String name = "";
-									if (invalidAtts.get(j).getNamespace() != null)
-										switch (invalidAtts.get(j)
-												.getNamespace()) {
-										case "http://www.w3.org/XML/1998/namespace":
-											name += "xml ";
-											break;
-										case "http://www.w3.org/2000/xmlns/":
-											name += "xmlns ";
-											break;
-										case "http://www.w3.org/1999/xlink":
-											name += "xlink ";
-											break;
-										}
-									if (invalidAtts.get(j).getLocalName() != null) {
-										name += invalidAtts.get(j)
-												.getLocalName();
-									} else {
-										name += invalidAtts.get(j).getName();
-									}
-									// attrNames.add(name);
-									// attrPos.put(name, j);
-									attrNames.put(name, invalidAtts.get(j)
-											.getValue());
-								}
-							}
-						}
+					if (attrNames.size() > 0) {
+						TreeMap<String, String> sorted_map = new TreeMap<String, String>(
+								attrNames);
+						for (Map.Entry<String, String> entry : sorted_map
+								.entrySet()) {
+							String key = entry.getKey();
+							String value = entry.getValue();
 
-						// if (attrNames.size() > 0) {
-						// attrNames.sort(null);
-						// for (int j = 0; j < attrNames.size(); j += 1) {
-						// str += "\n| " + indent(1 + ancestors)
-						// + attrNames.get(j);
-						// str += "=\""
-						// + current
-						// .getAttributes()
-						// .item(attrPos.get(attrNames
-						// .get(j)))
-						// .getNodeValue() + "\"";
-						// }
-						// }
-
-						if (attrNames.size() > 0) {
-							TreeMap<String, String> sorted_map = new TreeMap<String, String>(
-									attrNames);
-							for (Map.Entry<String, String> entry : sorted_map
-									.entrySet()) {
-								String key = entry.getKey();
-								String value = entry.getValue();
-
-								// str += "\n| " + indent(1 + ancestors) + key;
-								str += "\n| "
-										+ indent(1 + ancestors
-												+ templateAncestors(current, 0))
-										+ key;
-								str += "=\"" + value + "\"";
-							}
+							// str += "\n| " + indent(1 + ancestors) + key;
+							str += "\n| "
+									+ indent(1 + ancestors
+											+ templateAncestors(current, 0))
+									+ key;
+							str += "=\"" + value + "\"";
 						}
 					}
 
@@ -251,7 +134,7 @@ public class Serializer {
 					 * required format of html5lib
 					 */
 					if (current.getNodeName().equals("template")
-							&& current.getNamespaceURI().equals(Namespace.HTML)) {
+							&& ((Element) current).isHTMLElement()) {
 						str += "\n| "
 								+ indent(1 + ancestors
 										+ templateAncestors(current, 0))
@@ -266,6 +149,8 @@ public class Serializer {
 						continue;
 					}
 				}
+				break;
+			default:
 				break;
 			}
 			for (;;) {
@@ -297,7 +182,7 @@ public class Serializer {
 		if (current.getParentNode() != null) {
 			current = current.getParentNode();
 			if (current.getNodeName().equals("template")
-					&& current.getNamespaceURI().equals(Namespace.HTML))
+					&& ((Element) current).isHTMLElement())
 				ancestors++;
 			return templateAncestors(current, ancestors);
 		} else
