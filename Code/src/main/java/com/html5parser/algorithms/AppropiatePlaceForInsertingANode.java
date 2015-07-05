@@ -1,7 +1,7 @@
 package com.html5parser.algorithms;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import com.html5dom.Element;
+import com.html5dom.Node;
 
 import com.html5parser.classes.ParserContext;
 

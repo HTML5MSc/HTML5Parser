@@ -1,8 +1,6 @@
 package com.html5parser.algorithms;
 
-import org.w3c.dom.Element;
-
-import com.html5parser.constants.Namespace;
+import com.html5dom.Element;
 
 public class IntegrationPoint {
 	/*
@@ -13,8 +11,7 @@ public class IntegrationPoint {
 	 */
 	public static Boolean isMathMLTextIntegrationPoint(Element element) {
 
-		if (element != null
-				&& element.getNamespaceURI().equals(Namespace.MathML)) {
+		if (element != null && element.isMathMLElement()) {
 			if (element.getNodeName().equals("mi")
 					|| element.getNodeName().equals("mo")
 					|| element.getNodeName().equals("mn")
@@ -43,13 +40,13 @@ public class IntegrationPoint {
 	public static Boolean isHtmlIntegrationPoint(Element element) {
 		if (element != null
 				&& ((element.getNodeName().equals("annotation-xml")
-						&& element.getNamespaceURI().equals(Namespace.MathML)
+						&& element.isMathMLElement()
 						&& element.hasAttribute("encoding") && (element
 						.getAttribute("encoding").equalsIgnoreCase("text/html") || element
 						.getAttribute("encoding").equalsIgnoreCase(
 								"application/xhtml+xml"))) || (element
-						.getNamespaceURI().equals(Namespace.SVG) && (element
-						.getNodeName().equals("foreignObject")
+						.isSVGElement() && (element.getNodeName().equals(
+						"foreignObject")
 						|| element.getNodeName().equals("desc") || element
 						.getNodeName().equals("title"))))) {
 			return true;

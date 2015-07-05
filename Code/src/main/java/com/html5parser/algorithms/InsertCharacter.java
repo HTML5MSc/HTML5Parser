@@ -1,8 +1,8 @@
 package com.html5parser.algorithms;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-
+import com.html5dom.Document;
+import com.html5dom.Node;
+import com.html5dom.Node.NodeType;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 
@@ -37,7 +37,7 @@ public class InsertCharacter {
 
 		// If the adjusted insertion location is in a Document node, then abort
 		// these steps.
-		if (adjustedInsertionLocation.getParent().getNodeType() == Node.DOCUMENT_NODE) {
+		if (adjustedInsertionLocation.getParent().getNodeType() == NodeType.DOCUMENT_NODE) {
 			return null;
 		}
 
@@ -49,14 +49,14 @@ public class InsertCharacter {
 			beforeLocation = referenceLocation.getPreviousSibling();
 		// if it will be inserted before location
 		if (beforeLocation != null
-				&& beforeLocation.getNodeType() == Node.TEXT_NODE) {
+				&& beforeLocation.getNodeType() == NodeType.TEXT_NODE) {
 			beforeLocation.setNodeValue((beforeLocation.getNodeValue())
 					.concat(data));
 			return beforeLocation;
 		}// if it will be inserted as a last child
 		else if (adjustedInsertionLocation.getParent().getLastChild() != null
 				&& adjustedInsertionLocation.getParent().getLastChild()
-						.getNodeType() == Node.TEXT_NODE) {
+						.getNodeType() == NodeType.TEXT_NODE) {
 			Node location = adjustedInsertionLocation.getParent()
 					.getLastChild();
 			location.setNodeValue((location.getNodeValue()).concat(data));

@@ -1,6 +1,6 @@
 package com.html5parser.algorithms;
 
-import org.w3c.dom.Element;
+import com.html5dom.Element;
 
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;

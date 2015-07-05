@@ -1,6 +1,6 @@
 package com.html5parser.algorithms;
 
-import org.w3c.dom.Node;
+import com.html5dom.Node;
 
 /**
  * Provides a location to insert a new Node.

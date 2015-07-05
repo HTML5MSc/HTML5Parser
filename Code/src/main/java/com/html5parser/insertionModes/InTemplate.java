@@ -1,7 +1,6 @@
 package com.html5parser.insertionModes;
 
-import org.w3c.dom.Element;
-
+import com.html5dom.Element;
 import com.html5parser.algorithms.ListOfActiveFormattingElements;
 import com.html5parser.algorithms.ResetTheInsertionModeAppropriately;
 import com.html5parser.classes.InsertionMode;
@@ -217,7 +216,10 @@ public class InTemplate implements IInsertionMode {
 			Element templateElement = null;
 			do {
 				templateElement = parserContext.getOpenElements().pop();
-			} while (!(parserContext.isHTMLElement(templateElement, "template")));
+				if (templateElement.isHTMLElement()
+						&& templateElement.getNodeName().equals("template"))
+					break;
+			} while (!parserContext.getOpenElements().isEmpty());
 
 			ListOfActiveFormattingElements.clear(parserContext);
 			parserContext.getTemplateInsertionModes().pop();

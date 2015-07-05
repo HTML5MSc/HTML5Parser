@@ -43,6 +43,8 @@ public class Script_data_escaped_state implements ITokenizerState {
 			 * Parse error. Emit a U+FFFD REPLACEMENT CHARACTER character token.
 			 */
 			context.addParseErrors(ParseErrorType.UnexpectedInputCharacter);
+			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
+					0xFFFD));
 			break;
 		case EOF:
 			/*

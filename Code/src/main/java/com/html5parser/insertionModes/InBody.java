@@ -1,13 +1,11 @@
 package com.html5parser.insertionModes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
+import com.html5dom.Element;
+import com.html5dom.Node;
 import com.html5parser.algorithms.AddAttributesToAnElement;
 import com.html5parser.algorithms.AdjustForeignAttributes;
 import com.html5parser.algorithms.AdjustMathMLAttributes;
@@ -29,7 +27,6 @@ import com.html5parser.classes.Token.TokenType;
 import com.html5parser.classes.TokenizerState;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.classes.token.TagToken.Attribute;
-import com.html5parser.constants.HTML5Elements;
 import com.html5parser.constants.Namespace;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.factories.TokenizerStateFactory;
@@ -101,9 +98,7 @@ public class InBody implements IInsertionMode {
 				&& token.getValue().equals("html")) {
 
 			parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
-			if (parserContext.openElementsContain("template")) {
-				// ignore the token
-			} else {
+			if (!parserContext.openElementsContain("template")) {
 				Element html = parserContext.getOpenElements().get(0);
 				TagToken tagToken = (TagToken) token;
 				AddAttributesToAnElement.run(html, tagToken);
@@ -139,7 +134,7 @@ public class InBody implements IInsertionMode {
 				&& token.getValue().equals("body")) {
 			parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
 			if ((parserContext.getOpenElements().size() > 1 && !parserContext
-					.getOpenElements().get(1).getLocalName().equals("body"))
+					.getOpenElements().get(1).getNodeName().equals("body"))
 					|| parserContext.getOpenElements().size() == 1
 					|| parserContext.openElementsContain("template")) {
 				// ignore the token
@@ -599,7 +594,7 @@ public class InBody implements IInsertionMode {
 				while (!parserContext.getOpenElements().isEmpty()) {
 					Element element = parserContext.getOpenElements().pop();
 					if (element.getNodeName().equals(token.getValue())
-							&& element.getNamespaceURI().equals(Namespace.HTML)) {
+							&& element.isHTMLElement()) {
 						break;
 					}
 				}
@@ -955,16 +950,15 @@ public class InBody implements IInsertionMode {
 			ListOfActiveFormattingElements.clear(parserContext);
 		}
 		/*
-		 * A start tag whose tag name is "table" TODO If the Document is not set
-		 * to quirks mode, and the stack of open elements has a p element in
-		 * button scope, then close a p element. Insert an HTML element for the
-		 * token. Set the frameset-ok flag to "not ok". Switch the insertion
-		 * mode to "in table".
+		 * A start tag whose tag name is "table" If the Document is not set to
+		 * quirks mode, and the stack of open elements has a p element in button
+		 * scope, then close a p element. Insert an HTML element for the token.
+		 * Set the frameset-ok flag to "not ok". Switch the insertion mode to
+		 * "in table".
 		 */
 		else if (tokenType == TokenType.start_tag
 				&& isOneOf(token.getValue(), new String[] { "table" })) {
-			if (!parserContext.getDocument().getUserData("quirksmode")
-					.equals("quirks mode")
+			if (!parserContext.getDocument().isQuirksMode()
 					&& ElementInScope.isInButtonScope(parserContext, "p"))
 				closeApElement(parserContext);
 			InsertAnHTMLElement.run(parserContext, token);
@@ -1485,8 +1479,7 @@ public class InBody implements IInsertionMode {
 			}
 			// 3 Otherwise, if node is in the special category, then this is a
 			// parse error; ignore the token, and abort these steps.
-			else if (Arrays.asList(HTML5Elements.SPECIAL).contains(
-					node.getNodeName())) {
+			else if (node.isSpecialElement()) {
 				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
 				return;
 			}

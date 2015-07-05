@@ -2,7 +2,7 @@ package com.html5parser.interfaces;
 
 import java.io.InputStream;
 
-import org.w3c.dom.Document;
+import com.html5dom.Document;
 
 import com.html5parser.classes.ParserContext;
 

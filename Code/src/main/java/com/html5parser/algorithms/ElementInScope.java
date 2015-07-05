@@ -3,10 +3,8 @@ package com.html5parser.algorithms;
 import java.util.Arrays;
 import java.util.Stack;
 
-import org.w3c.dom.Element;
-
+import com.html5dom.Element;
 import com.html5parser.classes.ParserContext;
-import com.html5parser.constants.Namespace;
 
 public class ElementInScope {
 
@@ -46,7 +44,7 @@ public class ElementInScope {
 
 		return false;
 	}
-	
+
 	// The stack of open elements is said to have an element target node in a
 	// specific scope consisting of a list of element types list when the
 	// following algorithm terminates in a match state:
@@ -59,8 +57,8 @@ public class ElementInScope {
 			// the stack).
 			Element node = openElements.pop();
 			// If node is the target node, terminate in a match state.
-			//if (node.getNodeName().equals(elementName))
-			if(isOneOf(node.getNodeName(), elementName))
+			// if (node.getNodeName().equals(elementName))
+			if (isOneOf(node.getNodeName(), elementName))
 				return true;
 			// Otherwise, if node is one of the element types in list, terminate
 			// in a failure state.
@@ -131,14 +129,17 @@ public class ElementInScope {
 				"annotation-xml" };
 		String[] elementsInSVGns = { "foreignObject", "desc", "title" };
 
-		if (element.getNamespaceURI().equals(Namespace.HTML) &&
-		Arrays.asList(elementsInHTMLns).contains(element.getNodeName()))
+		if (element.isHTMLElement()
+				&& Arrays.asList(elementsInHTMLns).contains(
+						element.getNodeName()))
 			return true;
-		if (element.getNamespaceURI().equals(Namespace.MathML) &&
-		Arrays.asList(elementsInMathMLns).contains(element.getNodeName()))
+		if (element.isMathMLElement()
+				&& Arrays.asList(elementsInMathMLns).contains(
+						element.getNodeName()))
 			return true;
-		if (element.getNamespaceURI().equals(Namespace.SVG) &&
-		Arrays.asList(elementsInSVGns).contains(element.getNodeName()))
+		if (element.isSVGElement()
+				&& Arrays.asList(elementsInSVGns).contains(
+						element.getNodeName()))
 			return true;
 		return false;
 	}
@@ -152,8 +153,9 @@ public class ElementInScope {
 	// ul in the HTML namespace
 	private static Boolean isInListItemScope(Element element) {
 		String[] elementsInHTMLns = { "ol", "ul" };
-		if (element.getNamespaceURI().equals(Namespace.HTML) &&
-		Arrays.asList(elementsInHTMLns).contains(element.getNodeName()))
+		if (element.isHTMLElement()
+				&& Arrays.asList(elementsInHTMLns).contains(
+						element.getNodeName()))
 			return true;
 		return isInScope(element);
 	}
@@ -167,8 +169,9 @@ public class ElementInScope {
 	// button in the HTML namespace
 	private static Boolean isInButtonScope(Element element) {
 		String[] elementsInHTMLns = { "button" };
-		if (element.getNamespaceURI().equals(Namespace.HTML) &&
-		Arrays.asList(elementsInHTMLns).contains(element.getNodeName()))
+		if (element.isHTMLElement()
+				&& Arrays.asList(elementsInHTMLns).contains(
+						element.getNodeName()))
 			return true;
 		return isInScope(element);
 	}
@@ -182,8 +185,9 @@ public class ElementInScope {
 	// template in the HTML namespace
 	private static Boolean isInTableScope(Element element) {
 		String[] elementsInHTMLns = { "html", "table", "template" };
-		if (element.getNamespaceURI().equals(Namespace.HTML) &&
-		Arrays.asList(elementsInHTMLns).contains(element.getNodeName()))
+		if (element.isHTMLElement()
+				&& Arrays.asList(elementsInHTMLns).contains(
+						element.getNodeName()))
 			return true;
 		return false;
 	}
@@ -196,8 +200,8 @@ public class ElementInScope {
 	// option in the HTML namespace
 	private static Boolean isInSelectScope(Element element) {
 		String[] elementsInHTMLns = { "optgroup", "option" };
-		if (!(element.getNamespaceURI().equals(Namespace.HTML) &&
-		Arrays.asList(elementsInHTMLns).contains(element.getNodeName())))
+		if (!(element.isHTMLElement() && Arrays.asList(elementsInHTMLns)
+				.contains(element.getNodeName())))
 			return true;
 		return false;
 	}

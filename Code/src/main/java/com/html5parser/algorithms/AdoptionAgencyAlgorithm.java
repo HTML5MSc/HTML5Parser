@@ -1,15 +1,13 @@
 package com.html5parser.algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Stack;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
+import com.html5dom.Element;
+import com.html5dom.Node;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.token.TagToken;
-import com.html5parser.constants.HTML5Elements;
 import com.html5parser.constants.Namespace;
 import com.html5parser.insertionModes.InBody;
 import com.html5parser.parseError.ParseErrorType;
@@ -38,10 +36,10 @@ public class AdoptionAgencyAlgorithm {
 		/*
 		 * W3C spec mistake
 		 */
-		// // 1 If the current node is an HTML element whose tag name is
-		// subject,
-		// // then run these substeps:
-		if (currentNode.getNodeName().equals(subject)) {
+		// 1 If the current node is an HTML element whose tag name is subject,
+		// then run these substeps:
+		if (currentNode.isHTMLElement()
+				&& currentNode.getNodeName().equals(subject)) {
 			// 1.1 Let element be the current node.
 			// 1.2 Pop element off the stack of open elements.
 			parserContext.getOpenElements().pop();
@@ -55,10 +53,12 @@ public class AdoptionAgencyAlgorithm {
 		/*
 		 * whatwg Living standard correction
 		 */
-		// 1 If the current node is an HTML element whose tag name is subject,
-		// and the current node is not in the list of active formatting
-		// elements, then pop the current node off the stack of open elements,
-		// and abort these steps.
+		// // 1 If the current node is an HTML element whose tag name is
+		// subject,
+		// // and the current node is not in the list of active formatting
+		// // elements, then pop the current node off the stack of open
+		// elements,
+		// // and abort these steps.
 		// if (currentNode.getNodeName().equals(subject)
 		// && !parserContext.getActiveFormattingElements().contains(
 		// currentNode)) {
@@ -132,14 +132,15 @@ public class AdoptionAgencyAlgorithm {
 			formattingElementIndex = stackOpenElements
 					.indexOf(formattingElement);
 			for (int i = formattingElementIndex + 1; i < stackOpenElements
-					.size(); i++)
+					.size(); i++) {
 				// for (int i = stackOpenElements
 				// .size() - 1; i > formattingElementIndex; i--)
-				if (Arrays.asList(HTML5Elements.SPECIAL).contains(
-						stackOpenElements.get(i).getNodeName())) {
-					furthestBlock = stackOpenElements.get(i);
+				Element e = stackOpenElements.get(i);
+				if (e.isSpecialElement()) {
+					furthestBlock = e;
 					break;
 				}
+			}
 
 			// 10 If there is no furthest block, then the UA must first pop all
 			// the nodes from the bottom of the stack of open elements, from the
@@ -269,11 +270,11 @@ public class AdoptionAgencyAlgorithm {
 
 			// 16 Take all of the child nodes of furthest block and append them
 			// to the element created in the last step.
-			NodeList nl = furthestBlock.getChildNodes();
-			while (nl.getLength() > 0)
-				newElement.appendChild(nl.item(0));
+			List<Node> nl = furthestBlock.getChildNodes();
+			while (nl.size() > 0)
+				newElement.appendChild(nl.get(0));
 
-			while (furthestBlock.getChildNodes().getLength() > 0)
+			while (furthestBlock.getChildNodes().size() > 0)
 				furthestBlock.removeChild(furthestBlock.getFirstChild());
 
 			// 17 Append that new element to furthest block.

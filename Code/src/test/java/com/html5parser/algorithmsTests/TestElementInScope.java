@@ -3,19 +3,15 @@ package com.html5parser.algorithmsTests;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.junit.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
+import com.html5dom.Document;
+import com.html5dom.Element;
 import com.html5parser.algorithms.ElementInScope;
 import com.html5parser.classes.ParserContext;
 
 public class TestElementInScope {
-	
+
 	@Test
 	public void test_pIsInButtonScopeByChild() {
 		String elementName = "p";
@@ -26,29 +22,29 @@ public class TestElementInScope {
 		assertTrue(elementName + " is in button Scope",
 				ElementInScope.isInButtonScope(parserContext, elementName));
 	}
-	
+
 	@Test
 	public void test_pIsInButtonScopeDirect() {
 		String elementName = "p";
-		String[] stack = { "html", "body", "button", "p"};
+		String[] stack = { "html", "body", "button", "p" };
 		Document doc = createDocument();
 		ParserContext parserContext = createStackOfOpenElements(doc, stack);
 
 		assertTrue(elementName + " is in button Scope",
 				ElementInScope.isInButtonScope(parserContext, elementName));
 	}
-	
+
 	@Test
 	public void test_pIsNotInButtonScope() {
 		String elementName = "p";
-		String[] stack = { "html", "body", "button"};
+		String[] stack = { "html", "body", "button" };
 		Document doc = createDocument();
 		ParserContext parserContext = createStackOfOpenElements(doc, stack);
 
 		assertFalse(elementName + " is not in button Scope",
 				ElementInScope.isInButtonScope(parserContext, elementName));
 	}
-	
+
 	@Test
 	public void test_liIsInButtonScopeByChild() {
 		String elementName = "li";
@@ -59,29 +55,29 @@ public class TestElementInScope {
 		assertTrue(elementName + " is in list item Scope",
 				ElementInScope.isInListItemScope(parserContext, elementName));
 	}
-	
+
 	@Test
 	public void test_liIsInButtonScopeDirect() {
 		String elementName = "li";
-		String[] stack = { "html", "body", "ul", "li"};
+		String[] stack = { "html", "body", "ul", "li" };
 		Document doc = createDocument();
 		ParserContext parserContext = createStackOfOpenElements(doc, stack);
 
 		assertTrue(elementName + " is in list item Scope",
 				ElementInScope.isInListItemScope(parserContext, elementName));
 	}
-	
+
 	@Test
 	public void test_liIsNotInButtonScope() {
 		String elementName = "li";
-		String[] stack = { "html", "body", "ul"};
+		String[] stack = { "html", "body", "ul" };
 		Document doc = createDocument();
 		ParserContext parserContext = createStackOfOpenElements(doc, stack);
 
 		assertFalse(elementName + " is not in list item Scope",
 				ElementInScope.isInListItemScope(parserContext, elementName));
 	}
-	
+
 	@Test
 	public void test_selectIsInSelectScope() {
 		String elementName = "select";
@@ -103,11 +99,11 @@ public class TestElementInScope {
 		assertTrue(elementName + " is in Select Scope",
 				ElementInScope.isInSelectScope(parserContext, elementName));
 	}
-	
+
 	@Test
 	public void test_selectIsNotInSelectScope() {
 		String elementName = "select";
-		String[] stack = { "html", "body"};
+		String[] stack = { "html", "body" };
 		Document doc = createDocument();
 		ParserContext parserContext = createStackOfOpenElements(doc, stack);
 
@@ -125,7 +121,7 @@ public class TestElementInScope {
 		assertTrue(elementName + " is in Table Scope",
 				ElementInScope.isInTableScope(parserContext, elementName));
 	}
-	
+
 	@Test
 	public void test_tableIsInTableScopeDirect() {
 		String elementName = "table";
@@ -147,7 +143,7 @@ public class TestElementInScope {
 		assertFalse(elementName + " is not in Table Scope",
 				ElementInScope.isInTableScope(parserContext, elementName));
 	}
-	
+
 	@Test
 	public void test_tbodyIsInTableScopeNested() {
 		String elementName = "tbody";
@@ -182,18 +178,7 @@ public class TestElementInScope {
 	}
 
 	private Document createDocument() {
-
-		Document doc = null;
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder;
-		try {
-			builder = dbf.newDocumentBuilder();
-			doc = builder.newDocument();
-
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Document doc = new Document();
 		return doc;
 	}
 

@@ -1,15 +1,12 @@
 package com.html5parser.algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
-import org.w3c.dom.Attr;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-
+import com.html5dom.Attribute;
+import com.html5dom.Element;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.token.TagToken;
-import com.html5parser.constants.HTML5Elements;
 
 public class ListOfActiveFormattingElements {
 	// private String[] markerElements = { "applet", "marquee", "object", "th",
@@ -18,8 +15,7 @@ public class ListOfActiveFormattingElements {
 	public static void push(ParserContext parserContext, Element element) {
 
 		// Not a formatting element
-		if (!Arrays.asList(HTML5Elements.FORMATTING).contains(
-				element.getNodeName()))
+		if (!element.isFormattingElement())
 			return;
 
 		ArrayList<Element> list = parserContext.getActiveFormattingElements();
@@ -69,30 +65,29 @@ public class ListOfActiveFormattingElements {
 		}
 
 		// compare attributes
-		NamedNodeMap expectedAttrs = e1.getAttributes();
-		NamedNodeMap actualAttrs = e2.getAttributes();
-		if (expectedAttrs.getLength() != actualAttrs.getLength())
+		List<Attribute> expectedAttrs = e1.getAttributes();
+		List<Attribute> actualAttrs = e2.getAttributes();
+		if (expectedAttrs.size() != actualAttrs.size())
 			return false;
 
-		for (int i = 0; i < expectedAttrs.getLength(); i++) {
-			Attr expectedAttr = (Attr) expectedAttrs.item(i);
-			if (expectedAttr.getName().startsWith("xmlns")) {
+		for (int i = 0; i < expectedAttrs.size(); i++) {
+			Attribute expectedAttr = expectedAttrs.get(i);
+			if (expectedAttr.getNodeName().startsWith("xmlns")) {
 				continue;
 			}
-			Attr actualAttr = null;
+			Attribute actualAttr = null;
 			if (expectedAttr.getNamespaceURI() == null) {
-				actualAttr = (Attr) actualAttrs.getNamedItem(expectedAttr
-						.getName());
+				actualAttr = e2.getAttributeNode(expectedAttr.getNodeName());
 			} else {
-				actualAttr = (Attr) actualAttrs.getNamedItemNS(
+				actualAttr = e2.getAttributeNodeNS(
 						expectedAttr.getNamespaceURI(),
-						expectedAttr.getLocalName());
+						expectedAttr.getNodeName());
 			}
 			if (actualAttr == null) {
 				// Attribute not found
 				return false;
 			}
-			if (!expectedAttr.getValue().equals(actualAttr.getValue())) {
+			if (!expectedAttr.getNodeValue().equals(actualAttr.getNodeValue())) {
 				// Attribute values do not match value
 				return false;
 			}

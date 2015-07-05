@@ -1,13 +1,8 @@
 package com.html5parser.algorithms;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-
+import com.html5dom.Document;
+import com.html5dom.Element;
+import com.html5dom.Node;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
@@ -44,54 +39,42 @@ public class CreateAnElementForAToken {
 			doc = ((Document) intendedParentElement);
 
 		Element element = doc.createElementNS(namespace,
-				cleanElementName(currentToken.getValue()));
+				currentToken.getValue());
 		// Element element = doc.createElement(currentToken.getValue());
 		// The new element saves a reference of the token that created it
-		element.setUserData("0", currentToken, null);
+		element.setUserData("0", currentToken);
 
 		if (currentToken.getType().equals(TokenType.start_tag)) {
 			for (Attribute attribute : ((TagToken) currentToken)
 					.getAttributes()) {
 				// TODO character "," is not a valid attribute name, DOM throws
 				// an exception but HTML5 does accept it
-				try {
-					element.setAttributeNS(attribute.getNamespace(),
-							attribute.getName(), attribute.getValue());
 
-					// If the newly created element has an xmlns attribute in
-					// the
-					// XMLNS
-					// namespace whose value is not exactly the same as the
-					// element's
-					// namespace, that is a parse error. Similarly, if the newly
-					// created
-					// element has an xmlns:xlink attribute in the XMLNS
-					// namespace
-					// whose
-					// value is not the XLink Namespace, that is a parse error.
-					if ((attribute.getName().equals("xmlns")
-							&& namespace.equals(Namespace.XMLNS) && !attribute
-							.getValue().equals(Namespace.XMLNS))
-							|| (attribute.getName().equals("xmlns:xlink")
-									&& namespace.equals(Namespace.XMLNS) && !attribute
-									.getValue().equals(Namespace.XLink))) {
-						context.addParseErrors(
-								ParseErrorType.InvalidNamespace,
-								"Wrong namespace :" + attribute.getValue()
-										+ " in element "
-										+ currentToken.getValue());
-					}
-				} catch (DOMException e) {
-					@SuppressWarnings("unchecked")
-					List<Attribute> invalidAtts = (List<Attribute>) element
-							.getUserData("invalidAtts");
-					if (invalidAtts == null)
-						invalidAtts = new ArrayList<Attribute>();
-					invalidAtts.add(attribute);
-					element.setUserData("invalidAtts", invalidAtts, null);
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				element.setAttributeNS(attribute.getNamespace(),
+						attribute.getName(), attribute.getValue());
+
+				// If the newly created element has an xmlns attribute in
+				// the
+				// XMLNS
+				// namespace whose value is not exactly the same as the
+				// element's
+				// namespace, that is a parse error. Similarly, if the newly
+				// created
+				// element has an xmlns:xlink attribute in the XMLNS
+				// namespace
+				// whose
+				// value is not the XLink Namespace, that is a parse error.
+				if ((attribute.getName().equals("xmlns")
+						&& namespace.equals(Namespace.XMLNS) && !attribute
+						.getValue().equals(Namespace.XMLNS))
+						|| (attribute.getName().equals("xmlns:xlink")
+								&& namespace.equals(Namespace.XMLNS) && !attribute
+								.getValue().equals(Namespace.XLink))) {
+					context.addParseErrors(ParseErrorType.InvalidNamespace,
+							"Wrong namespace :" + attribute.getValue()
+									+ " in element " + currentToken.getValue());
 				}
+
 			}
 		}
 
@@ -129,10 +112,4 @@ public class CreateAnElementForAToken {
 		return element;
 	}
 
-	private static String cleanElementName(String name) {
-		name = name.replace("<", "");
-		if (name.endsWith(":"))
-			name = name.substring(0, name.length() - 1);
-		return name;
-	}
 }

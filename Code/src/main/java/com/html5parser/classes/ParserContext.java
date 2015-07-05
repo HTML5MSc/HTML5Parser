@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-
+import com.html5dom.Document;
+import com.html5dom.Element;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.classes.token.TagToken.Attribute;
 import com.html5parser.constants.Namespace;
@@ -272,7 +271,7 @@ public class ParserContext {
 	public boolean openElementsContain(String elementName) {
 		return openElementsContain(elementName, Namespace.HTML);
 	}
-	
+
 	public boolean openElementsContain(String elementName, String namespace) {
 		List<Element> list = new ArrayList<Element>();
 		list.addAll(openElements);
@@ -292,16 +291,6 @@ public class ParserContext {
 
 	public void setFlagHTMLFragmentParser(boolean flagHTMLFragmentParser) {
 		this.flagHTMLFragmentParser = flagHTMLFragmentParser;
-	}
-
-	public boolean isHTMLElement(Element element, String name) {
-		boolean value = false;
-		if (element != null && name != null
-				&& element.getNamespaceURI() != null
-				&& element.getNamespaceURI().equals(Namespace.HTML)
-				&& element.getNodeName().equals(name))
-			value = true;
-		return value;
 	}
 
 }

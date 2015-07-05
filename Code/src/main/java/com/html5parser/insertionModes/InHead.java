@@ -1,7 +1,6 @@
 package com.html5parser.insertionModes;
 
-import org.w3c.dom.Element;
-
+import com.html5dom.Element;
 import com.html5parser.algorithms.AdjustedInsertionLocation;
 import com.html5parser.algorithms.AppropiatePlaceForInsertingANode;
 import com.html5parser.algorithms.CreateAnElementForAToken;
@@ -261,7 +260,8 @@ public class InHead implements IInsertionMode {
 							.addParseErrors(ParseErrorType.UnexpectedToken);
 				while (true) {
 					Element element = parserContext.getOpenElements().pop();
-					if (parserContext.isHTMLElement(element, token.getValue())) {
+					if (element.isHTMLElement()
+							&& element.getNodeName().equals(token.getValue())) {
 						break;
 					}
 				}
