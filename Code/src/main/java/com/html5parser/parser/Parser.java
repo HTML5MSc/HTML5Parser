@@ -104,10 +104,10 @@ public class Parser implements IParser {
 							.setFlagReconsumeCurrentInputCharacter(false);
 				}
 
-				 for (Token tok : parserContext.getTokenizerContext()
-				 .getTokens()) {
-				 System.out.println(tok.getType() + " : " + tok.getValue());
-				 }
+				// for (Token tok : parserContext.getTokenizerContext()
+				// .getTokens()) {
+				// System.out.println(tok.getType() + " : " + tok.getValue());
+				// }
 
 				/*
 				 * Consume all the tokens emited
