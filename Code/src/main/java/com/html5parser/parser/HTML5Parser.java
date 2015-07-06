@@ -36,7 +36,9 @@ public class HTML5Parser {
 		try {
 			Parser parser = new Parser();
 			doc = parser.parse(html);
-			System.out.println(Serializer.toHtml5libFormat(doc));
+			String output = Serializer.toHtml5libFormat(doc);
+			output = output.replace("]]>", "]] >");
+			System.out.println(output);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
