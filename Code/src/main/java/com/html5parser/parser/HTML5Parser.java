@@ -3,6 +3,7 @@ package com.html5parser.parser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import com.html5dom.Document;
 
@@ -36,9 +37,9 @@ public class HTML5Parser {
 		try {
 			Parser parser = new Parser();
 			doc = parser.parse(html);
-			String output = Serializer.toHtml5libFormat(doc);
-			output = output.replace("]]>", "]] >");
-			System.out.println(output);
+			String output = Serializer.toHtml5libFormat(doc);			
+			PrintStream out = new PrintStream(System.out, true, "UTF-8");
+		    out.println(output);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
