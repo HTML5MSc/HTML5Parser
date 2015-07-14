@@ -1,8 +1,9 @@
 package com.html5parser.parser;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 import com.html5dom.Document;
@@ -35,11 +36,11 @@ public class HTML5Parser {
 			return;
 		}
 		try {
-			Parser parser = new Parser();
+			Parser parser = new Parser(true);
 			doc = parser.parse(html);
-			String output = Serializer.toHtml5libFormat(doc);			
+			String output = Serializer.toHtml5libFormat(doc);
 			PrintStream out = new PrintStream(System.out, true, "UTF-8");
-		    out.println(output);
+			out.println(output);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,9 +52,10 @@ public class HTML5Parser {
 		StringBuilder sb = new StringBuilder();
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new FileReader(path));
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(
+					path), "UTF-8"));
 			String line;
-			if((line = br.readLine()) != null)
+			if ((line = br.readLine()) != null)
 				sb.append(line);
 			while ((line = br.readLine()) != null) {
 				sb.append(System.getProperty("line.separator"));
