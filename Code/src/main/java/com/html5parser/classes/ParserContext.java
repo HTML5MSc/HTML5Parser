@@ -37,7 +37,6 @@ public class ParserContext {
 	 * Stacks
 	 */
 	private Stack<Element> openElements = new Stack<Element>();
-	private Stack<ParseError> parseErrors = new Stack<ParseError>();
 	private Stack<IInsertionMode> templateInsertionModes = new Stack<IInsertionMode>();
 
 	/*
@@ -56,6 +55,7 @@ public class ParserContext {
 	 * Others
 	 */
 	private ArrayList<Element> activeFormattingElements = new ArrayList<Element>();
+	private ArrayList<ParseError> parseErrors = new ArrayList<ParseError>();
 	// private Element currentNode; //is the last element pushed onto the stack
 	// of open elements
 	private Element htmlFragmentContext;
@@ -109,20 +109,20 @@ public class ParserContext {
 		this.openElements = openElements;
 	}
 
-	public Stack<ParseError> getParseErrors() {
+	public ArrayList<ParseError> getParseErrors() {
 		return parseErrors;
 	}
 
-	public void setParseErrors(Stack<ParseError> parseErrors) {
+	public void setParseErrors(ArrayList<ParseError> parseErrors) {
 		this.parseErrors = parseErrors;
 	}
 
 	public void addParseErrors(ParseErrorType parseErrorType) {
-		parseErrors.push(new ParseError(parseErrorType, this));
+		parseErrors.add(new ParseError(parseErrorType, this));
 	}
 
 	public void addParseErrors(ParseErrorType parseErrorType, String message) {
-		parseErrors.push(new ParseError(parseErrorType, message));
+		parseErrors.add(new ParseError(parseErrorType, message, this));
 	}
 
 	public Stack<IInsertionMode> getTemplateInsertionModes() {
@@ -252,8 +252,8 @@ public class ParserContext {
 			if (set1.add(att.getName())) {
 				setToReturn.add(att);
 			} else {
-				this.parseErrors.push(new ParseError(
-						ParseErrorType.DuplicatedAttributeName, att.getName()));
+				this.addParseErrors(ParseErrorType.DuplicatedAttributeName,
+						att.getName());
 			}
 		}
 		((TagToken) this.tokenizerContext.getCurrentToken())
