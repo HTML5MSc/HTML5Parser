@@ -17,6 +17,9 @@ public class DOCTYPE_system_identifier_single_quoted_state implements
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		DocTypeToken docToken = null;
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.65", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 
 		// "'" (U+0027)

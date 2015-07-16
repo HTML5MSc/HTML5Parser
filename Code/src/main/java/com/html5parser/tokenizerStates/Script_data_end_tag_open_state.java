@@ -18,6 +18,9 @@ public class Script_data_end_tag_open_state implements ITokenizerState {
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
+		
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.18", currentChar);
 
 		switch (asciiCharacter) {
 		case LATIN_CAPITAL_LETTER:

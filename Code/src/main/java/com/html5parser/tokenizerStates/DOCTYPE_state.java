@@ -13,7 +13,10 @@ public class DOCTYPE_state implements ITokenizerState {
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
-		tokenizerContext.getCurrentInputCharacter();
+		int currentChar = tokenizerContext.getCurrentInputCharacter();
+		
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.52", currentChar);
 
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		

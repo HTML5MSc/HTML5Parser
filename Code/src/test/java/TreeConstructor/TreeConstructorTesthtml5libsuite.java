@@ -222,7 +222,7 @@ public class TreeConstructorTesthtml5libsuite {
 
 		// System.out.println("*************** " + input);
 		// System.out.println("******Expected " + expected);
-		Parser parser = new Parser(scriptFlag);
+		Parser parser = new Parser(scriptFlag, false);
 		Node result;
 		if (contextElement != null) {
 			System.out

@@ -23,6 +23,9 @@ public class InTable implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.9", token);
+		
 		switch (token.getType()) {
 
 		// A character token, if the current node is table, tbody, tfoot, thead,
@@ -288,9 +291,13 @@ public class InTable implements IInsertionMode {
 	}
 
 	private void clearTheStackBackToATableContext(ParserContext parserContext) {
+		
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.9.1");
+		
 		// it means that the UA must, while the current node is not a table,
 		// template, or html element, pop elements from the stack of open
-		// elements.
+		// elements.		
 		while (true) {
 			Element element = parserContext.getOpenElements().pop();
 			if (element.getNodeName().equals("table")

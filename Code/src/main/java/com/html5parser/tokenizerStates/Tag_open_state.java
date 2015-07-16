@@ -18,6 +18,9 @@ public class Tag_open_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		if (context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.8", currentChar);
+
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// "!" (U+0021)
 		// Switch to the markup declaration open state.

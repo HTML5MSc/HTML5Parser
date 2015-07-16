@@ -39,6 +39,10 @@ public class Tokenizing_character_references {
 	public static Queue<Token> getTokenCharactersFromReference(
 			Queue<Token> referenceTokens, ParserContext context,
 			int additionalAllowedCharacter) {
+		
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.69");
+				
 		Queue<Token> queue = new LinkedList<Token>(referenceTokens);
 		Queue<Token> result = new LinkedList<Token>();
 

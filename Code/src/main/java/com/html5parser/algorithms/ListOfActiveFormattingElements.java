@@ -14,6 +14,10 @@ public class ListOfActiveFormattingElements {
 
 	public static void push(ParserContext parserContext, Element element) {
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.3.3.1",
+					"Element \"" + element.getNodeName() + "\"");
+
 		// Not a formatting element
 		if (!element.isFormattingElement())
 			return;
@@ -101,6 +105,10 @@ public class ListOfActiveFormattingElements {
 	}
 
 	public static void clear(ParserContext parserContext) {
+
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.3.3.3");
+
 		// 1 Let entry be the last (most recently added) entry in the list of
 		// active formatting elements.
 		// 2 Remove entry from the list of active formatting elements.
@@ -117,6 +125,10 @@ public class ListOfActiveFormattingElements {
 	}
 
 	public static void reconstruct(ParserContext parserContext) {
+
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.3.3.2");
+
 		ArrayList<Element> list = parserContext.getActiveFormattingElements();
 		// 1 If there are no entries in the list of active formatting elements,
 		// then there is nothing to reconstruct; stop this algorithm.

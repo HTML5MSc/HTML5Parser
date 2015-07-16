@@ -27,6 +27,7 @@ import com.html5parser.classes.token.TagToken.Attribute;
 import com.html5parser.interfaces.IParser;
 import com.html5parser.parseError.ParseError;
 import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.Tracer;
 
 public class Parser implements IParser {
 
@@ -35,21 +36,26 @@ public class Parser implements IParser {
 	Tokenizer tokenizer;
 	StreamPreprocessor streamPreprocessor;
 	TreeConstructor treeConstructor;
+	Tracer tracer;
 
 	public Parser() {
-		initialize(false);
+		initialize(false, false);
 	}
 
-	public Parser(boolean scriptFlag) {
-		initialize(scriptFlag);
+	public Parser(boolean scriptFlag, boolean trace) {
+		initialize(scriptFlag, trace);
 	}
 
-	private void initialize(boolean scriptFlag) {
+	private void initialize(boolean scriptFlag, boolean trace) {
 		parserContext = new ParserContext();
 		tokenizer = new Tokenizer();
 		streamPreprocessor = new StreamPreprocessor();
 		treeConstructor = new TreeConstructor();
 		doc = createNewDocument();
+		if(trace){
+			tracer = new Tracer();
+			parserContext.setTracer(tracer);
+		}
 
 		parserContext.setDocument(doc);
 		parserContext.setFlagScripting(scriptFlag);

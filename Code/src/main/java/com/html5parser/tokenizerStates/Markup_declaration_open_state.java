@@ -22,6 +22,9 @@ public class Markup_declaration_open_state implements ITokenizerState {
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		Token bogusCommentToken;
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.45", currentChar);
+		
 		/*
 		 * If the next two characters are both "-" (U+002D) characters, consume
 		 * those two characters, create a comment token whose data is the empty

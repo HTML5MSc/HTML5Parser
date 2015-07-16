@@ -13,9 +13,12 @@ public class Before_DOCTYPE_system_identifier_state implements ITokenizerState {
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
-		tokenizerContext.getCurrentInputCharacter();
+		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		DocTypeToken docToken = null;
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.63", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 
 		// U+0009 CHARACTER TABULATION (tab)

@@ -17,6 +17,9 @@ public class Initial implements IInsertionMode {
 	public ParserContext process(ParserContext parserContext) {
 
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
+		
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.1", token);
 
 		switch (token.getType()) {
 		// A character token that is one of U+0009 CHARACTER TABULATION, "LF"

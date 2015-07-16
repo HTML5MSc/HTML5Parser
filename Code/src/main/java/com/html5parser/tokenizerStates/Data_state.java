@@ -11,11 +11,13 @@ import com.html5parser.parseError.ParseErrorType;
 
 public class Data_state implements ITokenizerState {
 
-	public ParserContext process(ParserContext context) {
+	public ParserContext process(ParserContext context) {		
 		TokenizerStateFactory factory;
 		Token token = null;
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.1", currentChar);
 
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// U+0026 AMPERSAND (&)

@@ -15,6 +15,9 @@ public class ForeignContent {
 	public static ParserContext run(ParserContext parserContext) {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.5", token);
+		
 		switch (token.getType()) {
 
 		// A character token that is U+0000 NULL

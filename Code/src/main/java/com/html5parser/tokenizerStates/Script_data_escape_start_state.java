@@ -14,10 +14,13 @@ public class Script_data_escape_start_state implements ITokenizerState {
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
-
+		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.20", currentChar);
+		
 		switch (asciiCharacter) {
 		case HYPHEN_MINUS:
 			/*

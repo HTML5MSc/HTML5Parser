@@ -14,6 +14,9 @@ public class Comment_start_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.46", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// "-" (U+002D)
 		// Switch to the comment start dash state.

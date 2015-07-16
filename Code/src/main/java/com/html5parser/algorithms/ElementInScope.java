@@ -14,26 +14,41 @@ public class ElementInScope {
 
 	public static Boolean isInScope(ParserContext parserContext,
 			String elementName) {
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.3.2.",
+					"\"" + elementName + "\" element");
 		return isInScope(parserContext, elementName, null);
 	}
 
 	public static Boolean isInListItemScope(ParserContext parserContext,
 			String elementName) {
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.3.2.3",
+					"\"" + elementName + "\" element");
 		return isInScope(parserContext, elementName, ScopeType.ListItem);
 	}
 
 	public static Boolean isInButtonScope(ParserContext parserContext,
 			String elementName) {
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.3.2.4",
+					"\"" + elementName + "\" element");
 		return isInScope(parserContext, elementName, ScopeType.Button);
 	}
 
 	public static Boolean isInTableScope(ParserContext parserContext,
 			String elementName) {
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.3.2.5",
+					"\"" + elementName + "\" element");
 		return isInScope(parserContext, elementName, ScopeType.Table);
 	}
 
 	public static Boolean isInSelectScope(ParserContext parserContext,
 			String elementName) {
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.3.2.6",
+					"\"" + elementName + "\" element");
 		return isInScope(parserContext, elementName, ScopeType.Select);
 	}
 

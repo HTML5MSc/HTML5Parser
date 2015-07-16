@@ -21,6 +21,9 @@ public class BeforeHead implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.3", token);
+		
 		/*
 		 * A character token that is one of U+0009 CHARACTER TABULATION, "LF"
 		 * (U+000A), "FF" (U+000C), "CR" (U+000D), or U+0020 SPACE Ignore the

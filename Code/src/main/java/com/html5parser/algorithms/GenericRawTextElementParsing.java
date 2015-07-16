@@ -9,17 +9,21 @@ import com.html5parser.factories.TokenizerStateFactory;
 
 public class GenericRawTextElementParsing {
 
-	public static ParserContext run(ParserContext context, TagToken token) {
+	public static ParserContext run(ParserContext parserContext, TagToken token) {
+		
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.2.1", token);
+		
 		TokenizerStateFactory tokenizerFactory = TokenizerStateFactory
 				.getInstance();
 		InsertionModeFactory insertionModeFactory = InsertionModeFactory
 				.getInstance();
-		InsertAnHTMLElement.run(context, token);
-		context.getTokenizerContext().setNextState(
+		InsertAnHTMLElement.run(parserContext, token);
+		parserContext.getTokenizerContext().setNextState(
 				tokenizerFactory.getState(TokenizerState.RAWTEXT_state));
-		context.setOriginalInsertionMode(context.getInsertionMode());
-		context.setInsertionMode(insertionModeFactory
+		parserContext.setOriginalInsertionMode(parserContext.getInsertionMode());
+		parserContext.setInsertionMode(insertionModeFactory
 				.getInsertionMode(InsertionMode.text));
-		return context;
+		return parserContext;
 	}
 }

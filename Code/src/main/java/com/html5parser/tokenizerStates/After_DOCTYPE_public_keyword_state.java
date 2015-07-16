@@ -11,10 +11,14 @@ import com.html5parser.parseError.ParseErrorType;
 public class After_DOCTYPE_public_keyword_state implements ITokenizerState {
 
 	public ParserContext process(ParserContext context) {
+		
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
-		TokenizerContext tokenizerContext = context.getTokenizerContext();
-		tokenizerContext.getCurrentInputCharacter();
-		DocTypeToken docToken = null;
+		TokenizerContext tokenizerContext = context.getTokenizerContext();		
+		DocTypeToken docToken = null;		
+		int currentChar = tokenizerContext.getCurrentInputCharacter();
+		
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.56", currentChar);
 
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 

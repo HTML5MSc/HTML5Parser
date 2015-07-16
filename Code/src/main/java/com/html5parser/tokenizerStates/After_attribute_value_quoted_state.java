@@ -12,7 +12,11 @@ public class After_attribute_value_quoted_state implements ITokenizerState {
 	public ParserContext process(ParserContext context) {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
+		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.42", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// "tab" (U+0009)
 		// "LF" (U+000A)

@@ -18,6 +18,9 @@ public class AfterAfterFrameset implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
+		
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.23", token);
 
 		/**
 		 * A comment token

@@ -12,6 +12,9 @@ public class Text implements IInsertionMode {
 
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.8", token);
+		
 		switch (token.getType()) {
 		// A character token
 		// Insert the token's character.

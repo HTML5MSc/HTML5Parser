@@ -17,6 +17,9 @@ public class RAWTEXT_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.5", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// U+003C LESS-THAN SIGN (<)
 		// Switch to the RAWTEXT less-than sign state

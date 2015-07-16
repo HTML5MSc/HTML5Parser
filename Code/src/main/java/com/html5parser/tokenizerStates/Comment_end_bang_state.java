@@ -13,6 +13,8 @@ public class Comment_end_bang_state implements ITokenizerState {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.51", currentChar);
 
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 

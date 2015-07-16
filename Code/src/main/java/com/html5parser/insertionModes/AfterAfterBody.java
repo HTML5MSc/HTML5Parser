@@ -19,6 +19,9 @@ public class AfterAfterBody implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.22", token);
+		
 		/**
 		 * A comment token
 		 * 

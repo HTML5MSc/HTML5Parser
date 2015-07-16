@@ -12,7 +12,6 @@ import com.html5parser.algorithms.AdjustMathMLAttributes;
 import com.html5parser.algorithms.AdjustSVGAttributes;
 import com.html5parser.algorithms.AdoptionAgencyAlgorithm;
 import com.html5parser.algorithms.ElementInScope;
-import com.html5parser.algorithms.GenerateAllImpliedEndTagsThoroughly;
 import com.html5parser.algorithms.GenerateImpliedEndTags;
 import com.html5parser.algorithms.GenericRawTextElementParsing;
 import com.html5parser.algorithms.InsertAnHTMLElement;
@@ -43,6 +42,9 @@ public class InBody implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
 		Stack<Element> openElementStack = parserContext.getOpenElements();
+
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.7", token);
 
 		/*
 		 * A character token that is U+0000 NULL Parse error. Ignore the token.
@@ -1380,6 +1382,12 @@ public class InBody implements IInsertionMode {
 			if (!parserContext.getActiveFormattingElements().isEmpty()) {
 				ListOfActiveFormattingElements.reconstruct(parserContext);
 			}
+
+			if (parserContext.isTracing()) {
+				parserContext.getTracer().addParseEvent("8.2.5.1.5");
+				parserContext.getTracer().addParseEvent("8.2.5.1.7");
+			}
+
 			AdjustMathMLAttributes.run((TagToken) token);
 			AdjustForeignAttributes.run((TagToken) token);
 			InsertForeignElement.run(parserContext, token, Namespace.MathML);
@@ -1404,6 +1412,12 @@ public class InBody implements IInsertionMode {
 			if (!parserContext.getActiveFormattingElements().isEmpty()) {
 				ListOfActiveFormattingElements.reconstruct(parserContext);
 			}
+
+			if (parserContext.isTracing()) {
+				parserContext.getTracer().addParseEvent("8.2.5.1.6");
+				parserContext.getTracer().addParseEvent("8.2.5.1.7");
+			}
+
 			AdjustSVGAttributes.run((TagToken) token);
 			AdjustForeignAttributes.run((TagToken) token);
 			InsertForeignElement.run(parserContext, token, Namespace.SVG);
@@ -1462,8 +1476,7 @@ public class InBody implements IInsertionMode {
 			if (node.getNodeName().equals(token.getValue())) {
 				// 2.1 Generate implied end tags, except for HTML elements with
 				// the same tag name as the token.
-				GenerateAllImpliedEndTagsThoroughly.run(parserContext,
-						token.getValue());
+				GenerateImpliedEndTags.run(parserContext, token.getValue());
 				// 2.2 If node is not the current node, then this is a parse
 				// error.
 				if (!node.equals(parserContext.getCurrentNode()))
@@ -1494,6 +1507,10 @@ public class InBody implements IInsertionMode {
 		// If the current node is not a p element, then this is a parse error.
 		// Pop elements from the stack of open elements until a p element has
 		// been popped from the stack.
+
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.7.1");
+
 		GenerateImpliedEndTags.run(parserContext, "p");
 		if (!parserContext.getCurrentNode().getNodeName().equals("p"))
 			parserContext.addParseErrors(ParseErrorType.UnexpectedToken);

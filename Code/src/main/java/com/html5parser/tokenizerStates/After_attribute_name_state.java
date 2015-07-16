@@ -15,6 +15,9 @@ public class After_attribute_name_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.36", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// "tab" (U+0009)
 		// "LF" (U+000A)

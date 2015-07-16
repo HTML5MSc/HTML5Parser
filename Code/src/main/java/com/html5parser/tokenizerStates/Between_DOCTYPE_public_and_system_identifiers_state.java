@@ -15,6 +15,10 @@ public class Between_DOCTYPE_public_and_system_identifiers_state implements
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		DocTypeToken docToken = null;
+		int currentChar = tokenizerContext.getCurrentInputCharacter();
+		
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.61", currentChar);
 
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 

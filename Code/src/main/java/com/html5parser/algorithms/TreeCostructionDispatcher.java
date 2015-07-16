@@ -9,11 +9,16 @@ public class TreeCostructionDispatcher {
 
 	/**
 	 * 
-	 * @param context
+	 * @param parserContext
 	 * @return true if process with an insertion mode false if process as a
 	 *         foreign content.
 	 */
-	public static Boolean processTokenInInsertionMode(ParserContext context) {
+	public static Boolean processTokenInInsertionMode(
+			ParserContext parserContext) {
+
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5");
+
 		/*
 		 * If there is no adjusted current node
 		 * 
@@ -45,8 +50,9 @@ public class TreeCostructionDispatcher {
 		 * Process the token according to the rules given in the section for
 		 * parsing tokens in foreign content.
 		 */
-		Element adjustedCurrentNode = context.getAdjustedCurrentNode();
-		Token currentToken = context.getTokenizerContext().getCurrentToken();
+		Element adjustedCurrentNode = parserContext.getAdjustedCurrentNode();
+		Token currentToken = parserContext.getTokenizerContext()
+				.getCurrentToken();
 		if (adjustedCurrentNode == null
 				|| (adjustedCurrentNode.isHTMLElement())
 				|| ((IntegrationPoint

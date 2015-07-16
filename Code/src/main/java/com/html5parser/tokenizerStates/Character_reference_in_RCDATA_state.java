@@ -21,6 +21,9 @@ public class Character_reference_in_RCDATA_state implements ITokenizerState {
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		Queue<Token> result;
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.4", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// U+0026 AMPERSAND (&)
 		// Switch to the character reference in data state.

@@ -9,7 +9,11 @@ import com.html5parser.factories.TokenizerStateFactory;
 
 public class GenericRCDATAElementParsing {
 
-	public static ParserContext run(ParserContext context, TagToken token) {
+	public static ParserContext run(ParserContext parserContext, TagToken token) {
+		
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.2.2", token);
+		
 		/*
 		 * 1 Insert an HTML element for the token. 2 If the algorithm that was
 		 * invoked is the generic raw text element parsing algorithm, switch the
@@ -22,12 +26,12 @@ public class GenericRCDATAElementParsing {
 				.getInstance();
 		InsertionModeFactory insertionModeFactory = InsertionModeFactory
 				.getInstance();
-		InsertAnHTMLElement.run(context, token);
-		context.getTokenizerContext().setNextState(
+		InsertAnHTMLElement.run(parserContext, token);
+		parserContext.getTokenizerContext().setNextState(
 				tokenizerFactory.getState(TokenizerState.RCDATA_state));
-		context.setOriginalInsertionMode(context.getInsertionMode());
-		context.setInsertionMode(insertionModeFactory
+		parserContext.setOriginalInsertionMode(parserContext.getInsertionMode());
+		parserContext.setInsertionMode(insertionModeFactory
 				.getInsertionMode(InsertionMode.text));
-		return context;
+		return parserContext;
 	}
 }

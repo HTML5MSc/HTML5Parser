@@ -18,6 +18,9 @@ public class Script_data_double_escaped_state implements ITokenizerState {
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
+		
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.29", currentChar);
 
 		switch (asciiCharacter) {
 		case HYPHEN_MINUS:

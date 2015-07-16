@@ -17,6 +17,9 @@ public class CData_section_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.68", currentChar);
+		
 		// Consume every character up to the next occurrence of the three
 		// character sequence U+005D RIGHT SQUARE BRACKET U+005D RIGHT SQUARE
 		// BRACKET U+003E GREATER-THAN SIGN (]]>), or the end of the file (EOF),

@@ -34,8 +34,8 @@ public class ParseError {
 			this.message = "Unexpected "
 					+ currentToken.getType()
 					+ " token"
-					+ (currentToken.getValue() == null ? "" : " \""
-							+ currentToken.getValue() + "\"") + " in "
+					+ (currentToken.getValue() == null ? "" : (" \""
+							+ currentToken.getValue() + "\"")) + " in "
 					+ getInsertionModeName(parserContext) + " Insertion Mode";
 			break;
 		case EndTagWithAttributes:

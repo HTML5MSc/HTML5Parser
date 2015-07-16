@@ -20,6 +20,9 @@ public class Script_data_double_escaped_dash_dash_state implements
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.31", currentChar);
+		
 		switch (asciiCharacter) {
 		case HYPHEN_MINUS:
 			/*

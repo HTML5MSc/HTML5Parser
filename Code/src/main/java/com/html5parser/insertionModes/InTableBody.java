@@ -20,6 +20,9 @@ public class InTableBody implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.13", token);
+		
 		switch (token.getType()) {
 		case start_tag:
 			switch (token.getValue()) {
@@ -150,6 +153,10 @@ public class InTableBody implements IInsertionMode {
 
 	private void clearTheStackBackToATableBodyContext(
 			ParserContext parserContext) {
+		
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.13.1");
+		
 		// it means that the UA must, while the current node is not a tbody,
 		// tfoot, thead, template, or html element, pop elements from the stack
 		// of open elements.

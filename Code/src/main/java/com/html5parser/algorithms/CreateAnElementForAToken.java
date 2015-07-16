@@ -13,7 +13,10 @@ import com.html5parser.parseError.ParseErrorType;
 
 public class CreateAnElementForAToken {
 	public static Element run(Node intendedParentElement, String namespace,
-			Token currentToken, ParserContext context) {
+			Token currentToken, ParserContext parserContext) {
+
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.7", currentToken);
 
 		// Create a node implementing the interface appropriate for the element
 		// type corresponding to the tag name of the token in given namespace
@@ -63,7 +66,7 @@ public class CreateAnElementForAToken {
 						|| (attribute.getName().equals("xmlns:xlink")
 								&& namespace.equals(Namespace.XMLNS) && !attribute
 								.getValue().equals(Namespace.XLink))) {
-					context.addParseErrors(
+					parserContext.addParseErrors(
 							ParseErrorType.InvalidNamespace,
 							attribute.getValue());
 				}

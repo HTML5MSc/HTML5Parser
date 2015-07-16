@@ -22,6 +22,9 @@ public class BeforeHTML implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		Document doc = parserContext.getDocument();
 		TokenType tokenType = token.getType();
+		
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.2", token);
 
 		/*
 		 * A DOCTYPE token Parse error. Ignore the token.

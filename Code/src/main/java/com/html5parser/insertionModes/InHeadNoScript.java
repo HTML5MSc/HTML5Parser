@@ -16,6 +16,9 @@ public class InHeadNoScript implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.5", token);
+		
 		/*
 		 * A DOCTYPE token Parse error. Ignore the token.
 		 */

@@ -26,6 +26,10 @@ public class ParsingHTMLFragments {
 	public static List<Node> run(ParserContext parserContext, Element context,
 			String input) throws ParserConfigurationException {
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.4");
+
+		
 		// Create a new Document node, and mark it as being an HTML document.
 		Document document = new Document();
 

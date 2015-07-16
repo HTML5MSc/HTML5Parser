@@ -15,11 +15,9 @@ import com.html5parser.insertionModes.Initial;
 import com.html5parser.interfaces.IInsertionMode;
 import com.html5parser.parseError.ParseError;
 import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.Tracer;
 
 public class ParserContext {
-
-	// TODO extra validation when emit tokens. see tokenization in spec
-
 	/*
 	 * Tokenizer context
 	 */
@@ -56,8 +54,7 @@ public class ParserContext {
 	 */
 	private ArrayList<Element> activeFormattingElements = new ArrayList<Element>();
 	private ArrayList<ParseError> parseErrors = new ArrayList<ParseError>();
-	// private Element currentNode; //is the last element pushed onto the stack
-	// of open elements
+
 	private Element htmlFragmentContext;
 	private Element headElementPointer;
 	private Element formElementPointer;
@@ -67,6 +64,8 @@ public class ParserContext {
 	 */
 	Document doc;
 
+	private Tracer tracer;
+	
 	public TokenizerContext getTokenizerContext() {
 		return tokenizerContext;
 	}
@@ -293,4 +292,15 @@ public class ParserContext {
 		this.flagHTMLFragmentParser = flagHTMLFragmentParser;
 	}
 
+	public Tracer getTracer() {
+		return tracer;
+	}
+
+	public void setTracer(Tracer tracer) {
+		this.tracer = tracer;
+	}
+
+	public boolean isTracing(){
+		return this.tracer != null;
+	}
 }

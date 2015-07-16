@@ -17,6 +17,9 @@ public class DOCTYPE_system_identifier_double_quoted_state implements
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		DocTypeToken docToken = null;
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.64", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 
 		// U+0022 QUOTATION MARK (")

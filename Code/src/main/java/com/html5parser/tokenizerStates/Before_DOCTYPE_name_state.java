@@ -16,6 +16,9 @@ public class Before_DOCTYPE_name_state implements ITokenizerState {
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		DocTypeToken docToken = null;
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.53", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 
 		// U+0009 CHARACTER TABULATION (tab)

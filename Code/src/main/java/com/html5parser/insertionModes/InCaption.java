@@ -18,6 +18,9 @@ public class InCaption implements IInsertionMode {
 
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.11", token);
+		
 		switch (token.getType()) {
 
 		case start_tag:

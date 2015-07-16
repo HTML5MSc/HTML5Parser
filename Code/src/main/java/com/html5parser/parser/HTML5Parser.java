@@ -36,7 +36,7 @@ public class HTML5Parser {
 			return;
 		}
 		try {
-			Parser parser = new Parser(true);
+			Parser parser = new Parser(true, false);
 			doc = parser.parse(html);
 			String output = Serializer.toHtml5libFormat(doc);
 			PrintStream out = new PrintStream(System.out, true, "UTF-8");

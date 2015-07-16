@@ -2,35 +2,40 @@ package com.html5parser.algorithms;
 
 import com.html5dom.Element;
 import com.html5dom.Node;
-
 import com.html5parser.classes.ParserContext;
 
 public class AppropiatePlaceForInsertingANode {
 
-	public static AdjustedInsertionLocation run(ParserContext context) {
-		return AppropiatePlaceForInsertingANode.run(context, null);
+	public static AdjustedInsertionLocation run(ParserContext parserContext) {
+		return AppropiatePlaceForInsertingANode.run(parserContext, null);
 	}
 
-	public static AdjustedInsertionLocation run(ParserContext context,
+	public static AdjustedInsertionLocation run(ParserContext parserContext,
 			Node overrideTarget) {
+
 		Node target;
 		Node adjustedInsertionLocation = null;
 
 		if (overrideTarget != null)
 			target = overrideTarget;
 		else
-			target = context.getOpenElements().peek();
+			target = parserContext.getOpenElements().peek();
 
 		String name = target.getNodeName();
-		if (context.isFlagFosterParenting()
+
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.1.1",
+					"Override target \"" + name + "\"");
+
+		if (parserContext.isFlagFosterParenting()
 				&& (name.equals("table") || name.equals("tbody")
 						|| name.equals("tfoot") || name.equals("thead") || name
 							.equals("tr"))) {
 
 			Element lastTemplate = null;
 			int templateIndex = 0;
-			for (int i = context.getOpenElements().size() - 1; i >= 0; i--) {
-				Element element = context.getOpenElements().get(i);
+			for (int i = parserContext.getOpenElements().size() - 1; i >= 0; i--) {
+				Element element = parserContext.getOpenElements().get(i);
 				if (element.getNodeName().equals("template")) {
 					lastTemplate = element;
 					templateIndex = i;
@@ -40,8 +45,8 @@ public class AppropiatePlaceForInsertingANode {
 
 			Element lastTable = null;
 			int tableIndex = 0;
-			for (int i = context.getOpenElements().size() - 1; i >= 0; i--) {
-				Element element = context.getOpenElements().get(i);
+			for (int i = parserContext.getOpenElements().size() - 1; i >= 0; i--) {
+				Element element = parserContext.getOpenElements().get(i);
 				if (element.getNodeName().equals("table")) {
 					lastTable = element;
 					tableIndex = i;
@@ -71,8 +76,8 @@ public class AppropiatePlaceForInsertingANode {
 			// elements (the html element), after its last child (if any),
 			// and abort these substeps. (fragment case)
 			if (lastTable == null) {
-				return new AdjustedInsertionLocation(context.getOpenElements()
-						.get(0), null);
+				return new AdjustedInsertionLocation(parserContext
+						.getOpenElements().get(0), null);
 			}
 
 			// If last table has a parent node, then let adjusted insertion
@@ -85,8 +90,8 @@ public class AppropiatePlaceForInsertingANode {
 
 			// Let previous element be the element immediately above last
 			// table in the stack of open elements.
-			Node previousElement = context.getOpenElements()
-					.get(tableIndex - 1);
+			Node previousElement = parserContext.getOpenElements().get(
+					tableIndex - 1);
 
 			// Let adjusted insertion location be inside previous element,
 			// after its last child (if any).

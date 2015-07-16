@@ -14,6 +14,9 @@ public class PLAINTEXT_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.7", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// U+0000 NULL
 		// Parse error. Emit a U+FFFD REPLACEMENT CHARACTER character token.

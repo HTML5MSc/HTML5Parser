@@ -18,6 +18,11 @@ public class AdoptionAgencyAlgorithm {
 	// name subject for which the algorithm is being run, consists of the
 	// following steps:
 	public static ParserContext Run(ParserContext parserContext, String subject) {
+
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.7.2",
+					"Tag name \"" + subject + "\"");
+
 		Element currentNode = parserContext.getCurrentNode();
 		Element formattingElement = null;
 		Element furthestBlock = null;

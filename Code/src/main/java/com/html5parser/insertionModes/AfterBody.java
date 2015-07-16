@@ -16,6 +16,9 @@ public class AfterBody implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
+		
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.19", token);
 
 		/**
 		 * A character token that is one of U+0009 CHARACTER TABULATION, U+000A

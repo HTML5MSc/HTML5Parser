@@ -19,6 +19,9 @@ public class InTemplate implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.18", token);
+		
 		/**
 		 * A character token A comment token A DOCTYPE token
 		 * 

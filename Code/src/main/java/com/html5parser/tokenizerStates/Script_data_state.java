@@ -16,6 +16,9 @@ public class Script_data_state implements ITokenizerState {
 		Token token = null;
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
+		
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.6", currentChar);
 
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// U+003C LESS-THAN SIGN (<)

@@ -18,6 +18,9 @@ public class Attribute_value_single_quoted_state extends
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		if(context.isTracing())
+			context.getTracer().addParseEvent("8.2.4.39", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// End of possible reference
 		case SEMICOLON:

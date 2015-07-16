@@ -19,6 +19,9 @@ public class InCell implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.15", token);
+		
 		switch (token.getType()) {
 		case start_tag:
 			switch (token.getValue()) {
@@ -145,6 +148,9 @@ public class InCell implements IInsertionMode {
 
 	private void closeTheCell(ParserContext parserContext) {
 
+		if (parserContext.isTracing())
+			parserContext.getTracer().addParseEvent("8.2.5.4.15.1");
+		
 		// 1 Generate implied end tags.
 		GenerateImpliedEndTags.run(parserContext);
 		// 2 If the current node is not now a td element or a th element, then
