@@ -8,7 +8,7 @@ import com.html5parser.classes.TokenizerState;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.ITokenizerState;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class Attribute_value_double_quoted_state extends
 		Character_reference_in_attribute_value_state implements ITokenizerState {
@@ -18,8 +18,8 @@ public class Attribute_value_double_quoted_state extends
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.38", currentChar);
+		
+			context.addParseEvent("8.2.4.38", currentChar);
 		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// End of possible reference

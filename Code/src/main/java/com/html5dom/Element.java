@@ -136,6 +136,34 @@ public class Element extends Node {
 				&& !this.isRawTextElement() && this.isEscapableRawTextElement();
 	}
 
+	public boolean isHtml5FormElement() {
+		if (Arrays.asList(Constants.HTML5_FORM_ELEMENTS).contains(this.nodeName)
+				&& this.isHTMLElement())
+			return true;
+		return false;
+	}
+	
+	public boolean isHtml5GraphicElement() {
+		if (Arrays.asList(Constants.HTML5_GRAPHIC_ELEMENTS).contains(this.nodeName)
+				&& this.isHTMLElement())
+			return true;
+		return false;
+	}
+	
+	public boolean isHtml5SemanticStructuralElement() {
+		if (Arrays.asList(Constants.HTML5_SEMANTIC_STRUCTURAL_ELEMENTS).contains(this.nodeName)
+				&& this.isHTMLElement())
+			return true;
+		return false;
+	}
+	
+	public boolean isHtml5MediaElement() {
+		if (Arrays.asList(Constants.HTML5_MEDIA_ELEMENTS).contains(this.nodeName)
+				&& this.isHTMLElement())
+			return true;
+		return false;
+	}
+	
 	@Override
 	public String getNodeName() {
 		return this.nodeName;

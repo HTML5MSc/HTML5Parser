@@ -12,7 +12,7 @@ import com.html5parser.classes.Token.TokenType;
 import com.html5parser.constants.Namespace;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class BeforeHTML implements IInsertionMode {
 
@@ -23,8 +23,8 @@ public class BeforeHTML implements IInsertionMode {
 		Document doc = parserContext.getDocument();
 		TokenType tokenType = token.getType();
 		
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.4.2", token);
+		
+			parserContext.addParseEvent("8.2.5.4.2", token);
 
 		/*
 		 * A DOCTYPE token Parse error. Ignore the token.

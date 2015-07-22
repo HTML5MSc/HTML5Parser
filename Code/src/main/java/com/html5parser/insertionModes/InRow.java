@@ -10,7 +10,7 @@ import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InRow implements IInsertionMode {
 
@@ -19,8 +19,8 @@ public class InRow implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.4.14", token);
+		
+			parserContext.addParseEvent("8.2.5.4.14", token);
 		
 		switch (token.getType()) {
 		case start_tag:
@@ -156,8 +156,8 @@ public class InRow implements IInsertionMode {
 
 	private void clearTheStackBackToATableRowContext(ParserContext parserContext) {
 		
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.4.14.1");
+		
+			parserContext.addParseEvent("8.2.5.4.14_1");
 		
 		// it means that the UA must, while the current node is not a tr,
 		// template, or html element, pop elements from the stack of open

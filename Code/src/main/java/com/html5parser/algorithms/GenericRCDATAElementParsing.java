@@ -11,8 +11,8 @@ public class GenericRCDATAElementParsing {
 
 	public static ParserContext run(ParserContext parserContext, TagToken token) {
 		
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.2.2", token);
+		
+			parserContext.addParseEvent("8.2.5.2_2", token);
 		
 		/*
 		 * 1 Insert an HTML element for the token. 2 If the algorithm that was

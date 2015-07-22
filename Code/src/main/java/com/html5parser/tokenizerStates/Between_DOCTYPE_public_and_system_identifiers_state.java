@@ -6,7 +6,7 @@ import com.html5parser.classes.TokenizerState;
 import com.html5parser.classes.token.DocTypeToken;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.ITokenizerState;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class Between_DOCTYPE_public_and_system_identifiers_state implements
 		ITokenizerState {
@@ -17,8 +17,8 @@ public class Between_DOCTYPE_public_and_system_identifiers_state implements
 		DocTypeToken docToken = null;
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.61", currentChar);
+		
+			context.addParseEvent("8.2.4.61", currentChar);
 
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 

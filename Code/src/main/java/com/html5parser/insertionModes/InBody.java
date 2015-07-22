@@ -30,7 +30,7 @@ import com.html5parser.constants.Namespace;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InBody implements IInsertionMode {
 
@@ -43,8 +43,7 @@ public class InBody implements IInsertionMode {
 		TokenType tokenType = token.getType();
 		Stack<Element> openElementStack = parserContext.getOpenElements();
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.4.7", token);
+		parserContext.addParseEvent("8.2.5.4.7", token);
 
 		/*
 		 * A character token that is U+0000 NULL Parse error. Ignore the token.
@@ -984,12 +983,10 @@ public class InBody implements IInsertionMode {
 						token.getValue(), new String[] { "area", "br", "embed",
 								"img", "keygen", "wbr" }))) {
 
-			if (token.getValue().equals("br")) {
+			if (tokenType == TokenType.end_tag && token.getValue().equals("br")) {
 				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
 			}
-			if (!parserContext.getActiveFormattingElements().isEmpty()) {
-				ListOfActiveFormattingElements.reconstruct(parserContext);
-			}
+			ListOfActiveFormattingElements.reconstruct(parserContext);
 			InsertAnHTMLElement.run(parserContext, token);
 			parserContext.getOpenElements().pop();
 			((TagToken) token).setFlagAcknowledgeSelfClosingTag(true);
@@ -1383,9 +1380,9 @@ public class InBody implements IInsertionMode {
 				ListOfActiveFormattingElements.reconstruct(parserContext);
 			}
 
-			if (parserContext.isTracing()) {
-				parserContext.getTracer().addParseEvent("8.2.5.1.5");
-				parserContext.getTracer().addParseEvent("8.2.5.1.7");
+			{
+				parserContext.addParseEvent("8.2.5.1_5");
+				parserContext.addParseEvent("8.2.5.1_7");
 			}
 
 			AdjustMathMLAttributes.run((TagToken) token);
@@ -1413,9 +1410,9 @@ public class InBody implements IInsertionMode {
 				ListOfActiveFormattingElements.reconstruct(parserContext);
 			}
 
-			if (parserContext.isTracing()) {
-				parserContext.getTracer().addParseEvent("8.2.5.1.6");
-				parserContext.getTracer().addParseEvent("8.2.5.1.7");
+			{
+				parserContext.addParseEvent("8.2.5.1_6");
+				parserContext.addParseEvent("8.2.5.1_7");
 			}
 
 			AdjustSVGAttributes.run((TagToken) token);
@@ -1508,8 +1505,7 @@ public class InBody implements IInsertionMode {
 		// Pop elements from the stack of open elements until a p element has
 		// been popped from the stack.
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.4.7.1");
+		parserContext.addParseEvent("8.2.5.4.7_1");
 
 		GenerateImpliedEndTags.run(parserContext, "p");
 		if (!parserContext.getCurrentNode().getNodeName().equals("p"))

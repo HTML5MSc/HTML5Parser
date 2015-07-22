@@ -5,7 +5,7 @@ import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
 import com.html5parser.classes.TokenizerContext;
 import com.html5parser.interfaces.ITokenizerState;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class PLAINTEXT_state implements ITokenizerState {
 
@@ -14,8 +14,8 @@ public class PLAINTEXT_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.7", currentChar);
+		
+			context.addParseEvent("8.2.4.7", currentChar);
 		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// U+0000 NULL

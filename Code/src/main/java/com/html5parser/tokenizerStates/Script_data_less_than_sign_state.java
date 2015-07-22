@@ -18,8 +18,8 @@ public class Script_data_less_than_sign_state implements ITokenizerState {
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.17", currentChar);
+		
+			context.addParseEvent("8.2.4.17", currentChar);
 		
 		switch (asciiCharacter) {
 		case DASH:

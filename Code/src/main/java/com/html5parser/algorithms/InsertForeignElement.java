@@ -9,8 +9,8 @@ public class InsertForeignElement {
 	public static Element run(ParserContext parserContext, Token token,
 			String namespace) {
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.1.3", token);
+		
+			parserContext.addParseEvent("8.2.5.1_3", token);
 
 		AdjustedInsertionLocation adjustedInsertionLocation = AppropiatePlaceForInsertingANode
 				.run(parserContext);

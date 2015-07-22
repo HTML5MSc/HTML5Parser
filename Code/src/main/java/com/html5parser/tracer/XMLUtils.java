@@ -48,6 +48,24 @@ public class XMLUtils {
 		return document;
 	}
 	
+	public static Document readXMLFromInputStream(InputStream inputStream)
+			throws ParserConfigurationException, SAXException, IOException {
+		
+		DocumentBuilderFactory dbf;
+		DocumentBuilder db;
+		Document document;
+
+		dbf = DocumentBuilderFactory.newInstance();
+		db = dbf.newDocumentBuilder();
+		Reader reader = new InputStreamReader(inputStream, "UTF-8");
+		InputSource is = new InputSource(reader);
+		is.setEncoding("UTF-8");
+
+		document = db.parse(is);
+
+		return document;
+	}
+	
 	public static ArrayList<Element> getElementsByTagName(Node node,
 			String tagName) {
 		ArrayList<Element> elements = new ArrayList<Element>();

@@ -70,8 +70,7 @@ public class TokenizerTesthtml5libsuite {
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/unicodeCharsProblematic.test",
 				"https://raw.githubusercontent.com/Prin4/Testcases/master/tokenizerScriptStatesTest.test",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/contentModelFlags.test",
-				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/escapeFlag.test" 
-				};
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/escapeFlag.test" };
 
 		for (String resource : resources) {
 			testList = addTestFile(testList, resource);
@@ -100,8 +99,9 @@ public class TokenizerTesthtml5libsuite {
 
 			for (int i = 0; i < tests.size(); i++) {
 				JSONObject test = (JSONObject) tests.get(i);
-				String testName = (String) test.get("description") + i + " (" + resource + ") ";
-				
+				String testName = (String) test.get("description") + i + " ("
+						+ resource + ") ";
+
 				testList.add(new Object[] { testName, test });
 			}
 
@@ -155,29 +155,37 @@ public class TokenizerTesthtml5libsuite {
 						.push(lastStartTag);
 
 			}
-			
+
 			String input = (String) test.get("input");
-			if( test.get("doubleEscaped")!=null && (boolean) test.get("doubleEscaped")){
-				String codePoint=input.substring(input.indexOf("\\u")+2, input.lastIndexOf("\\u")+6);
-				String co = String.valueOf((char) Integer.parseInt(codePoint,16));
-				input = input.replaceFirst("\\\\u....", "\\\\"+String.valueOf((char) Integer.parseInt(codePoint,16)));
+			if (test.get("doubleEscaped") != null
+					&& (boolean) test.get("doubleEscaped")) {
+				String codePoint = input.substring(input.indexOf("\\u") + 2,
+						input.lastIndexOf("\\u") + 6);
+				String co = String.valueOf((char) Integer.parseInt(codePoint,
+						16));
+				input = input.replaceFirst(
+						"\\\\u....",
+						"\\\\"
+								+ String.valueOf((char) Integer.parseInt(
+										codePoint, 16)));
 			}
-			
-			parserContext = parser.tokenize(parserContext,
-					input);
+
+			parserContext = parser.tokenize(parserContext, input);
 			output = serializeTokens(simplifyCharacterTokens(parserContext
 					.getTokenizerContext().getTokens()));
-			
+
 			JSONArray expectedOutput = (JSONArray) test.get("output");
 			// String expected = expectedOutput.toString().replaceAll(
 			// "\"ParseError\"(,)|(,)?\"ParseError\"", "");
 			String expected = formatHtml5libOutput(expectedOutput);
-			if( test.get("doubleEscaped")!=null && (boolean) test.get("doubleEscaped")){
-				String sub = expected.substring(expected.indexOf("\\u")+2, expected.lastIndexOf("\\u")+6);
-				int codePoint=Integer.parseInt(sub,16);
-				String co=String.valueOf(Character.toChars(codePoint));
-				 co=String.valueOf(Character.toChars(co.getBytes()[0]));
-				expected = expected.replaceFirst("\\\\u....", "\\\\"+co);
+			if (test.get("doubleEscaped") != null
+					&& (boolean) test.get("doubleEscaped")) {
+				String sub = expected.substring(expected.indexOf("\\u") + 2,
+						expected.lastIndexOf("\\u") + 6);
+				int codePoint = Integer.parseInt(sub, 16);
+				String co = String.valueOf(Character.toChars(codePoint));
+				co = String.valueOf(Character.toChars(co.getBytes()[0]));
+				expected = expected.replaceFirst("\\\\u....", "\\\\" + co);
 			}
 			assertEquals("Wrong tokens", expected, output);
 

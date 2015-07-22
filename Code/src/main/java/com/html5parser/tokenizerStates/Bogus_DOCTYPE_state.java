@@ -13,8 +13,8 @@ public class Bogus_DOCTYPE_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.67", currentChar);
+		
+			context.addParseEvent("8.2.4.67", currentChar);
 		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 

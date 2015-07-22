@@ -23,8 +23,8 @@ public class GenerateImpliedEndTags {
 
 	public static ParserContext run(ParserContext parserContext, String exception) {
 		
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.3");
+		
+			parserContext.addParseEvent("8.2.5.3_1");
 		
 		String nodeName = parserContext.getCurrentNode().getNodeName();
 		// If a step requires the UA to generate implied end tags but lists an

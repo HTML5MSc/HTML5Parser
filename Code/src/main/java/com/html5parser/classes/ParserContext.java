@@ -13,8 +13,8 @@ import com.html5parser.classes.token.TagToken.Attribute;
 import com.html5parser.constants.Namespace;
 import com.html5parser.insertionModes.Initial;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseError;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 import com.html5parser.tracer.Tracer;
 
 public class ParserContext {
@@ -65,7 +65,7 @@ public class ParserContext {
 	Document doc;
 
 	private Tracer tracer;
-	
+
 	public TokenizerContext getTokenizerContext() {
 		return tokenizerContext;
 	}
@@ -106,22 +106,6 @@ public class ParserContext {
 
 	public void setOpenElements(Stack<Element> openElements) {
 		this.openElements = openElements;
-	}
-
-	public ArrayList<ParseError> getParseErrors() {
-		return parseErrors;
-	}
-
-	public void setParseErrors(ArrayList<ParseError> parseErrors) {
-		this.parseErrors = parseErrors;
-	}
-
-	public void addParseErrors(ParseErrorType parseErrorType) {
-		parseErrors.add(new ParseError(parseErrorType, this));
-	}
-
-	public void addParseErrors(ParseErrorType parseErrorType, String message) {
-		parseErrors.add(new ParseError(parseErrorType, message, this));
 	}
 
 	public Stack<IInsertionMode> getTemplateInsertionModes() {
@@ -254,6 +238,7 @@ public class ParserContext {
 				this.addParseErrors(ParseErrorType.DuplicatedAttributeName,
 						att.getName());
 			}
+
 		}
 		((TagToken) this.tokenizerContext.getCurrentToken())
 				.setAttributes(setToReturn);
@@ -300,7 +285,168 @@ public class ParserContext {
 		this.tracer = tracer;
 	}
 
-	public boolean isTracing(){
+	public boolean isTracing() {
 		return this.tracer != null;
+	}
+
+	public void addParseEvent(String section) {
+		if (!this.isTracing())
+			return;
+		this.tracer.addParseEvent(section, "");
+	}
+
+	public void addParseEvent(String section, int currentChar) {
+		if (!this.isTracing())
+			return;
+		String additionalInfo = "Input character: \""
+				+ (currentChar != -1 ? String.valueOf(Character
+						.toChars(currentChar)) : "EOF") + "\" (" + currentChar
+				+ ")";
+		this.tracer.addParseEvent(section, additionalInfo);
+	}
+
+	public void addParseEvent(String section, Token currentToken) {
+		if (!this.isTracing())
+			return;
+		String additionalInfo = "Input token: "
+				+ currentToken.getType()
+				+ (currentToken.getValue() == null ? "" : (" \""
+						+ currentToken.getValue() + "\""));
+		this.tracer.addParseEvent(section, additionalInfo);
+	}
+
+	public void addParseEvent(String section, String additionalInfo) {
+		if (!this.isTracing())
+			return;
+		this.tracer.addParseEvent(section, additionalInfo);
+	}
+
+	public void countToken() {
+		if (!this.isTracing())
+			return;
+		this.tracer.getSummary().incrementEmittedTokens();
+	}
+
+	public void countElement(Element element) {
+		if (!this.isTracing())
+			return;
+
+		if (element.isFormattingElement())
+			this.tracer.getSummary().setFormattingElements(true);
+		if (element.isSpecialElement())
+			this.tracer.getSummary().setSpecialElements(true);
+		if (element.isMathMLElement())
+			this.tracer.getSummary().setMathMlElements(true);
+		if (element.isSVGElement())
+			this.tracer.getSummary().setSvgElements(true);
+		if (element.isHtml5FormElement())
+			this.tracer.getSummary().setHtml5FormElements(true);
+		if (element.isHtml5GraphicElement())
+			this.tracer.getSummary().setHtml5GraphicElements(true);
+		if (element.isHtml5MediaElement())
+			this.tracer.getSummary().setHtml5MediaElements(true);
+		if (element.isHtml5SemanticStructuralElement())
+			this.tracer.getSummary().setHtml5SemanticStructuralElements(true);
+	}
+
+	public ArrayList<ParseError> getParseErrors() {
+		return parseErrors;
+	}
+
+	public void addParseErrors(ParseErrorType errorType) {
+		addParseErrors(errorType, null);
+	}
+
+	public void addParseErrors(ParseErrorType errorType, String error) {
+		addParseErrors(errorType, error, null);		
+	}
+
+	public void addParseErrors(ParseErrorType errorType, String error,
+			String section) {
+		String errorMessage = getErrorMessage(errorType, error);
+		String description = getDescription(errorType);
+		
+		parseErrors.add(new ParseError(errorType, errorMessage));
+
+		if (this.isTracing())
+			this.tracer.addParseError(section, description, errorMessage);
+	}
+
+	private String getErrorMessage(ParseErrorType type, String error) {
+		String message;
+		int currentChar = this.tokenizerContext.getCurrentInputCharacter();
+		Token currentToken = this.tokenizerContext.getCurrentToken();
+
+		switch (type) {
+		case InvalidInputCharacter:
+			message = "Invalid input character \""
+					+ String.valueOf(Character.toChars(currentChar)) + "\" ("
+					+ currentChar + ") while preprocessing the stream";
+			break;
+		case UnexpectedInputCharacter:
+			message = "Unexpected character \""
+					+ (currentChar != -1 ? String.valueOf(Character
+							.toChars(currentChar)) : "EOF") + "\" ("
+					+ currentChar + ")";
+			break;
+		case UnexpectedToken:
+			message = "Unexpected "
+					+ currentToken.getType()
+					+ " token"
+					+ (currentToken.getValue() == null ? "" : (" \""
+							+ currentToken.getValue() + "\""));
+			message = error == null ? message : (message + " " + error);
+			break;
+		case EndTagWithAttributes:
+			message = "End tag \"" + currentToken.getValue()
+					+ "\" emitted with attributes.";
+			break;
+		case EndTagWithSelfClosingFlag:
+			message = "End tag \"" + currentToken.getValue()
+					+ "\" emitted with its self-closing flag set";
+			break;
+		case StartTagWithSelfClosingFlag:
+			message = "Self-closing flag not acknowledged in start tag \""
+					+ currentToken.getValue() + "\"";
+			break;
+		case DuplicatedAttributeName:
+			message = "Duplicated attribute name \"" + error
+					+ "\" in element \"" + currentToken.getValue() + "\"";
+			break;
+		case InvalidNamespace:
+			message = "Invalid attribute namespace \"" + error
+					+ "\" in element \"" + currentToken.getValue() + "\"";
+		default:
+			message = error;
+			break;
+		}
+
+		return message;
+	}
+
+	private String getDescription(ParseErrorType type) {
+		switch (type) {
+		case UnexpectedInputCharacter:
+			return "Tokenizer " + getTokenizerStateName();
+		case UnexpectedToken:
+			return getInsertionModeName() + " insertion mode";
+		default:
+			return "";
+		}
+	}
+
+	private String getTokenizerStateName() {
+		String s = this.getTokenizerContext().getNextState().toString();
+		s = s.replace("com.html5parser.tokenizerStates.", "");
+		s = s.substring(0, s.indexOf("@"));
+		s = s.replace("_", " ");
+		return s;
+	}
+
+	private String getInsertionModeName() {
+		String s = this.insertionMode.toString();
+		s = s.replace("com.html5parser.insertionModes.", "");
+		s = s.substring(0, s.indexOf("@"));
+		return s;
 	}
 }

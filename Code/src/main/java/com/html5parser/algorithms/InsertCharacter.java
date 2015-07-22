@@ -30,8 +30,8 @@ public class InsertCharacter {
 	 */
 	public static Node run(ParserContext parserContext, String data) {
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.1.8",
+		
+			parserContext.addParseEvent("8.2.5.1_8",
 					"Character \"" + data + "\"");
 
 		// Let the adjusted insertion location be the appropriate place for

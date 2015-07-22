@@ -19,17 +19,15 @@ import com.html5parser.constants.Namespace;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.parser.Parser;
-import com.html5parser.parser.Serializer;
 
 public class ParsingHTMLFragments {
 
 	public static List<Node> run(ParserContext parserContext, Element context,
 			String input) throws ParserConfigurationException {
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.4");
-
 		
+			parserContext.addParseEvent("8.4");
+
 		// Create a new Document node, and mark it as being an HTML document.
 		Document document = new Document();
 
@@ -225,8 +223,7 @@ public class ParsingHTMLFragments {
 			Node adopted = doc.importNode(node, true);
 			context.appendChild(adopted);
 		}
-		System.out.println(Serializer.toHtmlString(doc));
-
-		System.out.println(parserContext.getParseErrors());
+		// System.out.println(Serializer.toHtmlString(doc));
+		// System.out.println(parserContext.getParseErrors());
 	}
 }

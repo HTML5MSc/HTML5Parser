@@ -9,14 +9,13 @@ import com.html5parser.classes.Token.TokenType;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.classes.token.TagToken.Attribute;
 import com.html5parser.constants.Namespace;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class CreateAnElementForAToken {
 	public static Element run(Node intendedParentElement, String namespace,
 			Token currentToken, ParserContext parserContext) {
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.4.7", currentToken);
+		parserContext.addParseEvent("8.2.5.1_2", currentToken);
 
 		// Create a node implementing the interface appropriate for the element
 		// type corresponding to the tag name of the token in given namespace
@@ -46,6 +45,8 @@ public class CreateAnElementForAToken {
 		// Element element = doc.createElement(currentToken.getValue());
 		// The new element saves a reference of the token that created it
 		element.setUserData("0", currentToken);
+		
+		parserContext.countElement(element);
 
 		if (currentToken.getType().equals(TokenType.start_tag)) {
 			for (Attribute attribute : ((TagToken) currentToken)
@@ -68,7 +69,7 @@ public class CreateAnElementForAToken {
 								.getValue().equals(Namespace.XLink))) {
 					parserContext.addParseErrors(
 							ParseErrorType.InvalidNamespace,
-							attribute.getValue());
+							attribute.getValue(), "8.2.5.1_2_2");
 				}
 
 			}

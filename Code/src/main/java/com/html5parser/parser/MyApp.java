@@ -11,8 +11,11 @@ import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
 import com.html5parser.insertionModes.InSelect;
-import com.html5parser.parseError.ParseError;
 import com.html5parser.tracer.Event;
+import com.html5parser.tracer.Event.EventType;
+import com.html5parser.tracer.ParseError;
+import com.html5parser.tracer.Tracer;
+import com.html5parser.tracer.TracerSummary;
 
 /**
  * Hello world!
@@ -32,20 +35,24 @@ public class MyApp {
 	}
 
 	private static void parse() {
-		Parser parser = new Parser(true, true);
+		//Parser parser = new Parser(true, true);
+		Parser parser = new Parser(true);
+		ParserContext parserContext = parser.getParserContext();
+		Tracer tracer = new Tracer(true);
+		parserContext.setTracer(tracer);
+		tracer.initializeEvents();
 		// String html = "<b id=a><p><b id=b></p></b>o";
-		String html = "< g><a h=2 h=3 /></p h=2>Jul 10 – Jul 14<html t=2></u/>";
+		String html = "< g><a h=2 h=3 /><i></p h=2><b>Jul 10 – Jul 14</i><html t=2><svg><math><b>etst</a>";
 		// "<form id=\"nav-searchbar\" action=\"http://www.amazon.co.uk/s/ref=nb_sb_noss\" method=\"get\"accept-charset=\"utf-8\" ,=\"\">"
-		// +
-		// String html = "<script type=\"data\"><!--foo</script>";
+		// String html = "<!doctype html><html lang=\"en-US\"><head>";
 		// String html = "<script type=\"data\"><!--foo </script>";
 		// String html = "<a><svg><tr><input></a>";
 
-		Document doc = parser.parse(html);
-		ParserContext parserContext = parser.parserContext;
+		Document doc = parser.parse(html);		
+//		tracer.initializeEvents();
+//		tracer.refreshParseEvents();
 		// System.out.println(Serializer.toHtmlString(doc));
-		// System.out.println(doc.getOuterHtml(true));
-		System.out.println(parserContext.getParseErrors());
+		System.out.println(doc.getOuterHtml(true));
 		System.out.println(Serializer.toHtml5libFormat(doc).replace("]]>",
 				"] ] >"));
 		System.out.println(printParseErrors(parserContext));
@@ -54,7 +61,12 @@ public class MyApp {
 	}
 
 	private static String printParseErrors(ParserContext parserContext) {
+		// if (!parserContext.isTracing())
+		// return "Tracing disabled.";
 		StringBuilder sb = new StringBuilder();
+		sb.append("***** ERRORS *****");
+		sb.append(System.getProperty("line.separator"));
+
 		for (ParseError err : parserContext.getParseErrors()) {
 			sb.append(err.getMessage());
 			sb.append(System.getProperty("line.separator"));
@@ -65,13 +77,46 @@ public class MyApp {
 	private static String printTracer(ParserContext parserContext) {
 		if (!parserContext.isTracing())
 			return "Tracing disabled.";
-
 		StringBuilder sb = new StringBuilder();
-		for (Event event : parserContext.getTracer().getParseEvents()) {
-			sb.append(event.getSection() + " - " + event.getDescription()
-					+ " - " + event.getAdditionalInfo());
+		Tracer tracer = parserContext.getTracer();
+		TracerSummary sumary = tracer.getSummary();
+
+		ArrayList<EventType> excludeTypes = new ArrayList<Event.EventType>();
+		ArrayList<String> excludeSections = new ArrayList<String>();
+		excludeTypes.add(EventType.TokenizerState);
+		excludeTypes.add(EventType.InsertionMode);
+		excludeTypes.add(EventType.Algorithm);
+		excludeSections.add("8.2.5");
+		excludeSections.add("8.2.5.1_1");
+
+		sb.append("***** EVENTS *****");
+		sb.append(System.getProperty("line.separator"));
+		for (Event event : tracer.getParseEvents(excludeTypes, excludeSections)) {
+			sb.append("Sec: " + event.getSection() + " Desc: " + event.getDescription()
+					+ " Info: " + event.getAdditionalInfo());
 			sb.append(System.getProperty("line.separator"));
 		}
+		sb.append(System.getProperty("line.separator"));
+		sb.append("***** SUMMARY *****");
+		sb.append(System.getProperty("line.separator"));
+		sb.append("Algorithms: " + sumary.getAlgorithms());
+		sb.append(System.getProperty("line.separator"));
+		sb.append("Insertion modes: " + sumary.getInsertionModes());
+		sb.append(System.getProperty("line.separator"));
+		sb.append("Tokenizer states: " + sumary.getTokenizerStates());
+		sb.append(System.getProperty("line.separator"));
+		sb.append("Parse errors: " + sumary.getParseErrors());
+		sb.append(System.getProperty("line.separator"));
+		sb.append("Token count: " + sumary.getEmittedTokens());
+		sb.append(System.getProperty("line.separator"));
+		sb.append("Formatting elements: " + sumary.isFormattingElements());
+		sb.append(System.getProperty("line.separator"));
+		sb.append("Special elements: " + sumary.isSpecialElements());
+		sb.append(System.getProperty("line.separator"));
+		sb.append("MathML elements: " + sumary.isMathMlElements());
+		sb.append(System.getProperty("line.separator"));
+		sb.append("SVG elements: " + sumary.isSvgElements());
+
 		return sb.toString();
 	}
 

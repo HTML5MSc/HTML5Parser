@@ -29,8 +29,8 @@ public class InsertComment {
 		// Let data be the data given in the comment token being processed.
 		String data = token.getValue();
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.1.8",
+		
+			parserContext.addParseEvent("8.2.5.1_8",
 					"Comment \"" + data + "\"");
 		
 		// If position was specified, then let the adjusted insertion location

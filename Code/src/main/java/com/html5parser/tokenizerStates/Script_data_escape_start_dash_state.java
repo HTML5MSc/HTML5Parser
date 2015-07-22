@@ -19,8 +19,8 @@ public class Script_data_escape_start_dash_state implements ITokenizerState {
 				.getCurrentASCIICharacter();
 		
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.21", currentChar);
+		
+			context.addParseEvent("8.2.4.21", currentChar);
 
 		switch (asciiCharacter) {
 		case HYPHEN_MINUS:

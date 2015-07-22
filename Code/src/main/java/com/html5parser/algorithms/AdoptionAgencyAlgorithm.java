@@ -10,7 +10,7 @@ import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.constants.Namespace;
 import com.html5parser.insertionModes.InBody;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class AdoptionAgencyAlgorithm {
 
@@ -19,9 +19,8 @@ public class AdoptionAgencyAlgorithm {
 	// following steps:
 	public static ParserContext Run(ParserContext parserContext, String subject) {
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.4.7.2",
-					"Tag name \"" + subject + "\"");
+		parserContext.addParseEvent("8.2.5.4.7_2", "Subject tag name \"" + subject
+				+ "\"");
 
 		Element currentNode = parserContext.getCurrentNode();
 		Element formattingElement = null;
@@ -45,6 +44,10 @@ public class AdoptionAgencyAlgorithm {
 		// then run these substeps:
 		if (currentNode.isHTMLElement()
 				&& currentNode.getNodeName().equals(subject)) {
+
+			parserContext.addParseEvent("8.2.5.4.7_2_1",
+					"Current node equals tag name \"" + subject + "\"");
+
 			// 1.1 Let element be the current node.
 			// 1.2 Pop element off the stack of open elements.
 			parserContext.getOpenElements().pop();
@@ -96,6 +99,11 @@ public class AdoptionAgencyAlgorithm {
 			// If there is no such element, then abort these steps and instead
 			// act as described in the "any other end tag" entry above.
 			if (formattingElement == null) {
+				
+				String msg = "No formatting element with tag name \"" + subject + "\""; 
+				parserContext.addParseEvent("8.2.5.4.7_2_5",
+						msg);
+				
 				new InBody().anyOtherEndTag(parserContext);
 				return parserContext;
 			}
@@ -106,7 +114,11 @@ public class AdoptionAgencyAlgorithm {
 			// if (!parserContext.getOpenElements().contains(formattingElement))
 			// {
 			if (!stackOpenElements.contains(formattingElement)) {
-				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
+				
+				String msg = "Formatting element is not in the stack of open elements"; 
+				String section = "8.2.5.4.7_2_6";				
+				
+				parserContext.addParseErrors(ParseErrorType.UnexpectedToken, msg, section);
 				parserContext.getActiveFormattingElements().remove(
 						formattingElement);
 				break;
@@ -119,15 +131,22 @@ public class AdoptionAgencyAlgorithm {
 			else {
 				if (!ElementInScope.isInScope(parserContext,
 						formattingElement.getNodeName())) {
+					
+					String msg = "Formatting element is not in scope";
+					String section = "8.2.5.4.7_2_7";
+					
 					parserContext
-							.addParseErrors(ParseErrorType.UnexpectedToken);
+							.addParseErrors(ParseErrorType.UnexpectedToken, msg, section);
 					return parserContext;
 				}
 			}
 			// 8 If formatting element is not the current node, this is a parse
 			// error. (But do not abort these steps.)
-			if (!formattingElement.equals(currentNode))
-				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
+			if (!formattingElement.equals(currentNode)){
+				String msg = "Formatting element is not the current node";
+				String section = "8.2.5.4.7_2_8";
+				parserContext.addParseErrors(ParseErrorType.UnexpectedToken, msg, section);
+			}
 
 			// 9 Let furthest block be the topmost node in the stack of open
 			// elements that is lower in the stack than formatting element, and
@@ -151,9 +170,13 @@ public class AdoptionAgencyAlgorithm {
 			// the nodes from the bottom of the stack of open elements, from the
 			// current node up to and including formatting element, then remove
 			// formatting element from the list of active formatting elements,
-			// and finally
-			// abort these steps.
+			// and finally abort these steps.
 			if (furthestBlock == null) {
+				
+				String msg = "There is no furthest block";
+				parserContext.addParseEvent("8.2.5.4.7_2_10",
+						msg);
+				
 				do {
 					// Element e = parserContext.getOpenElements().pop();
 					Element e = stackOpenElements.remove(stackOpenElements
@@ -257,6 +280,9 @@ public class AdoptionAgencyAlgorithm {
 
 				// 13.11 Return to the step labeled inner loop.
 			}
+			
+			parserContext.addParseEvent("8.2.5.4.7_2_20");
+			
 			// 14 Insert whatever last node ended up being in the previous step
 			// at the appropriate place for inserting a node, but using common
 			// ancestor as the override target.

@@ -23,8 +23,8 @@ public class AppropiatePlaceForInsertingANode {
 
 		String name = target.getNodeName();
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.1.1",
+		
+			parserContext.addParseEvent("8.2.5.1_1",
 					"Override target \"" + name + "\"");
 
 		if (parserContext.isFlagFosterParenting()

@@ -9,8 +9,8 @@ import com.html5parser.constants.Namespace;
 public class InsertAnHTMLElement {
 
 	public static Element run(ParserContext parserContext, Token token) {
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.1.4", token);
+		
+			parserContext.addParseEvent("8.2.5.1_4", token);
 		
 		return InsertForeignElement.run(parserContext, token, Namespace.HTML);
 	}

@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <events>
-	<!-- Tokenizer States -->
+
+	<event section="8.2" description="Parsing HTML documents" />
+	<event section="8.2.1" description="Overview of the parsing model" />
+	<event section="8.2.2" description="The input byte stream" />
+	<event section="8.2.2.1" description="Parsing with a known character encoding" />
+	<event section="8.2.2.2" description="Determining the character encoding" />
+	<event section="8.2.2.3" description="Character encodings" />
+	<event section="8.2.2.4" description="Changing the encoding while parsing" />
+	<event section="8.2.2.5" description="Preprocessing the input stream" />
+
+	<event section="8.2.3" description="Parse state" />
+	<event section="8.2.3.1" description="The insertion mode" />
+	<event section="8.2.3.1_1" description="Reset the insertion mode appropriately" type="Algorithm" />	
+	<event section="8.2.3.2" description="The stack of open elements" />
+	<event section="8.2.3.2_1" description="Have an element target node in a specific scope" type="Algorithm" />
+	<event section="8.2.3.2_2" description="Have a particular element in scope " type="Algorithm" />
+	<event section="8.2.3.2_3" description="Have a particular element in list item scope" type="Algorithm" />
+	<event section="8.2.3.2_4" description="Have a particular element in button scope" type="Algorithm" />
+	<event section="8.2.3.2_5" description="Have a particular element in table scope" type="Algorithm" />
+	<event section="8.2.3.2_6" description="Have a particular element in select scope" type="Algorithm" />	
+	<event section="8.2.3.3" description="The list of active formatting elements" />
+	<event section="8.2.3.3_1" description="Push onto the list of active formatting elements" type="Algorithm" />
+	<event section="8.2.3.3_2" description="Reconstruct the active formatting elements" type="Algorithm" />
+	<event section="8.2.3.3_3" description="Clear the list of active formatting elements up to the last marker" type="Algorithm" />
+	<event section="8.2.3.4" description="The element pointers" />
+	<event section="8.2.3.5" description="Other parsing state flags" />
+	
+	<event section="8.2.4" description="Tokenization" />
 	<event section="8.2.4.1" description="Data state" type="TokenizerState" />
 	<event section="8.2.4.2" description="Character reference in data state" type="TokenizerState" />
 	<event section="8.2.4.3" description="RCDATA state" type="TokenizerState" />
@@ -71,7 +98,25 @@
 	<event section="8.2.4.68" description="CDATA section state" type="TokenizerState" />
 	<event section="8.2.4.69" description="Tokenizing character references" type="TokenizerState" />
 	
-	<!-- Insertion Modes -->
+	<event section="8.2.5" description="Tree construction" />
+	<event section="8.2.5_1" description="Tree construction dispatcher" type="Algorithm" />
+	<event section="8.2.5.1" description="Creating and inserting nodes" />	
+	<event section="8.2.5.1_1" description="Appropriate place for inserting a node" type="Algorithm" />
+	<event section="8.2.5.1_2" description="Create an element for a token" type="Algorithm" />
+	<event section="8.2.5.1_3" description="Insert a foreign element" type="Algorithm" />
+	<event section="8.2.5.1_4" description="Insert an HTML element" type="Algorithm" />
+	<event section="8.2.5.1_5" description="Adjust MathML attributes" type="Algorithm" />
+	<event section="8.2.5.1_6" description="Adjust SVG attributes" type="Algorithm" />
+	<event section="8.2.5.1_7" description="Adjust foreign attributes" type="Algorithm" />
+	<event section="8.2.5.1_8" description="Insert a character" type="Algorithm" />
+	<event section="8.2.5.1_9" description="Insert a comment" type="Algorithm" />	
+	<event section="8.2.5.2" description="Parsing elements that contain only text" />
+	<event section="8.2.5.2_1" description="Generic raw text element parsing Algorithm" type="Algorithm" />
+	<event section="8.2.5.2_2" description="Generic RCDATA element parsing Algorithm" type="Algorithm" />	
+	<event section="8.2.5.3" description="Closing elements that have implied end tags" />
+	<event section="8.2.5.3_1" description="Generate implied end tags" type="Algorithm" />
+	
+	<event section="8.2.5.4" description="The rules for parsing tokens in HTML content" />
 	<event section="8.2.5.4.1" description="Initial" type="InsertionMode" />
 	<event section="8.2.5.4.2" description="Before html" type="InsertionMode" />
 	<event section="8.2.5.4.3" description="Before head" type="InsertionMode" />
@@ -79,14 +124,27 @@
 	<event section="8.2.5.4.5" description="In head noscript" type="InsertionMode" />
 	<event section="8.2.5.4.6" description="After head" type="InsertionMode" />
 	<event section="8.2.5.4.7" description="In body" type="InsertionMode" />
+	<event section="8.2.5.4.7_1" description="Close a p element" type="Algorithm" />
+	<event section="8.2.5.4.7_2" description="Adoption agency algorithm" type="Algorithm" />
+	<event section="8.2.5.4.7_2_1" description="Adoption agency algorithm - Exit step 1" type="Algorithm" />	
+	<event section="8.2.5.4.7_2_5" description="Adoption agency algorithm - Exit step 5" type="Algorithm" />
+	<event section="8.2.5.4.7_2_6" description="Adoption agency algorithm - Exit step 6" type="ParseError" />
+	<event section="8.2.5.4.7_2_7" description="Adoption agency algorithm - Exit step 7" type="ParseError" />
+	<event section="8.2.5.4.7_2_8" description="Adoption agency algorithm - Step 8" type="ParseError" />
+	<event section="8.2.5.4.7_2_10" description="Adoption agency algorithm - Exit step 10" type="Algorithm" />
+	<event section="8.2.5.4.7_2_20" description="Adoption agency algorithm - DOM manipulation" type="Algorithm" />
 	<event section="8.2.5.4.8" description="Text" type="InsertionMode" />
 	<event section="8.2.5.4.9" description="In table" type="InsertionMode" />
+	<event section="8.2.5.4.9_1" description="Clear the stack back to a table context" type="Algorithm" />
 	<event section="8.2.5.4.10" description="In table text" type="InsertionMode" />
 	<event section="8.2.5.4.11" description="In caption" type="InsertionMode" />
 	<event section="8.2.5.4.12" description="In column group" type="InsertionMode" />
 	<event section="8.2.5.4.13" description="In table body" type="InsertionMode" />
+	<event section="8.2.5.4.13_1" description="Clear the stack back to a table body context" type="Algorithm" />
 	<event section="8.2.5.4.14" description="In row" type="InsertionMode" />
+	<event section="8.2.5.4.14_1" description="Clear the stack back to a table row context" type="Algorithm" />
 	<event section="8.2.5.4.15" description="In cell" type="InsertionMode" />
+	<event section="8.2.5.4.15_1" description="Close the cell" type="Algorithm" />
 	<event section="8.2.5.4.16" description="In select" type="InsertionMode" />
 	<event section="8.2.5.4.17" description="In select in table" type="InsertionMode" />
 	<event section="8.2.5.4.18" description="In template" type="InsertionMode" />
@@ -96,36 +154,6 @@
 	<event section="8.2.5.4.22" description="After after body" type="InsertionMode" />
 	<event section="8.2.5.4.23" description="After after frameset" type="InsertionMode" />
 	
-	<!-- Algorithms -->
-	<event section="8.2.3.1" description="Reset the insertion mode appropriately" type="algorithm" />
-	<event section="8.2.3.2.1" description="Have an element target node in a specific scope" type="algorithm" />
-	<event section="8.2.3.2.2" description="Have a particular element in scope " type="algorithm" />
-	<event section="8.2.3.2.3" description="Have a particular element in list item scope" type="algorithm" />
-	<event section="8.2.3.2.4" description="Have a particular element in button scope" type="algorithm" />
-	<event section="8.2.3.2.5" description="Have a particular element in table scope" type="algorithm" />
-	<event section="8.2.3.2.6" description="Have a particular element in select scope" type="algorithm" />
-	<event section="8.2.3.3.1" description="Push onto the list of active formatting elements" type="algorithm" />
-	<event section="8.2.3.3.2" description="Reconstruct the active formatting elements" type="algorithm" />
-	<event section="8.2.3.3.3" description="Clear the list of active formatting elements up to the last marker" type="algorithm" />
-	<event section="8.2.5" description="Tree construction dispatcher" type="algorithm" />
-	<event section="8.2.5.1.1" description="Appropriate place for inserting a node" type="algorithm" />
-	<event section="8.2.5.1.2" description="Create an element for a token" type="algorithm" />
-	<event section="8.2.5.1.3" description="Insert a foreign element" type="algorithm" />
-	<event section="8.2.5.1.4" description="Insert an HTML element" type="algorithm" />
-	<event section="8.2.5.1.5" description="Adjust MathML attributes" type="algorithm" />
-	<event section="8.2.5.1.6" description="Adjust SVG attributes" type="algorithm" />
-	<event section="8.2.5.1.7" description="Adjust foreign attributes" type="algorithm" />
-	<event section="8.2.5.1.8" description="Insert a character" type="algorithm" />
-	<event section="8.2.5.1.9" description="Insert a comment" type="algorithm" />
-	<event section="8.2.5.2.1" description="Generic raw text element parsing algorithm" type="algorithm" />
-	<event section="8.2.5.2.2" description="Generic RCDATA element parsing algorithm" type="algorithm" />
-	<event section="8.2.5.3" description="Generate implied end tags" type="algorithm" />
-	<event section="8.2.5.4.7.1" description="Close a p element" type="algorithm" />
-	<event section="8.2.5.4.7.2" description="Adoption agency algorithm" type="algorithm" />
-	<event section="8.2.5.4.9.1" description="Clear the stack back to a table context" type="algorithm" />
-	<event section="8.2.5.4.13.1" description="Clear the stack back to a table body context" type="algorithm" />
-	<event section="8.2.5.4.14.1" description="Clear the stack back to a table row context" type="algorithm" />
-	<event section="8.2.5.4.15.1" description="Close the cell" type="algorithm" />
-	<event section="8.2.5.5" description="The rules for parsing tokens in foreign content" type="algorithm" />
-	<event section="8.4" description="HTML fragment parsing algorithm" type="algorithm" />
+	<event section="8.2.5.5" description="The rules for parsing tokens in foreign content" type="Algorithm" />
+	<event section="8.4" description="HTML fragment parsing Algorithm" type="Algorithm" />
 </events>

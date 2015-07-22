@@ -5,7 +5,7 @@ import com.html5parser.classes.TokenizerContext;
 import com.html5parser.classes.TokenizerState;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.ITokenizerState;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class After_attribute_value_quoted_state implements ITokenizerState {
 
@@ -14,8 +14,8 @@ public class After_attribute_value_quoted_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.42", currentChar);
+		
+			context.addParseEvent("8.2.4.42", currentChar);
 		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// "tab" (U+0009)

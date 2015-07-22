@@ -21,8 +21,8 @@ public class RCDATA_end_tag_open_state implements ITokenizerState {
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.12", currentChar);
+		
+			context.addParseEvent("8.2.4.12", currentChar);
 		
 		switch (asciiCharacter) {
 

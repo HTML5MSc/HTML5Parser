@@ -18,8 +18,8 @@ public class Script_data_escape_start_state implements ITokenizerState {
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.20", currentChar);
+		
+			context.addParseEvent("8.2.4.20", currentChar);
 		
 		switch (asciiCharacter) {
 		case HYPHEN_MINUS:

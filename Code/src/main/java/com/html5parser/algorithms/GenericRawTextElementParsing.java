@@ -11,8 +11,8 @@ public class GenericRawTextElementParsing {
 
 	public static ParserContext run(ParserContext parserContext, TagToken token) {
 		
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5.2.1", token);
+		
+			parserContext.addParseEvent("8.2.5.2_1", token);
 		
 		TokenizerStateFactory tokenizerFactory = TokenizerStateFactory
 				.getInstance();

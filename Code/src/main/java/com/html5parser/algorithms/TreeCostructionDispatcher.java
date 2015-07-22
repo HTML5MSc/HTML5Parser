@@ -16,8 +16,8 @@ public class TreeCostructionDispatcher {
 	public static Boolean processTokenInInsertionMode(
 			ParserContext parserContext) {
 
-		if (parserContext.isTracing())
-			parserContext.getTracer().addParseEvent("8.2.5");
+		
+			parserContext.addParseEvent("8.2.5_1");
 
 		/*
 		 * If there is no adjusted current node

@@ -20,8 +20,8 @@ public class RAWTEXT_end_tag_name_state implements ITokenizerState {
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.16", currentChar);
+		
+			context.addParseEvent("8.2.4.16", currentChar);
 		
 		switch (asciiCharacter) {
 

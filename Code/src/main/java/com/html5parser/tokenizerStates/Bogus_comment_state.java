@@ -13,8 +13,8 @@ public class Bogus_comment_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		
-		if(context.isTracing())
-			context.getTracer().addParseEvent("8.2.4.44", currentChar);
+		
+			context.addParseEvent("8.2.4.44", currentChar);
 
 		/*
 		 * Consume every character up to and including the first U+003E

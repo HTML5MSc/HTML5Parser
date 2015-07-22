@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 public class Event {
 
 	public enum EventType {
-		TokenizerState, InsertionMode, Algorithm
+		TokenizerState, InsertionMode, Algorithm, ParseError
 	}		
 	private String description;
 	private String section;
