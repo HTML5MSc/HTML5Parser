@@ -9,7 +9,7 @@ import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class AfterAfterBody implements IInsertionMode {
 
@@ -19,6 +19,9 @@ public class AfterAfterBody implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
 
+		
+			parserContext.addParseEvent("8.2.5.4.22", token);
+		
 		/**
 		 * A comment token
 		 * 

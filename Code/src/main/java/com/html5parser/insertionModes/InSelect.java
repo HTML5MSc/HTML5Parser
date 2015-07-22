@@ -12,7 +12,7 @@ import com.html5parser.algorithms.ResetTheInsertionModeAppropriately;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InSelect implements IInsertionMode {
 
@@ -21,6 +21,9 @@ public class InSelect implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		String currentNodeName = parserContext.getCurrentNode().getNodeName();
 
+		
+			parserContext.addParseEvent("8.2.5.4.16", token);
+		
 		switch (token.getType()) {
 		// A character token that is U+0000 NULL
 		// Parse error. Ignore the token.

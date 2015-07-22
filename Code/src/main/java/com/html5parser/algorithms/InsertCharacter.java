@@ -10,30 +10,34 @@ public class InsertCharacter {
 
 	/**
 	 * 
-	 * @param context
+	 * @param parserContext
 	 * @param token
 	 * @return the Node in which the characters where added
 	 */
-	public static Node run(ParserContext context, Token token) {
-		return run(context, token.getValue());
+	public static Node run(ParserContext parserContext, Token token) {
+		return run(parserContext, token.getValue());
 	}
 
-	public static Node run(ParserContext context, int character) {
-		return run(context, String.valueOf(Character.toChars(character)));
+	public static Node run(ParserContext parserContext, int character) {
+		return run(parserContext, String.valueOf(Character.toChars(character)));
 	}
 
 	/**
 	 * 
-	 * @param context
+	 * @param parserContext
 	 * @param token
 	 * @return the Node in which the characters where added
 	 */
-	public static Node run(ParserContext context, String data) {
+	public static Node run(ParserContext parserContext, String data) {
+
+		
+			parserContext.addParseEvent("8.2.5.1_8",
+					"Character \"" + data + "\"");
 
 		// Let the adjusted insertion location be the appropriate place for
 		// inserting a node.
 		AdjustedInsertionLocation adjustedInsertionLocation = AppropiatePlaceForInsertingANode
-				.run(context);
+				.run(parserContext);
 
 		// If the adjusted insertion location is in a Document node, then abort
 		// these steps.

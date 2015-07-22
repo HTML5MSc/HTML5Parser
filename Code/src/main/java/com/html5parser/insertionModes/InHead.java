@@ -22,7 +22,7 @@ import com.html5parser.constants.Namespace;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InHead implements IInsertionMode {
 
@@ -31,6 +31,9 @@ public class InHead implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
+		
+		
+			parserContext.addParseEvent("8.2.5.4.4", token);
 
 		/*
 		 * A character token that is one of U+0009 CHARACTER TABULATION, "LF"

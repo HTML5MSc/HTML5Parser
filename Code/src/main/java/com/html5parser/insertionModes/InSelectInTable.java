@@ -7,7 +7,7 @@ import com.html5parser.algorithms.ResetTheInsertionModeAppropriately;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InSelectInTable implements IInsertionMode {
 
@@ -15,6 +15,9 @@ public class InSelectInTable implements IInsertionMode {
 
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		
+			parserContext.addParseEvent("8.2.5.4.17", token);
+		
 		switch (token.getType()) {
 		case start_tag:
 			switch (token.getValue()) {

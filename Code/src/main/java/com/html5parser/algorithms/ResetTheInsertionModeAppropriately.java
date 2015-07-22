@@ -18,6 +18,10 @@ public class ResetTheInsertionModeAppropriately {
 	}
 
 	public static void Run(ParserContext parserContext, Element context) {
+		
+		
+			parserContext.addParseEvent("8.2.3.1_1");
+		
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Stack<Element> openElements = new Stack<Element>();
 		openElements.addAll(parserContext.getOpenElements());

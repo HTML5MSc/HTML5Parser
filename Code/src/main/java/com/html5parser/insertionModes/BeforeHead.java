@@ -11,7 +11,7 @@ import com.html5parser.classes.Token.TokenType;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class BeforeHead implements IInsertionMode {
 
@@ -21,6 +21,9 @@ public class BeforeHead implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
 
+		
+			parserContext.addParseEvent("8.2.5.4.3", token);
+		
 		/*
 		 * A character token that is one of U+0009 CHARACTER TABULATION, "LF"
 		 * (U+000A), "FF" (U+000C), "CR" (U+000D), or U+0020 SPACE Ignore the

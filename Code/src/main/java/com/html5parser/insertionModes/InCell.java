@@ -10,7 +10,7 @@ import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InCell implements IInsertionMode {
 
@@ -19,6 +19,9 @@ public class InCell implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		
+			parserContext.addParseEvent("8.2.5.4.15", token);
+		
 		switch (token.getType()) {
 		case start_tag:
 			switch (token.getValue()) {
@@ -145,6 +148,9 @@ public class InCell implements IInsertionMode {
 
 	private void closeTheCell(ParserContext parserContext) {
 
+		
+			parserContext.addParseEvent("8.2.5.4.15_1");
+		
 		// 1 Generate implied end tags.
 		GenerateImpliedEndTags.run(parserContext);
 		// 2 If the current node is not now a td element or a th element, then

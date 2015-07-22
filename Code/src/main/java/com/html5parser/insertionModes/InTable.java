@@ -14,7 +14,7 @@ import com.html5parser.classes.Token.TokenType;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InTable implements IInsertionMode {
 
@@ -23,6 +23,9 @@ public class InTable implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		
+			parserContext.addParseEvent("8.2.5.4.9", token);
+		
 		switch (token.getType()) {
 
 		// A character token, if the current node is table, tbody, tfoot, thead,
@@ -288,9 +291,13 @@ public class InTable implements IInsertionMode {
 	}
 
 	private void clearTheStackBackToATableContext(ParserContext parserContext) {
+		
+		
+			parserContext.addParseEvent("8.2.5.4.9_1");
+		
 		// it means that the UA must, while the current node is not a table,
 		// template, or html element, pop elements from the stack of open
-		// elements.
+		// elements.		
 		while (true) {
 			Element element = parserContext.getOpenElements().pop();
 			if (element.getNodeName().equals("table")

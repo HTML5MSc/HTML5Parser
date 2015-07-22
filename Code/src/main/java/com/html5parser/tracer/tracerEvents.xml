@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<events>
+
+	<event section="8.2" description="Parsing HTML documents" />
+	<event section="8.2.1" description="Overview of the parsing model" />
+	<event section="8.2.2" description="The input byte stream" />
+	<event section="8.2.2.1" description="Parsing with a known character encoding" />
+	<event section="8.2.2.2" description="Determining the character encoding" />
+	<event section="8.2.2.3" description="Character encodings" />
+	<event section="8.2.2.4" description="Changing the encoding while parsing" />
+	<event section="8.2.2.5" description="Preprocessing the input stream" />
+
+	<event section="8.2.3" description="Parse state" />
+	<event section="8.2.3.1" description="The insertion mode" />
+	<event section="8.2.3.1_1" description="Reset the insertion mode appropriately" type="Algorithm" />	
+	<event section="8.2.3.2" description="The stack of open elements" />
+	<event section="8.2.3.2_1" description="Have an element target node in a specific scope" type="Algorithm" />
+	<event section="8.2.3.2_2" description="Have a particular element in scope " type="Algorithm" />
+	<event section="8.2.3.2_3" description="Have a particular element in list item scope" type="Algorithm" />
+	<event section="8.2.3.2_4" description="Have a particular element in button scope" type="Algorithm" />
+	<event section="8.2.3.2_5" description="Have a particular element in table scope" type="Algorithm" />
+	<event section="8.2.3.2_6" description="Have a particular element in select scope" type="Algorithm" />	
+	<event section="8.2.3.3" description="The list of active formatting elements" />
+	<event section="8.2.3.3_1" description="Push onto the list of active formatting elements" type="Algorithm" />
+	<event section="8.2.3.3_2" description="Reconstruct the active formatting elements" type="Algorithm" />
+	<event section="8.2.3.3_3" description="Clear the list of active formatting elements up to the last marker" type="Algorithm" />
+	<event section="8.2.3.4" description="The element pointers" />
+	<event section="8.2.3.5" description="Other parsing state flags" />
+	
+	<event section="8.2.4" description="Tokenization" />
+	<event section="8.2.4.1" description="Data state" type="TokenizerState" />
+	<event section="8.2.4.2" description="Character reference in data state" type="TokenizerState" />
+	<event section="8.2.4.3" description="RCDATA state" type="TokenizerState" />
+	<event section="8.2.4.4" description="Character reference in RCDATA state" type="TokenizerState" />
+	<event section="8.2.4.5" description="RAWTEXT state" type="TokenizerState" />
+	<event section="8.2.4.6" description="Script data state" type="TokenizerState" />
+	<event section="8.2.4.7" description="PLAINTEXT state" type="TokenizerState" />
+	<event section="8.2.4.8" description="Tag open state" type="TokenizerState" />
+	<event section="8.2.4.9" description="End tag open state" type="TokenizerState" />
+	<event section="8.2.4.10" description="Tag name state" type="TokenizerState" />
+	<event section="8.2.4.11" description="RCDATA less-than sign state" type="TokenizerState" />
+	<event section="8.2.4.12" description="RCDATA end tag open state" type="TokenizerState" />
+	<event section="8.2.4.13" description="RCDATA end tag name state" type="TokenizerState" />
+	<event section="8.2.4.14" description="RAWTEXT less-than sign state" type="TokenizerState" />
+	<event section="8.2.4.15" description="RAWTEXT end tag open state" type="TokenizerState" />
+	<event section="8.2.4.16" description="RAWTEXT end tag name state" type="TokenizerState" />
+	<event section="8.2.4.17" description="Script data less-than sign state" type="TokenizerState" />
+	<event section="8.2.4.18" description="Script data end tag open state" type="TokenizerState" />
+	<event section="8.2.4.19" description="Script data end tag name state" type="TokenizerState" />
+	<event section="8.2.4.20" description="Script data escape start state" type="TokenizerState" />
+	<event section="8.2.4.21" description="Script data escape start dash state" type="TokenizerState" />
+	<event section="8.2.4.22" description="Script data escaped state" type="TokenizerState" />
+	<event section="8.2.4.23" description="Script data escaped dash state" type="TokenizerState" />
+	<event section="8.2.4.24" description="Script data escaped dash dash state" type="TokenizerState" />
+	<event section="8.2.4.25" description="Script data escaped less-than sign state" type="TokenizerState" />
+	<event section="8.2.4.26" description="Script data escaped end tag open state" type="TokenizerState" />
+	<event section="8.2.4.27" description="Script data escaped end tag name state" type="TokenizerState" />
+	<event section="8.2.4.28" description="Script data double escape start state" type="TokenizerState" />
+	<event section="8.2.4.29" description="Script data double escaped state" type="TokenizerState" />
+	<event section="8.2.4.30" description="Script data double escaped dash state" type="TokenizerState" />
+	<event section="8.2.4.31" description="Script data double escaped dash dash state" type="TokenizerState" />
+	<event section="8.2.4.32" description="Script data double escaped less-than sign state" type="TokenizerState" />
+	<event section="8.2.4.33" description="Script data double escape end state" type="TokenizerState" />
+	<event section="8.2.4.34" description="Before attribute name state" type="TokenizerState" />
+	<event section="8.2.4.35" description="Attribute name state" type="TokenizerState" />
+	<event section="8.2.4.36" description="After attribute name state" type="TokenizerState" />
+	<event section="8.2.4.37" description="Before attribute value state" type="TokenizerState" />
+	<event section="8.2.4.38" description="Attribute value (double-quoted) state" type="TokenizerState" />
+	<event section="8.2.4.39" description="Attribute value (single-quoted) state" type="TokenizerState" />
+	<event section="8.2.4.40" description="Attribute value (unquoted) state" type="TokenizerState" />
+	<event section="8.2.4.41" description="Character reference in attribute value state" type="TokenizerState" />
+	<event section="8.2.4.42" description="After attribute value (quoted) state" type="TokenizerState" />
+	<event section="8.2.4.43" description="Self-closing start tag state" type="TokenizerState" />
+	<event section="8.2.4.44" description="Bogus comment state" type="TokenizerState" />
+	<event section="8.2.4.45" description="Markup declaration open state" type="TokenizerState" />
+	<event section="8.2.4.46" description="Comment start state" type="TokenizerState" />
+	<event section="8.2.4.47" description="Comment start dash state" type="TokenizerState" />
+	<event section="8.2.4.48" description="Comment state" type="TokenizerState" />
+	<event section="8.2.4.49" description="Comment end dash state" type="TokenizerState" />
+	<event section="8.2.4.50" description="Comment end state" type="TokenizerState" />
+	<event section="8.2.4.51" description="Comment end bang state" type="TokenizerState" />
+	<event section="8.2.4.52" description="DOCTYPE state" type="TokenizerState" />
+	<event section="8.2.4.53" description="Before DOCTYPE name state" type="TokenizerState" />
+	<event section="8.2.4.54" description="DOCTYPE name state" type="TokenizerState" />
+	<event section="8.2.4.55" description="After DOCTYPE name state" type="TokenizerState" />
+	<event section="8.2.4.56" description="After DOCTYPE public keyword state" type="TokenizerState" />
+	<event section="8.2.4.57" description="Before DOCTYPE public identifier state" type="TokenizerState" />
+	<event section="8.2.4.58" description="DOCTYPE public identifier (double-quoted) state" type="TokenizerState" />
+	<event section="8.2.4.59" description="DOCTYPE public identifier (single-quoted) state" type="TokenizerState" />
+	<event section="8.2.4.60" description="After DOCTYPE public identifier state" type="TokenizerState" />
+	<event section="8.2.4.61" description="Between DOCTYPE public and system identifiers state" type="TokenizerState" />
+	<event section="8.2.4.62" description="After DOCTYPE system keyword state" type="TokenizerState" />
+	<event section="8.2.4.63" description="Before DOCTYPE system identifier state" type="TokenizerState" />
+	<event section="8.2.4.64" description="DOCTYPE system identifier (double-quoted) state" type="TokenizerState" />
+	<event section="8.2.4.65" description="DOCTYPE system identifier (single-quoted) state" type="TokenizerState" />
+	<event section="8.2.4.66" description="After DOCTYPE system identifier state" type="TokenizerState" />
+	<event section="8.2.4.67" description="Bogus DOCTYPE state" type="TokenizerState" />
+	<event section="8.2.4.68" description="CDATA section state" type="TokenizerState" />
+	<event section="8.2.4.69" description="Tokenizing character references" type="TokenizerState" />
+	
+	<event section="8.2.5" description="Tree construction" />
+	<event section="8.2.5_1" description="Tree construction dispatcher" type="Algorithm" />
+	<event section="8.2.5.1" description="Creating and inserting nodes" />	
+	<event section="8.2.5.1_1" description="Appropriate place for inserting a node" type="Algorithm" />
+	<event section="8.2.5.1_2" description="Create an element for a token" type="Algorithm" />
+	<event section="8.2.5.1_3" description="Insert a foreign element" type="Algorithm" />
+	<event section="8.2.5.1_4" description="Insert an HTML element" type="Algorithm" />
+	<event section="8.2.5.1_5" description="Adjust MathML attributes" type="Algorithm" />
+	<event section="8.2.5.1_6" description="Adjust SVG attributes" type="Algorithm" />
+	<event section="8.2.5.1_7" description="Adjust foreign attributes" type="Algorithm" />
+	<event section="8.2.5.1_8" description="Insert a character" type="Algorithm" />
+	<event section="8.2.5.1_9" description="Insert a comment" type="Algorithm" />	
+	<event section="8.2.5.2" description="Parsing elements that contain only text" />
+	<event section="8.2.5.2_1" description="Generic raw text element parsing Algorithm" type="Algorithm" />
+	<event section="8.2.5.2_2" description="Generic RCDATA element parsing Algorithm" type="Algorithm" />	
+	<event section="8.2.5.3" description="Closing elements that have implied end tags" />
+	<event section="8.2.5.3_1" description="Generate implied end tags" type="Algorithm" />
+	
+	<event section="8.2.5.4" description="The rules for parsing tokens in HTML content" />
+	<event section="8.2.5.4.1" description="Initial" type="InsertionMode" />
+	<event section="8.2.5.4.2" description="Before html" type="InsertionMode" />
+	<event section="8.2.5.4.3" description="Before head" type="InsertionMode" />
+	<event section="8.2.5.4.4" description="In head" type="InsertionMode" />
+	<event section="8.2.5.4.5" description="In head noscript" type="InsertionMode" />
+	<event section="8.2.5.4.6" description="After head" type="InsertionMode" />
+	<event section="8.2.5.4.7" description="In body" type="InsertionMode" />
+	<event section="8.2.5.4.7_1" description="Close a p element" type="Algorithm" />
+	<event section="8.2.5.4.7_2" description="Adoption agency algorithm" type="Algorithm" />
+	<event section="8.2.5.4.7_2_1" description="Adoption agency algorithm - Exit step 1" type="Algorithm" />	
+	<event section="8.2.5.4.7_2_5" description="Adoption agency algorithm - Exit step 5" type="Algorithm" />
+	<event section="8.2.5.4.7_2_6" description="Adoption agency algorithm - Exit step 6" type="ParseError" />
+	<event section="8.2.5.4.7_2_7" description="Adoption agency algorithm - Exit step 7" type="ParseError" />
+	<event section="8.2.5.4.7_2_8" description="Adoption agency algorithm - Step 8" type="ParseError" />
+	<event section="8.2.5.4.7_2_10" description="Adoption agency algorithm - Exit step 10" type="Algorithm" />
+	<event section="8.2.5.4.7_2_20" description="Adoption agency algorithm - DOM manipulation" type="Algorithm" />
+	<event section="8.2.5.4.8" description="Text" type="InsertionMode" />
+	<event section="8.2.5.4.9" description="In table" type="InsertionMode" />
+	<event section="8.2.5.4.9_1" description="Clear the stack back to a table context" type="Algorithm" />
+	<event section="8.2.5.4.10" description="In table text" type="InsertionMode" />
+	<event section="8.2.5.4.11" description="In caption" type="InsertionMode" />
+	<event section="8.2.5.4.12" description="In column group" type="InsertionMode" />
+	<event section="8.2.5.4.13" description="In table body" type="InsertionMode" />
+	<event section="8.2.5.4.13_1" description="Clear the stack back to a table body context" type="Algorithm" />
+	<event section="8.2.5.4.14" description="In row" type="InsertionMode" />
+	<event section="8.2.5.4.14_1" description="Clear the stack back to a table row context" type="Algorithm" />
+	<event section="8.2.5.4.15" description="In cell" type="InsertionMode" />
+	<event section="8.2.5.4.15_1" description="Close the cell" type="Algorithm" />
+	<event section="8.2.5.4.16" description="In select" type="InsertionMode" />
+	<event section="8.2.5.4.17" description="In select in table" type="InsertionMode" />
+	<event section="8.2.5.4.18" description="In template" type="InsertionMode" />
+	<event section="8.2.5.4.19" description="After body" type="InsertionMode" />
+	<event section="8.2.5.4.20" description="In frameset" type="InsertionMode" />
+	<event section="8.2.5.4.21" description="After frameset" type="InsertionMode" />
+	<event section="8.2.5.4.22" description="After after body" type="InsertionMode" />
+	<event section="8.2.5.4.23" description="After after frameset" type="InsertionMode" />
+	
+	<event section="8.2.5.5" description="The rules for parsing tokens in foreign content" type="Algorithm" />
+	<event section="8.4" description="HTML fragment parsing Algorithm" type="Algorithm" />
+</events>

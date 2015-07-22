@@ -18,6 +18,9 @@ public class Script_data_double_escape_end_state implements ITokenizerState {
 
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
+		
+		
+			context.addParseEvent("8.2.4.33", currentChar);
 
 		switch (asciiCharacter) {
 

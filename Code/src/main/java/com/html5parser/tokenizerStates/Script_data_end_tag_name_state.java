@@ -20,6 +20,9 @@ public class Script_data_end_tag_name_state implements ITokenizerState {
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
+		
+			context.addParseEvent("8.2.4.19", currentChar);
+		
 		switch (asciiCharacter) {
 
 		case TAB:

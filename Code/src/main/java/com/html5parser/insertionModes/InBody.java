@@ -12,7 +12,6 @@ import com.html5parser.algorithms.AdjustMathMLAttributes;
 import com.html5parser.algorithms.AdjustSVGAttributes;
 import com.html5parser.algorithms.AdoptionAgencyAlgorithm;
 import com.html5parser.algorithms.ElementInScope;
-import com.html5parser.algorithms.GenerateAllImpliedEndTagsThoroughly;
 import com.html5parser.algorithms.GenerateImpliedEndTags;
 import com.html5parser.algorithms.GenericRawTextElementParsing;
 import com.html5parser.algorithms.InsertAnHTMLElement;
@@ -31,7 +30,7 @@ import com.html5parser.constants.Namespace;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InBody implements IInsertionMode {
 
@@ -43,6 +42,8 @@ public class InBody implements IInsertionMode {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 		TokenType tokenType = token.getType();
 		Stack<Element> openElementStack = parserContext.getOpenElements();
+
+		parserContext.addParseEvent("8.2.5.4.7", token);
 
 		/*
 		 * A character token that is U+0000 NULL Parse error. Ignore the token.
@@ -982,12 +983,10 @@ public class InBody implements IInsertionMode {
 						token.getValue(), new String[] { "area", "br", "embed",
 								"img", "keygen", "wbr" }))) {
 
-			if (token.getValue().equals("br")) {
+			if (tokenType == TokenType.end_tag && token.getValue().equals("br")) {
 				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
 			}
-			if (!parserContext.getActiveFormattingElements().isEmpty()) {
-				ListOfActiveFormattingElements.reconstruct(parserContext);
-			}
+			ListOfActiveFormattingElements.reconstruct(parserContext);
 			InsertAnHTMLElement.run(parserContext, token);
 			parserContext.getOpenElements().pop();
 			((TagToken) token).setFlagAcknowledgeSelfClosingTag(true);
@@ -1380,6 +1379,12 @@ public class InBody implements IInsertionMode {
 			if (!parserContext.getActiveFormattingElements().isEmpty()) {
 				ListOfActiveFormattingElements.reconstruct(parserContext);
 			}
+
+			{
+				parserContext.addParseEvent("8.2.5.1_5");
+				parserContext.addParseEvent("8.2.5.1_7");
+			}
+
 			AdjustMathMLAttributes.run((TagToken) token);
 			AdjustForeignAttributes.run((TagToken) token);
 			InsertForeignElement.run(parserContext, token, Namespace.MathML);
@@ -1404,6 +1409,12 @@ public class InBody implements IInsertionMode {
 			if (!parserContext.getActiveFormattingElements().isEmpty()) {
 				ListOfActiveFormattingElements.reconstruct(parserContext);
 			}
+
+			{
+				parserContext.addParseEvent("8.2.5.1_6");
+				parserContext.addParseEvent("8.2.5.1_7");
+			}
+
 			AdjustSVGAttributes.run((TagToken) token);
 			AdjustForeignAttributes.run((TagToken) token);
 			InsertForeignElement.run(parserContext, token, Namespace.SVG);
@@ -1462,8 +1473,7 @@ public class InBody implements IInsertionMode {
 			if (node.getNodeName().equals(token.getValue())) {
 				// 2.1 Generate implied end tags, except for HTML elements with
 				// the same tag name as the token.
-				GenerateAllImpliedEndTagsThoroughly.run(parserContext,
-						token.getValue());
+				GenerateImpliedEndTags.run(parserContext, token.getValue());
 				// 2.2 If node is not the current node, then this is a parse
 				// error.
 				if (!node.equals(parserContext.getCurrentNode()))
@@ -1494,6 +1504,9 @@ public class InBody implements IInsertionMode {
 		// If the current node is not a p element, then this is a parse error.
 		// Pop elements from the stack of open elements until a p element has
 		// been popped from the stack.
+
+		parserContext.addParseEvent("8.2.5.4.7_1");
+
 		GenerateImpliedEndTags.run(parserContext, "p");
 		if (!parserContext.getCurrentNode().getNodeName().equals("p"))
 			parserContext.addParseErrors(ParseErrorType.UnexpectedToken);

@@ -6,13 +6,9 @@ import java.util.Queue;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.Token.TokenType;
-import com.html5parser.classes.token.DocTypeToken;
-import com.html5parser.classes.token.TagToken;
-import com.html5parser.classes.token.TagToken.Attribute;
 import com.html5parser.constants.NamedCharacterReference;
 import com.html5parser.interfaces.ITokenizerState;
-import com.html5parser.parseError.ParseError;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class Tokenizing_character_references {
 
@@ -39,6 +35,9 @@ public class Tokenizing_character_references {
 	public static Queue<Token> getTokenCharactersFromReference(
 			Queue<Token> referenceTokens, ParserContext context,
 			int additionalAllowedCharacter) {
+
+		context.addParseEvent("8.2.4.69");
+
 		Queue<Token> queue = new LinkedList<Token>(referenceTokens);
 		Queue<Token> result = new LinkedList<Token>();
 
@@ -523,85 +522,5 @@ public class Tokenizing_character_references {
 		}
 
 		return result;
-	}
-
-	public static void main(String[] args) {
-		Queue<Token> queue = new LinkedList<Token>(), result;
-		ParserContext pc = new ParserContext();
-		// pc.getTokenizerContext().addTokenWithoutEmit(new
-		// Token(TokenType.character, "#"));
-		// pc.getTokenizerContext().addTokenWithoutEmit(new
-		// Token(TokenType.character, "x"));
-		// pc.getTokenizerContext().addTokenWithoutEmit(new
-		// Token(TokenType.character, "1"));
-		// pc.getTokenizerContext().addTokenWithoutEmit(new
-		// Token(TokenType.character, "0"));
-		// pc.getTokenizerContext().addTokenWithoutEmit(new
-		// Token(TokenType.character, "F"));
-
-		// queue.add(new Token(TokenType.character, "#"));
-		// queue.add(new Token(TokenType.character, "x"));
-		// queue.add(new Token(TokenType.character, "1"));
-		// queue.add(new Token(TokenType.character, "0"));
-		// queue.add(new Token(TokenType.character, "F"));
-
-		queue.add(new Token(TokenType.character, "E"));
-		queue.add(new Token(TokenType.character, "a"));
-		queue.add(new Token(TokenType.character, "a"));
-		queue.add(new Token(TokenType.character, "u"));
-		queue.add(new Token(TokenType.character, "t"));
-		queue.add(new Token(TokenType.character, "e"));
-		queue.add(new Token(TokenType.character, ";"));
-
-		// queue = pc.getTokenizerContext().getTokens();
-		result = Tokenizing_character_references
-				.getTokenCharactersFromReference(queue, pc);
-		System.out.println(result.poll().getValue().toString());
-
-		printTokens(pc);
-	}
-
-	private static void printTokens(ParserContext parserContext) {
-		System.out.println("*** TOKENS ***\n");
-		for (Token token : parserContext.getTokenizerContext().getTokens()) {
-			switch (token.getType()) {
-			case end_of_file:
-				System.out.println("EOF");
-				break;
-			case character:
-			case comment:
-				System.out.println(token.getType() + " : " + token.getValue());
-				break;
-			case DOCTYPE:
-				DocTypeToken docTypeToken = (DocTypeToken) token;
-				System.out.println(docTypeToken.getType() + " : "
-						+ docTypeToken.getValue() + " public id. "
-						+ docTypeToken.getPublicIdentifier() + " system id. "
-						+ docTypeToken.getSystemIdentifier()
-						+ " force-quirks flag "
-						+ docTypeToken.isForceQuircksFlag());
-				break;
-			case end_tag:
-			case start_tag:
-				TagToken tagToken = (TagToken) token;
-				System.out.println(tagToken.getType() + " : "
-						+ tagToken.getValue() + " self-closing flag "
-						+ tagToken.isFlagSelfClosingTag() + " attributes: ");
-				for (Attribute att : tagToken.getAttributes()) {
-					System.out.println(att.getName() + " : " + att.getValue());
-				}
-				break;
-			default:
-				System.out.println("Error");
-				break;
-			}
-
-		}
-
-		System.out.println("\n\n*** ERRORS ***\n");
-
-		for (ParseError error : parserContext.getParseErrors()) {
-			System.out.println(error.getMessage());
-		}
 	}
 }

@@ -7,7 +7,7 @@ import com.html5parser.algorithms.ListOfActiveFormattingElements;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InTableText implements IInsertionMode {
 
@@ -17,6 +17,9 @@ public class InTableText implements IInsertionMode {
 
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		
+			parserContext.addParseEvent("8.2.5.4.10", token);
+		
 		switch (token.getType()) {
 
 		// A character token that is U+0000 NULL

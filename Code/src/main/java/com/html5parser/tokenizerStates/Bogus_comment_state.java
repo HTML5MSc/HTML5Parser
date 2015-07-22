@@ -12,6 +12,9 @@ public class Bogus_comment_state implements ITokenizerState {
 		TokenizerStateFactory factory = TokenizerStateFactory.getInstance();
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
+		
+		
+			context.addParseEvent("8.2.4.44", currentChar);
 
 		/*
 		 * Consume every character up to and including the first U+003E

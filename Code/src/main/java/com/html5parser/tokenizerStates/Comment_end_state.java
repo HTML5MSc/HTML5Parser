@@ -5,7 +5,7 @@ import com.html5parser.classes.TokenizerContext;
 import com.html5parser.classes.TokenizerState;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.ITokenizerState;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class Comment_end_state implements ITokenizerState {
 
@@ -14,6 +14,9 @@ public class Comment_end_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		
+			context.addParseEvent("8.2.4.50", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// U+003E GREATER-THAN SIGN (>)
 		// Switch to the data state. Emit the comment token.

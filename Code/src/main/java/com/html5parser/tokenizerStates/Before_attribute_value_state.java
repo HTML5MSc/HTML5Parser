@@ -6,7 +6,7 @@ import com.html5parser.classes.TokenizerState;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.ITokenizerState;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class Before_attribute_value_state implements ITokenizerState {
 
@@ -15,6 +15,9 @@ public class Before_attribute_value_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
+		
+			context.addParseEvent("8.2.4.27", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// "tab" (U+0009)
 		// "LF" (U+000A)
@@ -69,9 +72,9 @@ public class Before_attribute_value_state implements ITokenizerState {
 					.getState(TokenizerState.Data_state));
 			tokenizerContext.setFlagEmitToken(true);
 			break;
-			// EOF
-			// Parse error. Switch to the data state. Reconsume the EOF
-			// character.
+		// EOF
+		// Parse error. Switch to the data state. Reconsume the EOF
+		// character.
 		case EOF:
 			context.addParseErrors(ParseErrorType.UnexpectedInputCharacter);
 			tokenizerContext.setNextState(factory

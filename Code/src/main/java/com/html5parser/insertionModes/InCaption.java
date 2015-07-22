@@ -10,7 +10,7 @@ import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InCaption implements IInsertionMode {
 
@@ -18,6 +18,9 @@ public class InCaption implements IInsertionMode {
 
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		
+			parserContext.addParseEvent("8.2.5.4.11", token);
+		
 		switch (token.getType()) {
 
 		case start_tag:

@@ -19,6 +19,9 @@ public class Script_data_escaped_less_than_sign_state implements
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
+		
+			context.addParseEvent("8.2.4.25", currentChar);
+		
 		switch (asciiCharacter) {
 		case DASH:
 			/*

@@ -7,13 +7,15 @@ import com.html5dom.Element;
 import com.html5parser.classes.ParserContext;
 import com.html5parser.classes.Token;
 import com.html5parser.classes.token.TagToken;
-import com.html5parser.parseError.ParseErrorType;
 import com.html5parser.parser.TreeConstructor;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class ForeignContent {
 
 	public static ParserContext run(ParserContext parserContext) {
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
+
+		parserContext.addParseEvent("8.2.5.5", token);
 
 		switch (token.getType()) {
 
@@ -47,7 +49,7 @@ public class ForeignContent {
 		// A DOCTYPE token
 		// Parse error. Ignore the token.
 		case DOCTYPE:
-			parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
+			parserContext.addParseErrors(ParseErrorType.UnexpectedToken, "", "8.2.5.5");
 			break;
 
 		// A start tag whose tag name is one of: "b", "big", "blockquote",
@@ -85,7 +87,7 @@ public class ForeignContent {
 					|| (token.getValue().equals("font") && ((TagToken) token)
 							.hasAttribute(new String[] { "color", "face",
 									"size" }))) {
-				parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
+				parserContext.addParseErrors(ParseErrorType.UnexpectedToken, "", "8.2.5.5");
 				if (!parserContext.isFlagHTMLFragmentParser()) {
 
 					Element e = parserContext.getOpenElements().pop();
@@ -183,7 +185,7 @@ public class ForeignContent {
 		// 2 If node's tag name, converted to ASCII lowercase, is not the same
 		// as the tag name of the token, then this is a parse error.
 		if (!node.getNodeName().toLowerCase().equals(token.getValue()))
-			parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
+			parserContext.addParseErrors(ParseErrorType.UnexpectedToken, "", "8.2.5.5");
 		// 3 Loop: If node is the topmost element in the stack of open elements,
 		// abort these steps. (fragment case)
 
@@ -197,7 +199,6 @@ public class ForeignContent {
 			// abort
 			// these steps.
 			if (node.getNodeName().toLowerCase().equals(token.getValue()))
-			// parserContext.addParseErrors(ParseErrorType.UnexpectedToken);
 			{
 				while (!stack.isEmpty()) {
 					Element e = stack.pop();

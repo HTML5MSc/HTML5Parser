@@ -9,11 +9,13 @@ import com.html5parser.classes.Token.TokenType;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.classes.token.TagToken.Attribute;
 import com.html5parser.constants.Namespace;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class CreateAnElementForAToken {
 	public static Element run(Node intendedParentElement, String namespace,
-			Token currentToken, ParserContext context) {
+			Token currentToken, ParserContext parserContext) {
+
+		parserContext.addParseEvent("8.2.5.1_2", currentToken);
 
 		// Create a node implementing the interface appropriate for the element
 		// type corresponding to the tag name of the token in given namespace
@@ -43,36 +45,31 @@ public class CreateAnElementForAToken {
 		// Element element = doc.createElement(currentToken.getValue());
 		// The new element saves a reference of the token that created it
 		element.setUserData("0", currentToken);
+		
+		parserContext.countElement(element);
 
 		if (currentToken.getType().equals(TokenType.start_tag)) {
 			for (Attribute attribute : ((TagToken) currentToken)
 					.getAttributes()) {
-				// TODO character "," is not a valid attribute name, DOM throws
-				// an exception but HTML5 does accept it
 
 				element.setAttributeNS(attribute.getNamespace(),
 						attribute.getName(), attribute.getValue());
 
 				// If the newly created element has an xmlns attribute in
-				// the
-				// XMLNS
-				// namespace whose value is not exactly the same as the
-				// element's
-				// namespace, that is a parse error. Similarly, if the newly
-				// created
-				// element has an xmlns:xlink attribute in the XMLNS
-				// namespace
-				// whose
-				// value is not the XLink Namespace, that is a parse error.
+				// the XMLNS namespace whose value is not exactly the same as
+				// the element's namespace, that is a parse error. Similarly, if
+				// the newly created element has an xmlns:xlink attribute in the
+				// XMLNS namespace whose value is not the XLink Namespace, that
+				// is a parse error.
 				if ((attribute.getName().equals("xmlns")
 						&& namespace.equals(Namespace.XMLNS) && !attribute
 						.getValue().equals(Namespace.XMLNS))
 						|| (attribute.getName().equals("xmlns:xlink")
 								&& namespace.equals(Namespace.XMLNS) && !attribute
 								.getValue().equals(Namespace.XLink))) {
-					context.addParseErrors(ParseErrorType.InvalidNamespace,
-							"Wrong namespace :" + attribute.getValue()
-									+ " in element " + currentToken.getValue());
+					parserContext.addParseErrors(
+							ParseErrorType.InvalidNamespace,
+							attribute.getValue(), "8.2.5.1_2_2");
 				}
 
 			}

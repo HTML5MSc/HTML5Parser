@@ -6,7 +6,7 @@ import com.html5parser.classes.TokenizerState;
 import com.html5parser.classes.token.DocTypeToken;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.ITokenizerState;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class DOCTYPE_public_identifier_single_quoted_state implements
 		ITokenizerState {
@@ -17,6 +17,9 @@ public class DOCTYPE_public_identifier_single_quoted_state implements
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		DocTypeToken docToken = null;
 
+		
+			context.addParseEvent("8.2.4.59", currentChar);
+		
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 
 		// "'" (U+0027)

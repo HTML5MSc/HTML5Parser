@@ -11,7 +11,7 @@ import com.html5parser.classes.Token.TokenType;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.factories.InsertionModeFactory;
 import com.html5parser.interfaces.IInsertionMode;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class InTableBody implements IInsertionMode {
 
@@ -20,6 +20,9 @@ public class InTableBody implements IInsertionMode {
 		InsertionModeFactory factory = InsertionModeFactory.getInstance();
 		Token token = parserContext.getTokenizerContext().getCurrentToken();
 
+		
+			parserContext.addParseEvent("8.2.5.4.13", token);
+		
 		switch (token.getType()) {
 		case start_tag:
 			switch (token.getValue()) {
@@ -150,6 +153,10 @@ public class InTableBody implements IInsertionMode {
 
 	private void clearTheStackBackToATableBodyContext(
 			ParserContext parserContext) {
+		
+		
+			parserContext.addParseEvent("8.2.5.4.13_1");
+		
 		// it means that the UA must, while the current node is not a tbody,
 		// tfoot, thead, template, or html element, pop elements from the stack
 		// of open elements.

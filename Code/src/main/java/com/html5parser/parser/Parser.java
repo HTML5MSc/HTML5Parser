@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -25,8 +26,8 @@ import com.html5parser.classes.token.DocTypeToken;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.classes.token.TagToken.Attribute;
 import com.html5parser.interfaces.IParser;
-import com.html5parser.parseError.ParseError;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
+import com.html5parser.tracer.Tracer;
 
 public class Parser implements IParser {
 
@@ -35,21 +36,30 @@ public class Parser implements IParser {
 	Tokenizer tokenizer;
 	StreamPreprocessor streamPreprocessor;
 	TreeConstructor treeConstructor;
+	Tracer tracer;
 
 	public Parser() {
-		initialize(false);
+		initialize(false, false);
 	}
 
 	public Parser(boolean scriptFlag) {
-		initialize(scriptFlag);
+		initialize(scriptFlag, false);
+	}
+	
+	public Parser(boolean scriptFlag, boolean trace) {
+		initialize(scriptFlag, trace);
 	}
 
-	private void initialize(boolean scriptFlag) {
+	private void initialize(boolean scriptFlag, boolean trace) {
 		parserContext = new ParserContext();
 		tokenizer = new Tokenizer();
 		streamPreprocessor = new StreamPreprocessor();
 		treeConstructor = new TreeConstructor();
 		doc = createNewDocument();
+		if (trace) {
+			tracer = new Tracer();
+			parserContext.setTracer(tracer);
+		}
 
 		parserContext.setDocument(doc);
 		parserContext.setFlagScripting(scriptFlag);
@@ -57,7 +67,8 @@ public class Parser implements IParser {
 	}
 
 	public Document parse(String htmlString) {
-		return parse(new ByteArrayInputStream(htmlString.getBytes()));
+		return parse(new ByteArrayInputStream(
+				htmlString.getBytes(StandardCharsets.UTF_8)));
 	}
 
 	public Document parse(InputStream stream) {
@@ -146,6 +157,8 @@ public class Parser implements IParser {
 								parserContext
 										.addParseErrors(ParseErrorType.StartTagWithSelfClosingFlag);
 						}
+
+						parserContext.countToken();
 					}
 					parserContext.getTokenizerContext().setFlagEmitToken(false);
 				}
@@ -396,12 +409,6 @@ public class Parser implements IParser {
 				break;
 			}
 
-		}
-
-		System.out.println("\n\n*** ERRORS ***\n");
-
-		for (ParseError error : parserContext.getParseErrors()) {
-			System.out.println(error.getMessage());
 		}
 	}
 

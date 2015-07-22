@@ -8,7 +8,10 @@ import com.html5parser.constants.Namespace;
 
 public class InsertAnHTMLElement {
 
-	public static Element run(ParserContext context, Token token) {
-		return InsertForeignElement.run(context, token, Namespace.HTML);
+	public static Element run(ParserContext parserContext, Token token) {
+		
+			parserContext.addParseEvent("8.2.5.1_4", token);
+		
+		return InsertForeignElement.run(parserContext, token, Namespace.HTML);
 	}
 }

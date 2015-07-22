@@ -1,14 +1,14 @@
 package com.html5dom;
 
 public class Constants {
-	protected static final String HTML_NAMESPACE = "http://www.w3.org/1999/xhtml";
-	protected static final String MathML_NAMESPACE = "http://www.w3.org/1998/Math/MathML";
-	protected static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+	public static final String HTML_NAMESPACE = "http://www.w3.org/1999/xhtml";
+	public static final String MathML_NAMESPACE = "http://www.w3.org/1998/Math/MathML";
+	public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
-	protected static final String[] FORMATTING_ELEMENTS = { "a", "b", "big",
+	public static final String[] FORMATTING_ELEMENTS = { "a", "b", "big",
 			"code", "em", "font", "i", "nobr", "s", "small", "strike",
 			"strong", "tt", "u" };
-	protected static final String[] SPECIAL_HTML_ELEMENTS = { "address",
+	public static final String[] SPECIAL_HTML_ELEMENTS = { "address",
 			"applet", "area", "article", "aside", "base", "basefont",
 			"bgsound", "blockquote", "body", "br", "button", "caption",
 			"center", "col", "colgroup", "dd", "details", "dir", "div", "dl",
@@ -21,15 +21,26 @@ public class Constants {
 			"source", "style", "summary", "table", "tbody", "td", "template",
 			"textarea", "tfoot", "th", "thead", "title", "tr", "track", "ul",
 			"wbr", "xmp" };
-	protected static final String[] SPECIAL_MATHML_ELEMENTS = { "mi", "mo",
+	public static final String[] SPECIAL_MATHML_ELEMENTS = { "mi", "mo",
 			"mn", "ms", "mtext", "annotation-xml" };
-	protected static final String[] SPECIAL_SVG_ELEMENTS = { "foreignObject",
+	public static final String[] SPECIAL_SVG_ELEMENTS = { "foreignObject",
 			"desc", "title" };
 
-	protected static final String[] VOID_ELEMENTS = { "area", "base", "br",
+	public static final String[] VOID_ELEMENTS = { "area", "base", "br",
 			"col", "embed", "hr", "img", "input", "keygen", "link", "meta",
 			"param", "source", "track", "wbr" };
-	protected static final String[] RAW_TEXT_ELEMENTS = { "script", "style" };
-	protected static final String[] ESCAPABLE_RAW_TEXT_ELEMENTS = { "textarea",
+	public static final String[] RAW_TEXT_ELEMENTS = { "script", "style" };
+	public static final String[] ESCAPABLE_RAW_TEXT_ELEMENTS = { "textarea",
 			"title" };
+
+	public static final String[] HTML5_SEMANTIC_STRUCTURAL_ELEMENTS = { "article", "aside",
+			"bdi", "details", "dialog", "figcaption", "figure", "footer",
+			"header", "main", "mark", "menuitem", "meter", "nav", "progress",
+			"rp", "rt", "ruby", "section", "summary", "time", "wbr" };
+	
+	public static final String[] HTML5_FORM_ELEMENTS = {"datalist", "keygen", "output"};
+	
+	public static final String[] HTML5_GRAPHIC_ELEMENTS = {"canvas", "svg"};
+	
+	public static final String[] HTML5_MEDIA_ELEMENTS = {"audio", "embed", "source", "track", "video"};
 }

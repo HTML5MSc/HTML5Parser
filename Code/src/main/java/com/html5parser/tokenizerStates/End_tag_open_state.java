@@ -8,7 +8,7 @@ import com.html5parser.classes.TokenizerState;
 import com.html5parser.classes.token.TagToken;
 import com.html5parser.factories.TokenizerStateFactory;
 import com.html5parser.interfaces.ITokenizerState;
-import com.html5parser.parseError.ParseErrorType;
+import com.html5parser.tracer.ParseError.ParseErrorType;
 
 public class End_tag_open_state implements ITokenizerState {
 
@@ -17,6 +17,8 @@ public class End_tag_open_state implements ITokenizerState {
 		Token token = null;
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
+
+		context.addParseEvent("8.2.4.9", currentChar);
 
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// U+003E GREATER-THAN SIGN (>)
