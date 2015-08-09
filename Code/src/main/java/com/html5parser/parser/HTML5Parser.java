@@ -14,8 +14,8 @@ import com.html5dom.Document;
  */
 public class HTML5Parser {
 	public static void main(String[] args) {
-		if (args.length != 2) {
-			System.out.println("Two parameters are required");
+		if (!(args.length == 2 || args.length == 4)) {
+			System.out.println("Two or four parameters are required");
 			return;
 		}
 
@@ -36,8 +36,12 @@ public class HTML5Parser {
 			return;
 		}
 		try {
-			Parser parser = new Parser(true, false);
+			Boolean trace = (args.length == 4 && args[2].equals("-t"));
+			Parser parser = new Parser(true, trace);
 			doc = parser.parse(html);
+			if (trace)
+				parser.getParserContext().getTracer().toXML(args[3]);
+
 			String output = Serializer.toHtml5libFormat(doc);
 			PrintStream out = new PrintStream(System.out, true, "UTF-8");
 			out.println(output);

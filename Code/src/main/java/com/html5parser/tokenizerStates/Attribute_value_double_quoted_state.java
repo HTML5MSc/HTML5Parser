@@ -18,9 +18,8 @@ public class Attribute_value_double_quoted_state extends
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
-		
-			context.addParseEvent("8.2.4.38", currentChar);
-		
+		context.addParseEvent("8.2.4.38", currentChar);
+
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// End of possible reference
 		case SEMICOLON:

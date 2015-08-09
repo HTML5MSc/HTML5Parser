@@ -21,9 +21,8 @@ public class Character_reference_in_RCDATA_state implements ITokenizerState {
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 		Queue<Token> result;
 
-		
-			context.addParseEvent("8.2.4.4", currentChar);
-		
+		context.addParseEvent("8.2.4.4", currentChar);
+
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// U+0026 AMPERSAND (&)
 		// Switch to the character reference in data state.
@@ -68,11 +67,11 @@ public class Character_reference_in_RCDATA_state implements ITokenizerState {
 					.getState(TokenizerState.RCDATA_state));
 			tokenizerContext.setFlagReconsumeCurrentInputCharacter(true);
 			break;
-			
+
 		case SEMICOLON:
 			token = new Token(TokenType.character, currentChar);
 			reference.add(token);
-			
+
 			result = Tokenizing_character_references
 					.getTokenCharactersFromReference(reference, context);
 
@@ -88,7 +87,7 @@ public class Character_reference_in_RCDATA_state implements ITokenizerState {
 			tokenizerContext.setNextState(factory
 					.getState(TokenizerState.RCDATA_state));
 			break;
-			
+
 		// Anything else
 		// Add a token in the stack of token but without emit to try Later to
 		// consume a reference

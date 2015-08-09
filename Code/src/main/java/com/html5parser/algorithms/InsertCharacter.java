@@ -30,9 +30,7 @@ public class InsertCharacter {
 	 */
 	public static Node run(ParserContext parserContext, String data) {
 
-		
-			parserContext.addParseEvent("8.2.5.1_8",
-					"Character \"" + data + "\"");
+		parserContext.addParseEvent("8.2.5.1_8", "Character \"" + data + "\"");
 
 		// Let the adjusted insertion location be the appropriate place for
 		// inserting a node.
