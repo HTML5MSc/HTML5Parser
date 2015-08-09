@@ -11,6 +11,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
 import com.html5parser.tracer.Event.EventType;
 
 public class Tracer {
@@ -172,7 +175,6 @@ public class Tracer {
 				e.setType(available.getType());
 				refreshTotals(e);
 			}
-
 	}
 
 	public void addParseEvent(Event event) {
@@ -228,5 +230,89 @@ public class Tracer {
 		this.parseEvents.add(parseEvent);
 
 		this.summary.incrementParseErrors();
+	}
+
+	public void toXML(String fileName) {
+		Document document = XMLUtils.createDocument();
+		Node summary = XMLUtils.addNode(document, document, "summary");
+
+		XMLUtils.addAttribute(document, summary, "Algorithms",
+				this.summary.getAlgorithms());
+		XMLUtils.addAttribute(document, summary, "EmittedTokens",
+				this.summary.getEmittedTokens());
+		XMLUtils.addAttribute(document, summary, "InsertionModes",
+				this.summary.getInsertionModes());
+		XMLUtils.addAttribute(document, summary, "ParseErrors",
+				this.summary.getParseErrors());
+		XMLUtils.addAttribute(document, summary, "TokenizerStates",
+				this.summary.getTokenizerStates());
+
+		XMLUtils.addAttribute(document, summary, "FormattingElements",
+				this.summary.isFormattingElements());
+		XMLUtils.addAttribute(document, summary, "HTML5FormElements",
+				this.summary.isHtml5FormElements());
+		XMLUtils.addAttribute(document, summary, "HTML5GraphicElements",
+				this.summary.isHtml5GraphicElements());
+		XMLUtils.addAttribute(document, summary, "HTML5MediaElements",
+				this.summary.isHtml5MediaElements());
+		XMLUtils.addAttribute(document, summary, "HTML5SemanticElements",
+				this.summary.isHtml5SemanticStructuralElements());
+		XMLUtils.addAttribute(document, summary, "MathMLElements",
+				this.summary.isMathMlElements());
+		XMLUtils.addAttribute(document, summary, "SpecialElements",
+				this.summary.isSpecialElements());
+		XMLUtils.addAttribute(document, summary, "SVGElements",
+				this.summary.isSvgElements());
+
+		Node events = XMLUtils.addNode(document, summary, "events");
+		for (Event event : this.getAvailableEvents()) {
+			if (event.getType() == null
+					|| event.getType() == EventType.ParseError)
+				continue;
+
+			Node n = XMLUtils.addNode(document, events, "event");
+			XMLUtils.addAttribute(document, n, "name", event.getDescription());
+			XMLUtils.addAttribute(document, n, "section", event.getSection());
+
+			switch (event.getType()) {
+			case Algorithm:
+				XMLUtils.addAttribute(document, n, "type", "Algorithm");
+				XMLUtils.addAttribute(document, n, "used",
+						this.usedAlgorithms.contains(event.getDescription()));
+				break;
+			case InsertionMode:
+				XMLUtils.addAttribute(document, n, "type", "Insertion Mode");
+				XMLUtils.addAttribute(
+						document,
+						n,
+						"used",
+						this.usedInsertionModes.contains(event.getDescription()));
+				break;
+			case TokenizerState:
+				XMLUtils.addAttribute(document, n, "type", "Tokenizer State");
+				XMLUtils.addAttribute(document, n, "used",
+						this.usedTokenizerStates.contains(event
+								.getDescription()));
+				break;
+			default:
+				break;
+			}
+		}
+
+		for (Event event : this.getParseEvents()) {
+			if (event.getType() != null
+					&& event.getType() == EventType.ParseError) {
+				Node n = XMLUtils.addNode(document, events, "event");
+				XMLUtils.addAttribute(
+						document,
+						n,
+						"name",
+						event.getDescription() + " - "
+								+ event.getAdditionalInfo());
+				XMLUtils.addAttribute(document, n, "type", "Parse Error");
+			}
+		}
+
+		XMLUtils.saveReportToFile(document, fileName);
 	}
 }

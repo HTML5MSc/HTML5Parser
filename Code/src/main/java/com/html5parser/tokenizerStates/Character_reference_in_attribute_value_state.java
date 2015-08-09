@@ -34,6 +34,9 @@ public class Character_reference_in_attribute_value_state {
 	// If no match reference add the input to the value of the attribute
 	protected void attemptToConsumeReferenceInAttribute(
 			TokenizerContext tokenizerContext, ParserContext context) {
+		
+		context.addParseEvent("8.2.4.41");
+		
 		if (parsingCharacterReference) {
 			if (!reference.isEmpty() && reference.peek().getValue().equals("#"))
 				attemptToConsumeReference(context, tokenizerContext);

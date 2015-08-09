@@ -14,7 +14,7 @@
 	<event section="8.2.3.1" description="The insertion mode" />
 	<event section="8.2.3.1_1" description="Reset the insertion mode appropriately" type="Algorithm" />	
 	<event section="8.2.3.2" description="The stack of open elements" />
-	<event section="8.2.3.2_1" description="Have an element target node in a specific scope" type="Algorithm" />
+	<event section="8.2.3.2_1" description="Have an element target node in a specific scope" />
 	<event section="8.2.3.2_2" description="Have a particular element in scope " type="Algorithm" />
 	<event section="8.2.3.2_3" description="Have a particular element in list item scope" type="Algorithm" />
 	<event section="8.2.3.2_4" description="Have a particular element in button scope" type="Algorithm" />

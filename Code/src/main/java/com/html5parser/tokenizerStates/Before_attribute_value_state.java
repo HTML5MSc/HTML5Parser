@@ -15,9 +15,8 @@ public class Before_attribute_value_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
-		
-			context.addParseEvent("8.2.4.27", currentChar);
-		
+		context.addParseEvent("8.2.4.37", currentChar);
+
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// "tab" (U+0009)
 		// "LF" (U+000A)
