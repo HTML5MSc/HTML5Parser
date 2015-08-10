@@ -21,9 +21,8 @@ public class RCDATA_end_tag_open_state implements ITokenizerState {
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
-		
-			context.addParseEvent("8.2.4.12", currentChar);
-		
+		context.addParseEvent("8.2.4.12", currentChar);
+
 		switch (asciiCharacter) {
 
 		case LATIN_CAPITAL_LETTER:

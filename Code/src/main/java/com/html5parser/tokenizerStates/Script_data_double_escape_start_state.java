@@ -53,7 +53,7 @@ public class Script_data_double_escape_start_state implements ITokenizerState {
 			 * the current input character as a character token.
 			 */
 			tokenizerContext
-					.appendCharacterToTemporaryBuffer(currentChar + 0x0020);
+					.appendCharacterToTemporaryBuffer(currentChar);
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
 					currentChar));
 			break;
