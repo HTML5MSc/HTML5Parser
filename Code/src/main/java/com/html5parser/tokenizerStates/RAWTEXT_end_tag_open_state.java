@@ -19,9 +19,8 @@ public class RAWTEXT_end_tag_open_state implements ITokenizerState {
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
 
-		
-			context.addParseEvent("8.2.4.15", currentChar);
-		
+		context.addParseEvent("8.2.4.15", currentChar);
+
 		switch (asciiCharacter) {
 		case LATIN_CAPITAL_LETTER:
 			/*
@@ -32,10 +31,9 @@ public class RAWTEXT_end_tag_open_state implements ITokenizerState {
 			 * state. (Don't emit the token yet; further details will be filled
 			 * in before it is emitted.)
 			 */
-			tokenizerContext
-					.appendCharacterToTemporaryBuffer(currentChar + 0x0020);
+			tokenizerContext.appendCharacterToTemporaryBuffer(currentChar);
 			tokenizerContext.setCurrentToken(new TagToken(TokenType.end_tag,
-					currentChar));
+					currentChar + 0x0020));
 			tokenizerContext.setNextState(factory
 					.getState(TokenizerState.RAWTEXT_end_tag_name_state));
 			break;
