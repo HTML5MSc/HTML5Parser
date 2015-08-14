@@ -15,9 +15,8 @@ public class Attribute_name_state implements ITokenizerState {
 		TokenizerContext tokenizerContext = context.getTokenizerContext();
 		int currentChar = tokenizerContext.getCurrentInputCharacter();
 
-		
-			context.addParseEvent("8.2.4.35", currentChar);
-		
+		context.addParseEvent("8.2.4.35", currentChar);
+
 		switch (tokenizerContext.getCurrentASCIICharacter()) {
 		// "tab" (U+0009)
 		// "LF" (U+000A)
@@ -103,8 +102,8 @@ public class Attribute_name_state implements ITokenizerState {
 		// there is already an attribute on the token with the exact same name,
 		// then this is a parse error and the new attribute must be dropped,
 		// along with the value that gets associated with it (if any).
-		if (tokenizerContext.getNextState() != factory
-				.getState(TokenizerState.Attribute_name_state)) {
+		if (!tokenizerContext.getNextState().toString()
+				.contains("Attribute_name_state")) {
 			context.validateAttributeNames();
 		}
 

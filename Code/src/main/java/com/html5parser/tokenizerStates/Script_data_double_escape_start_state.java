@@ -18,9 +18,8 @@ public class Script_data_double_escape_start_state implements ITokenizerState {
 
 		ASCIICharacter asciiCharacter = tokenizerContext
 				.getCurrentASCIICharacter();
-		
-		
-			context.addParseEvent("8.2.4.28", currentChar);
+
+		context.addParseEvent("8.2.4.28", currentChar);
 
 		switch (asciiCharacter) {
 
@@ -49,11 +48,12 @@ public class Script_data_double_escape_start_state implements ITokenizerState {
 			break;
 		case LATIN_CAPITAL_LETTER:
 			/*
-			 * Append the current input character to the temporary buffer. Emit
-			 * the current input character as a character token.
+			 * Append the lowercase version of the current input character (add
+			 * 0x0020 to the character's code point) to the temporary buffer.
+			 * Emit the current input character as a character token.
 			 */
 			tokenizerContext
-					.appendCharacterToTemporaryBuffer(currentChar);
+					.appendCharacterToTemporaryBuffer(currentChar + 0x0020);
 			tokenizerContext.emitCurrentToken(new Token(TokenType.character,
 					currentChar));
 			break;
