@@ -61,10 +61,10 @@ public class TokenizerTesthtml5libsuite {
 		List<Object[]> testList = new ArrayList<Object[]>();
 
 		String[] resources = {
-				// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/domjs.test",
-				// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/namedEntities.test",
+				//"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/domjs.test",
+				//"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/namedEntities.test",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/numericEntities.test",
-				// "https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/xmlViolation.test",
+				//"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/xmlViolation.test",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/pendingSpecChanges.test",
 
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/test1.test",
@@ -190,7 +190,12 @@ public class TokenizerTesthtml5libsuite {
 						expected.lastIndexOf("\\u") + 6);
 				int codePoint = Integer.parseInt(sub, 16);
 				String co = String.valueOf(Character.toChars(codePoint));
-				co = String.valueOf(Character.toChars(co.getBytes()[0]));
+				try{
+					co = String.valueOf(Character.toChars(co.getBytes()[0]));
+				}
+				catch(Exception e){
+					
+				}
 				expected = expected.replaceFirst("\\\\u....", "\\\\" + co);
 			}
 			assertEquals("Wrong tokens", expected, output);
