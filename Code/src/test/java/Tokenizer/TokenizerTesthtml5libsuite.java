@@ -61,8 +61,8 @@ public class TokenizerTesthtml5libsuite {
 		List<Object[]> testList = new ArrayList<Object[]>();
 
 		String[] resources = {
-				//"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/domjs.test",
-				//"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/namedEntities.test",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/domjs.test",
+				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/namedEntities.test",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/numericEntities.test",
 				//"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/xmlViolation.test",
 				"https://raw.githubusercontent.com/html5lib/html5lib-tests/master/tokenizer/pendingSpecChanges.test",
@@ -166,7 +166,7 @@ public class TokenizerTesthtml5libsuite {
 			if (test.get("doubleEscaped") != null
 					&& (boolean) test.get("doubleEscaped")) {
 				String codePoint = input.substring(input.indexOf("\\u") + 2,
-						input.lastIndexOf("\\u") + 6);
+						input.indexOf("\\u") + 6);
 				String co = String.valueOf((char) Integer.parseInt(codePoint,
 						16));
 				input = input.replaceFirst(
@@ -187,7 +187,7 @@ public class TokenizerTesthtml5libsuite {
 			if (test.get("doubleEscaped") != null
 					&& (boolean) test.get("doubleEscaped")) {
 				String sub = expected.substring(expected.indexOf("\\u") + 2,
-						expected.lastIndexOf("\\u") + 6);
+						expected.indexOf("\\u") + 6);
 				int codePoint = Integer.parseInt(sub, 16);
 				String co = String.valueOf(Character.toChars(codePoint));
 				try{
