@@ -45,7 +45,7 @@ public class Parser implements IParser {
 	public Parser(boolean scriptFlag) {
 		initialize(scriptFlag, false);
 	}
-	
+
 	public Parser(boolean scriptFlag, boolean trace) {
 		initialize(scriptFlag, trace);
 	}
@@ -79,6 +79,11 @@ public class Parser implements IParser {
 			in = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 
 			int currentChar = in.read();
+			// One leading U+FEFF BYTE ORDER MARK character must be ignored if
+			// any are present in the input stream.
+			if (currentChar == 0xFEFF)
+				currentChar = in.read();
+
 			while (!parserContext.isFlagStopParsing()) {
 				TokenizerContext tokenizerContext = parserContext
 						.getTokenizerContext();
